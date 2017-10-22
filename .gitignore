@@ -1,4 +1,4 @@
-/bin/
+*/bin/
 /.metadata/
 
 # Compiled class file
@@ -26,4 +26,5 @@ hs_err_pid*
 
 .classpath
 .project
+.recommenders/
 .settings/
