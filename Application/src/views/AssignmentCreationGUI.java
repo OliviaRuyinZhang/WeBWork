@@ -45,8 +45,9 @@ public class AssignmentCreationGUI extends JFrame {
 	 * Create the frame.
 	 */
 	public AssignmentCreationGUI() {
+		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 900, 720);
+		setBounds(100, 100, 900, 731);
 		contentPane = new JPanel();
 		contentPane.setBackground(Color.WHITE);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -56,13 +57,14 @@ public class AssignmentCreationGUI extends JFrame {
 		
 		JLabel lblNewAssignment = new JLabel("New Assignment");
 		lblNewAssignment.setFont(new Font("Segoe UI Light", Font.PLAIN, 52));
-		lblNewAssignment.setSize(lblNewAssignment.getPreferredSize());
 		lblNewAssignment.setBounds(62, 45, 377, 71);
+		lblNewAssignment.setSize(lblNewAssignment.getPreferredSize());
 		contentPane.add(lblNewAssignment);
 		
 		JLabel lblDueDate = new JLabel("Due Date");
 		lblDueDate.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 		lblDueDate.setBounds(62, 139, 72, 14);
+		lblDueDate.setSize(lblDueDate.getPreferredSize());
 		contentPane.add(lblDueDate);
 		
 		String[] monthStrings = { "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" };
@@ -70,6 +72,8 @@ public class AssignmentCreationGUI extends JFrame {
 		JComboBox monthDropDown = new JComboBox(monthStrings);
 		monthDropDown.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 		monthDropDown.setBounds(62, 164, 91, 27);
+		monthDropDown.setSize(monthDropDown.getPreferredSize());
+		
 		contentPane.add(monthDropDown);
 		
 		String[] days = new String[31];
@@ -79,19 +83,22 @@ public class AssignmentCreationGUI extends JFrame {
 		
 		JComboBox dateDropDown = new JComboBox(days);
 		dateDropDown.setFont(new Font("Segoe UI", Font.PLAIN, 15));
-		dateDropDown.setBounds(163, 164, 46, 27);
+		dateDropDown.setBounds(174, 164, 46, 27);
+		dateDropDown.setSize(dateDropDown.getPreferredSize());
 		contentPane.add(dateDropDown);
 		
 		String[] yearStrings = { "2017", "2018", "2019"};
 		
 		JComboBox yearDropDown = new JComboBox(yearStrings);
 		yearDropDown.setFont(new Font("Segoe UI", Font.PLAIN, 15));
-		yearDropDown.setBounds(219, 164, 64, 27);
+		yearDropDown.setBounds(226, 164, 64, 27);
+		yearDropDown.setSize(yearDropDown.getPreferredSize());
 		contentPane.add(yearDropDown);
 		
 		JLabel lblProblems = new JLabel("Problems");
 		lblProblems.setFont(new Font("Segoe UI Light", Font.PLAIN, 38));
 		lblProblems.setBounds(62, 220, 155, 51);
+		lblProblems.setSize(lblProblems.getPreferredSize());
 		contentPane.add(lblProblems);
 		
 		JPanel problemPanel = new JPanel();
@@ -102,11 +109,13 @@ public class AssignmentCreationGUI extends JFrame {
 		JLabel lblProblem = new JLabel("Problem");
 		lblProblem.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 		lblProblem.setBounds(24, 21, 56, 21);
+		lblProblem.setSize(lblProblem.getPreferredSize());
 		problemPanel.add(lblProblem);
 		
 		JLabel lblOptions = new JLabel("Options");
 		lblOptions.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 		lblOptions.setBounds(24, 102, 56, 21);
+		lblOptions.setSize(lblOptions.getPreferredSize());
 		problemPanel.add(lblOptions);
 		
 		JTextArea textArea = new JTextArea();
@@ -144,6 +153,7 @@ public class AssignmentCreationGUI extends JFrame {
 		JLabel lblSolution = new JLabel("Solution");
 		lblSolution.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 		lblSolution.setBounds(321, 102, 56, 21);
+		lblSolution.setSize(lblSolution.getPreferredSize());
 		problemPanel.add(lblSolution);
 		
 		JRadioButton option_A_radio = new JRadioButton("");
@@ -180,13 +190,14 @@ public class AssignmentCreationGUI extends JFrame {
 		contentPane.add(btnAddProblem);
 		
 		JButton btnCreate = new JButton("Create");
+		btnCreate.setForeground(Color.WHITE);
 		btnCreate.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 		btnCreate.setBackground(new Color(51, 204, 153));
 		btnCreate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
-		btnCreate.setBounds(720, 618, 107, 40);
+		btnCreate.setBounds(720, 630, 107, 40);
 		contentPane.add(btnCreate);
 	}
 }
