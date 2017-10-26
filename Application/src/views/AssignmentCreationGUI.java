@@ -1,5 +1,8 @@
 package views;
 
+import controllers.AssignmentCreator;
+import models.Problem;
+
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -11,19 +14,30 @@ import java.awt.Color;
 import javax.swing.JComboBox;
 import javax.swing.JTextField;
 import javax.swing.JTextArea;
+import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.sql.Date;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Enumeration;
+import java.util.Locale;
 import java.awt.event.ActionEvent;
 import javax.swing.JRadioButton;
+import java.awt.Dimension;
+import javax.swing.SwingConstants;
 
 public class AssignmentCreationGUI extends JFrame {
-
+	private int problemID = 1;
+	private ArrayList<Problem> problems = new ArrayList<>();
 	private JPanel contentPane;
 	private JTextField txtOptionA;
 	private JTextField txtOptionB;
 	private JTextField txtOptionC;
 	private JTextField txtOptionD;
+	private JTextField txtAssignmentNum;
 
 	/**
 	 * Launch the application.
@@ -67,7 +81,24 @@ public class AssignmentCreationGUI extends JFrame {
 		lblDueDate.setSize(lblDueDate.getPreferredSize());
 		contentPane.add(lblDueDate);
 		
-		String[] monthStrings = { "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" };
+		JLabel poundSymbol = new JLabel("#");
+		poundSymbol.setSize(new Dimension(365, 71));
+		poundSymbol.setFont(new Font("Segoe UI Light", Font.PLAIN, 52));
+		poundSymbol.setBounds(725, 45, 36, 71);
+		poundSymbol.setSize(poundSymbol.getPreferredSize());
+		contentPane.add(poundSymbol);
+		
+		txtAssignmentNum = new JTextField();
+		txtAssignmentNum.setHorizontalAlignment(SwingConstants.CENTER);
+		txtAssignmentNum.setFont(new Font("Segoe UI Light", Font.PLAIN, 52));
+		txtAssignmentNum.setText("1");
+		txtAssignmentNum.setBounds(771, 51, 56, 59);
+		contentPane.add(txtAssignmentNum);
+		txtAssignmentNum.setColumns(10);
+		
+		String[] monthStrings = { "January", "February", "March", "April",
+				"May", "June", "July", "August",
+				"September", "October", "November", "December" };
 		
 		JComboBox monthDropDown = new JComboBox(monthStrings);
 		monthDropDown.setFont(new Font("Segoe UI", Font.PLAIN, 15));
@@ -106,7 +137,7 @@ public class AssignmentCreationGUI extends JFrame {
 		contentPane.add(problemPanel);
 		problemPanel.setLayout(null);
 		
-		JLabel lblProblem = new JLabel("Problem");
+		JLabel lblProblem = new JLabel("Problem " + problemID);
 		lblProblem.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 		lblProblem.setBounds(24, 21, 56, 21);
 		lblProblem.setSize(lblProblem.getPreferredSize());
@@ -180,13 +211,45 @@ public class AssignmentCreationGUI extends JFrame {
 		bg.add(option_D_radio);
 		
 		
-		JButton btnAddProblem = new JButton("+ Add Problem");
+		JButton btnAddProblem = new JButton("+ Add This Problem");
+		btnAddProblem.setBackground(Color.LIGHT_GRAY);
 		btnAddProblem.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 		btnAddProblem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				String problemString = textArea.getText();
+				ArrayList<String> options = new ArrayList<>();
+				options.add(txtOptionA.getText());
+				options.add(txtOptionB.getText());
+				options.add(txtOptionC.getText());
+				options.add(txtOptionD.getText());
+				
+				String solution;
+				
+				if (option_A_radio.isSelected()) {
+					solution = txtOptionA.getText();
+				} else if (option_B_radio.isSelected()) {
+					solution = txtOptionB.getText();
+				} else if (option_C_radio.isSelected()) {
+					solution = txtOptionC.getText();
+				} else {
+					solution = txtOptionD.getText();
+				}
+				
+				Problem newProblem = new Problem(problemID, problemString, options, solution);
+				problems.add(newProblem);
+				problemID++;
+				
+				// Reset items
+				lblProblem.setText("Problem " + problemID);
+				textArea.setText("");
+				txtOptionA.setText("Option A");
+				txtOptionB.setText("Option B");
+				txtOptionC.setText("Option C");
+				txtOptionD.setText("Option D");
+				option_A_radio.setSelected(true);
 			}
 		});
-		btnAddProblem.setBounds(689, 232, 138, 40);
+		btnAddProblem.setBounds(521, 630, 190, 40);
 		contentPane.add(btnAddProblem);
 		
 		JButton btnCreate = new JButton("Create");
@@ -195,6 +258,16 @@ public class AssignmentCreationGUI extends JFrame {
 		btnCreate.setBackground(new Color(51, 204, 153));
 		btnCreate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				String month = Integer.toString(monthDropDown.getSelectedIndex() + 1);
+			    String date = dateDropDown.getSelectedItem().toString();
+			    String year = yearDropDown.getSelectedItem().toString();
+			    
+			    String fileName = "Assignment" + txtAssignmentNum.getText() + ".csv";
+			    
+				AssignmentCreator.initializeFile(fileName, month+"/"+date+"/"+year);
+				for (Problem problem : problems) {
+					AssignmentCreator.addProblem(fileName, problem);
+				}
 			}
 		});
 		btnCreate.setBounds(720, 630, 107, 40);
