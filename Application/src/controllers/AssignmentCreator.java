@@ -48,7 +48,6 @@ public class AssignmentCreator {
 			bf.write(sb.toString());
 			bf.close();
 
-			System.out.println("Problem added successfully");
 			fw.close();
 
 			return true;

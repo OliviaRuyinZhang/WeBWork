@@ -9,6 +9,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import java.awt.Color;
 import javax.swing.JComboBox;
@@ -114,7 +116,7 @@ public class AssignmentCreationGUI extends JFrame {
 		
 		JComboBox dateDropDown = new JComboBox(days);
 		dateDropDown.setFont(new Font("Segoe UI", Font.PLAIN, 15));
-		dateDropDown.setBounds(174, 164, 46, 27);
+		dateDropDown.setBounds(189, 164, 46, 27);
 		dateDropDown.setSize(dateDropDown.getPreferredSize());
 		contentPane.add(dateDropDown);
 		
@@ -122,7 +124,7 @@ public class AssignmentCreationGUI extends JFrame {
 		
 		JComboBox yearDropDown = new JComboBox(yearStrings);
 		yearDropDown.setFont(new Font("Segoe UI", Font.PLAIN, 15));
-		yearDropDown.setBounds(226, 164, 64, 27);
+		yearDropDown.setBounds(260, 164, 64, 27);
 		yearDropDown.setSize(yearDropDown.getPreferredSize());
 		contentPane.add(yearDropDown);
 		
@@ -253,7 +255,7 @@ public class AssignmentCreationGUI extends JFrame {
 		contentPane.add(btnAddProblem);
 		
 		JButton btnCreate = new JButton("Create");
-		btnCreate.setForeground(Color.WHITE);
+		btnCreate.setForeground(Color.BLACK);
 		btnCreate.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 		btnCreate.setBackground(new Color(51, 204, 153));
 		btnCreate.addActionListener(new ActionListener() {
@@ -265,9 +267,22 @@ public class AssignmentCreationGUI extends JFrame {
 			    String fileName = "Assignment" + txtAssignmentNum.getText() + ".csv";
 			    
 				AssignmentCreator.initializeFile(fileName, month+"/"+date+"/"+year);
+				
+				int numSuccessfullyAdded = 0;
 				for (Problem problem : problems) {
-					AssignmentCreator.addProblem(fileName, problem);
+					if(AssignmentCreator.addProblem(fileName, problem)) {
+						numSuccessfullyAdded++;
+					}
 				}
+				
+				if (numSuccessfullyAdded == problems.size()) {
+					JOptionPane.showMessageDialog(null, "Assignment created successfully!");
+				} else {
+					JOptionPane.showMessageDialog(null, "There was a problem adding one or more problems.");
+				}
+				
+				setVisible(false);
+				dispose(); // Destroy the JFrame object
 			}
 		});
 		btnCreate.setBounds(720, 630, 107, 40);
