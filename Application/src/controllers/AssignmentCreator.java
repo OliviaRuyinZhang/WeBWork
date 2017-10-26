@@ -9,6 +9,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import models.Problem;
+
 public class AssignmentCreator {
 
 	// Number of multiple choice options per problem
@@ -22,21 +24,21 @@ public class AssignmentCreator {
 	 * @param solution: The problem's solution
 	 * @param options: A list of multiple choice options for the problem
 	 */
-	public static boolean addProblem(String fileName, int problemId, String problem, String solution, ArrayList<String> options) {
+	public static boolean addProblem(String fileName, Problem problem) {
 		try {
 			FileWriter fw = new FileWriter(fileName, true);
 			BufferedWriter bf = new BufferedWriter(fw);
 
 			// Add each of the problem's items
 			StringBuilder sb = new StringBuilder();
-			sb.append(problemId);
+			sb.append(problem.getProblemID());
 			sb.append(","); // Next column.
-			sb.append(problem);
+			sb.append(problem.getProblemString());
 			sb.append(","); // Next column.
-			sb.append(solution);
+			sb.append(problem.getSolution());
 			sb.append(","); // Next column.
 			for (int i = 0; i < numOptions; i++) {
-				sb.append(options.get(i));
+				sb.append(problem.getOptions().get(i));
 				if (i != numOptions -1) {
 					sb.append("|");
 				}
@@ -64,7 +66,7 @@ public class AssignmentCreator {
 	 * @param fileName: The file to be initialized
 	 * @param dueDate: The assignment's due date
 	 */
-	private static void initializeFile(String fileName, String dueDate) {
+	public static void initializeFile(String fileName, String dueDate) {
 		try {
 			FileWriter fw = new FileWriter(fileName, false);
 			BufferedWriter bf = new BufferedWriter(fw);
@@ -80,65 +82,5 @@ public class AssignmentCreator {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-	}
-
-	public static void main(String argvs[]) {
-		String input;
-		Scanner reader = new Scanner(System.in);  // Reading from System.in
-		System.out.println("CREATING A NEW ASSIGNMENT");
-		System.out.println("=========================");
-		System.out.print("What is the assignment number?: ");
-		input = reader.nextLine();
-
-		// csv file name
-		String assignmentcsv = "assignment" + input + ".csv";
-
-		File assignment = new File(assignmentcsv);
-
-		// Loop until the user gives permission to either wipe old assignment file or start a new one
-		while (assignment.exists()) {
-			System.out.print("Warning: An assignment already exists with this number.\n"
-					+ "If you proceed, the existing assignment will be wiped. Continue? [yes] [no]: ");
-			input = reader.nextLine();
-			if (input.equalsIgnoreCase("yes")) {
-				break;
-			} else {
-				System.out.print("What assignment # is this?: ");
-				input = reader.nextLine();
-				// csv file name.
-				assignmentcsv = "assignment" + input + ".csv";
-				assignment = new File(assignmentcsv);
-			}
-		}
-		
-		System.out.print("When is the assignment due? [dd/mm/yyyy]: ");
-		input = reader.nextLine();
-		
-		initializeFile(assignmentcsv, input);
-
-		System.out.print("Add new problem? [yes] [no]: ");
-		input = reader.nextLine();
-		int problemId = 1;
-
-		while(input.equalsIgnoreCase("yes")) {
-			System.out.print("Enter the actual problem: ");
-			String problem = reader.nextLine();
-			System.out.print("Enter the problem's solution: ");
-			String solution = reader.nextLine();
-			ArrayList<String> options = new ArrayList<>();
-			for (int i = 0; i < numOptions; i++) {
-				System.out.print("Enter a multiple choice option: ");
-				options.add(reader.nextLine());
-			}
-
-			addProblem(assignmentcsv, problemId, problem, solution, options);
-
-			System.out.print("Add new problem? [yes] [no]: ");
-			input = reader.nextLine();
-			problemId++;
-		}
-
-		// Once finished
-		reader.close();
 	}
 }
