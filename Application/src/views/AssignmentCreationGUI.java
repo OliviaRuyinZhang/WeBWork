@@ -56,6 +56,7 @@ public class AssignmentCreationGUI extends JFrame {
 		
 		JLabel lblNewAssignment = new JLabel("New Assignment");
 		lblNewAssignment.setFont(new Font("Segoe UI Light", Font.PLAIN, 52));
+		lblNewAssignment.setSize(lblNewAssignment.getPreferredSize());
 		lblNewAssignment.setBounds(62, 45, 377, 71);
 		contentPane.add(lblNewAssignment);
 		
