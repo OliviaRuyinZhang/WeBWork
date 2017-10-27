@@ -1,7 +1,9 @@
 package controllers;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
@@ -58,10 +60,53 @@ public class AssignmentCreator {
 
 		return false;
 	}
+        
+        /**
+	 * Toggles first row first col cell between Unreleased and Released
+         * strings.
+	 * @param fileName: The file where status is to be toggled
+	 */
+        public static void toggleReleaseStatus(String fileName){
+                try {
+			FileReader fr = new FileReader(fileName);
+			BufferedReader br = new BufferedReader(fr);
+			
+                        // Get old string
+			String line = br.readLine();
+                        
+                        // Make new string
+                        String newLine = "";
+                        // Toggle status for new line
+                        if (line.charAt(0) == 'U'){
+                                newLine = "Released";
+                        } else {
+                                newLine = "Unreleased";
+                        }
+                        // Add rest of old line
+                        int addFromIndex = line.indexOf(",");
+                        for(int i = addFromIndex; i < line.length(); i ++){
+                                newLine = newLine + line.charAt(i);
+                        }
+                      
+			br.close();
+			fr.close();
+                        
+                        // Write new status
+                        FileWriter fw = new FileWriter(fileName, false);
+			BufferedWriter bf = new BufferedWriter(fw);
+                        
+			bf.write(newLine + "\n");
+                        
+			bf.close();
+			fw.close();
+                } catch (IOException e) {
+			e.printStackTrace();
+		}
+        }
 
 	/**
-	 * Wipes out the given file and adds the current date and due date as
-	 * the first row in the assignment csv file.
+	 * Wipes out the given file and adds the unreleased tag, current date 
+         * due date and as the first row in the assignment csv file.
 	 * @param fileName: The file to be initialized
 	 * @param dueDate: The assignment's due date
 	 */
@@ -74,10 +119,12 @@ public class AssignmentCreator {
 			DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 			LocalDate localDate = LocalDate.now();
 			
-			// Add today's date and the due date to the file
-			bf.write(dtf.format(localDate) + "," + dueDate + "\n");
+			// Add unreleased tag today's date and the due date 
+                        // to the file
+			bf.write("Unreleased," + dtf.format(localDate) + "," + dueDate + "\n");
 			bf.close();
 			fw.close();
+                        
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
