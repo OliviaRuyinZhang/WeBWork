@@ -62,9 +62,30 @@ public class AssignmentCreator {
 	}
         
         /**
+	 * Returns true if the first cell of assignment#.csv is "Released"
+	 * @param fileName: The file where release status is to be checked
+         * @return: true if first cell is "Released"
+	 */
+        public static boolean isReleased(String fileName){
+                boolean status = true;
+                try {
+                      FileReader fr = new FileReader(fileName);
+                      BufferedReader br = new BufferedReader(fr);
+                      // Check first cell for unreleased
+                      String line = br.readLine();
+                      if (line.charAt(0) == 'U'){
+                              status = false;
+                      }
+                } catch (IOException e) {
+			e.printStackTrace();
+		}
+                return status;
+        }
+        
+        /**
 	 * Toggles first row first col cell between Unreleased and Released
          * strings.
-	 * @param fileName: The file where status is to be toggled
+	 * @param fileName: The file where release status is to be toggled
 	 */
         public static void toggleReleaseStatus(String fileName){
                 try {
@@ -77,7 +98,7 @@ public class AssignmentCreator {
                         // Make new string
                         String newLine = "";
                         // Toggle status for new line
-                        if (line.charAt(0) == 'U'){
+                        if (!isReleased(fileName)){
                                 newLine = "Released";
                         } else {
                                 newLine = "Unreleased";
