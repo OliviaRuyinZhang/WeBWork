@@ -49,7 +49,7 @@ public class AssignmentListingGUI extends JFrame{
 		setBounds(100, 100, 900, 731);
 		setTitle("WebWork");
 		contentPane = new JPanel();
-		contentPane.setBackground(new Color(0.9919f, 0.97f, 0.99159f));
+		contentPane.setBackground(Color.WHITE);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
@@ -57,15 +57,15 @@ public class AssignmentListingGUI extends JFrame{
 		
 		// Welcome label.
 		JLabel lblWelcome = new JLabel("Welcome,");
-		lblWelcome.setFont(new Font("Segoe UI Light", Font.PLAIN, 25)); // Light pink
-		lblWelcome.setBounds(62, 15, 80, 50);
+		lblWelcome.setFont(new Font("Segoe UI Light", Font.PLAIN, 22));
+		lblWelcome.setBounds(62, 20, 80, 50);
 		lblWelcome.setSize(lblWelcome.getPreferredSize());
 		contentPane.add(lblWelcome);
 	
 		
 		// User's Name label.
 		JLabel lblName = new JLabel("Insert Name");
-		lblName.setFont(new Font("Segoe UI Light", Font.PLAIN, 55));
+		lblName.setFont(new Font("Segoe UI Light", Font.PLAIN, 52));
 		lblName.setBounds(62, 45, 350, 70);
 		lblName.setSize(lblName.getPreferredSize());
 		contentPane.add(lblName);
@@ -80,7 +80,7 @@ public class AssignmentListingGUI extends JFrame{
 		
 		// Released Assignments Panel
 		releasedPanel = new JPanel();
-		releasedPanel.setBackground(new Color(0.9919f, 0.97f, 0.99159f));
+		releasedPanel.setBackground(Color.WHITE);
 		contentPane.add(releasedPanel);
 		releasedPanel.setLayout(null);
 		
@@ -103,15 +103,16 @@ public class AssignmentListingGUI extends JFrame{
 			String[] info = getAssignmentInfo(fileName);
 			if(info[0].equals("Released")) {
 				assignReleasedPanel.setBounds(0, 55 + i, 765, 85);
-				assignReleasedPanel.setBackground(Color.WHITE);
+				assignReleasedPanel.setBackground(Color.decode("#F0F0F0"));
+				assignReleasedPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 				
 				lblAssignment = new JLabel(fileName.replaceFirst("[.][^.]+$", "")); // Strips the .csv extension.
-				lblAssignment.setFont(new Font("Segoe UI Light", Font.BOLD, 20));
-				lblAssignment.setBounds(50, 0, 350, 70);
+				lblAssignment.setFont(new Font("Segoe UI Semibold", Font.PLAIN, 16));
+				lblAssignment.setBounds(50, -3, 350, 70);
 				assignReleasedPanel.add(lblAssignment);
 				
 				lblDeadline = new JLabel("Due " + info[2]);
-				lblDeadline.setFont(new Font("Segoe UI Light", Font.PLAIN, 15));
+				lblDeadline.setFont(new Font("Segoe UI Regular", Font.PLAIN, 13));
 				lblDeadline.setBounds(50, 22, 350, 70);
 				lblDeadline.setBackground(Color.BLACK);
 				assignReleasedPanel.add(lblDeadline);
@@ -145,15 +146,16 @@ public class AssignmentListingGUI extends JFrame{
 			String[] info = getAssignmentInfo(fileName);
 			if(info[0].equals("Unreleased")) {
 				assignUnreleasedPanel.setBounds(0, 130 + i, 765, 85);
-				assignUnreleasedPanel.setBackground(Color.WHITE);
+				assignUnreleasedPanel.setBackground(Color.decode("#F0F0F0"));
+				assignUnreleasedPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 
 				lblAssignment = new JLabel(fileName.replaceFirst("[.][^.]+$", "")); // Strips the .csv extension.
-				lblAssignment.setFont(new Font("Segoe UI Light", Font.BOLD, 20));
-				lblAssignment.setBounds(50, 0, 350, 70);
+				lblAssignment.setFont(new Font("Segoe UI Semibold", Font.PLAIN, 16));
+				lblAssignment.setBounds(50, -3, 350, 70);
 				assignUnreleasedPanel.add(lblAssignment);
 				
 				lblDeadline = new JLabel("Due " + info[2]);
-				lblDeadline.setFont(new Font("Segoe UI Light", Font.PLAIN, 15));
+				lblDeadline.setFont(new Font("Segoe UI Regular", Font.PLAIN, 13));
 				lblDeadline.setBounds(50, 22, 350, 70);
 				assignUnreleasedPanel.add(lblDeadline);
 				
