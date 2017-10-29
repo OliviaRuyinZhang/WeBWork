@@ -7,6 +7,7 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -16,21 +17,15 @@ import java.awt.Color;
 import javax.swing.JComboBox;
 import javax.swing.JTextField;
 import javax.swing.JTextArea;
-import javax.swing.AbstractButton;
+import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
-import java.sql.Date;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Enumeration;
-import java.util.Locale;
 import java.awt.event.ActionEvent;
 import javax.swing.JRadioButton;
 import java.awt.Dimension;
 import javax.swing.SwingConstants;
-import javax.swing.UIManager;
 
 public class AssignmentCreationGUI extends JFrame {
 	private int problemID = 1;
@@ -64,13 +59,15 @@ public class AssignmentCreationGUI extends JFrame {
 	public AssignmentCreationGUI() {
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 900, 731);
+		setBounds(100, 100, 900, 750);
 		contentPane = new JPanel();
 		contentPane.setBackground(Color.WHITE);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		contentPane.setLayout(null);
+		
+		Border border = BorderFactory.createLineBorder(Color.decode("#7A7A7A"), 2);
 		
 		JLabel lblNewAssignment = new JLabel("New Assignment");
 		lblNewAssignment.setFont(new Font("Segoe UI Light", Font.PLAIN, 52));
@@ -136,7 +133,7 @@ public class AssignmentCreationGUI extends JFrame {
 		contentPane.add(lblProblems);
 		
 		JPanel problemPanel = new JPanel();
-		problemPanel.setBounds(62, 295, 765, 312);
+		problemPanel.setBounds(62, 295, 765, 338);
 		contentPane.add(problemPanel);
 		problemPanel.setLayout(null);
 		
@@ -148,63 +145,76 @@ public class AssignmentCreationGUI extends JFrame {
 		
 		JLabel lblOptions = new JLabel("Options");
 		lblOptions.setFont(new Font("Segoe UI", Font.PLAIN, 15));
-		lblOptions.setBounds(24, 102, 56, 21);
+		lblOptions.setBounds(25, 129, 56, 21);
 		lblOptions.setSize(lblOptions.getPreferredSize());
 		problemPanel.add(lblOptions);
 		
 		JTextArea textArea = new JTextArea();
-		textArea.setBounds(24, 53, 718, 38);
+		textArea.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+		textArea.setBorder(BorderFactory.createCompoundBorder(border,
+	            BorderFactory.createEmptyBorder(5, 5, 5, 5)));
+		textArea.setBounds(24, 53, 718, 60);
+		textArea.setLineWrap(true);
+		textArea.setWrapStyleWord(true);
 		problemPanel.add(textArea);
 		
 		txtOptionA = new JTextField(); 
 		txtOptionA.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+		txtOptionA.setBorder(BorderFactory.createCompoundBorder(border,
+	            BorderFactory.createEmptyBorder(5, 5, 5, 5)));
 		txtOptionA.setUI(new JTextFieldHintUI("Option A", Color.gray)); 
-		txtOptionA.setBounds(24, 134, 286, 30);
+		txtOptionA.setBounds(25, 161, 286, 30);
 		problemPanel.add(txtOptionA);
 		txtOptionA.setColumns(10);
 		
 		txtOptionB = new JTextField();
 		txtOptionB.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+		txtOptionB.setBorder(BorderFactory.createCompoundBorder(border,
+	            BorderFactory.createEmptyBorder(5, 5, 5, 5)));
 		txtOptionB.setUI(new JTextFieldHintUI("Option B", Color.gray)); 
 		txtOptionB.setColumns(10);
-		txtOptionB.setBounds(24, 175, 286, 30);
+		txtOptionB.setBounds(25, 202, 286, 30);
 		problemPanel.add(txtOptionB);
 		
 		txtOptionC = new JTextField();
 		txtOptionC.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+		txtOptionC.setBorder(BorderFactory.createCompoundBorder(border,
+	            BorderFactory.createEmptyBorder(5, 5, 5, 5)));
 		txtOptionC.setUI(new JTextFieldHintUI("Option C", Color.gray)); 
 		txtOptionC.setColumns(10);
-		txtOptionC.setBounds(24, 216, 286, 30);
+		txtOptionC.setBounds(25, 243, 286, 30);
 		problemPanel.add(txtOptionC);
 		
 		txtOptionD = new JTextField();
 		txtOptionD.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+		txtOptionD.setBorder(BorderFactory.createCompoundBorder(border,
+	            BorderFactory.createEmptyBorder(5, 5, 5, 5)));
 		txtOptionD.setUI(new JTextFieldHintUI("Option D", Color.gray)); 
 		txtOptionD.setColumns(10);
-		txtOptionD.setBounds(24, 257, 286, 30);
+		txtOptionD.setBounds(25, 284, 286, 30);
 		problemPanel.add(txtOptionD);		
 		
 		JLabel lblSolution = new JLabel("Solution");
 		lblSolution.setFont(new Font("Segoe UI", Font.PLAIN, 15));
-		lblSolution.setBounds(321, 102, 56, 21);
+		lblSolution.setBounds(322, 129, 56, 21);
 		lblSolution.setSize(lblSolution.getPreferredSize());
 		problemPanel.add(lblSolution);
 		
 		JRadioButton option_A_radio = new JRadioButton("");
 		option_A_radio.setSelected(true);
-		option_A_radio.setBounds(336, 134, 23, 30);
+		option_A_radio.setBounds(337, 161, 23, 30);
 		problemPanel.add(option_A_radio);
 		
 		JRadioButton option_B_radio = new JRadioButton("");
-		option_B_radio.setBounds(336, 175, 23, 30);
+		option_B_radio.setBounds(337, 202, 23, 30);
 		problemPanel.add(option_B_radio);
 		
 		JRadioButton option_C_radio = new JRadioButton("");
-		option_C_radio.setBounds(336, 216, 23, 30);
+		option_C_radio.setBounds(337, 243, 23, 30);
 		problemPanel.add(option_C_radio);
 		
 		JRadioButton option_D_radio = new JRadioButton("");
-		option_D_radio.setBounds(336, 257, 23, 30);
+		option_D_radio.setBounds(337, 284, 23, 30);
 		problemPanel.add(option_D_radio);
 		
 		ButtonGroup bg = new ButtonGroup();
@@ -256,12 +266,13 @@ public class AssignmentCreationGUI extends JFrame {
 				option_A_radio.setSelected(true);
 			}
 		});
-		btnAddProblem.setBounds(521, 630, 190, 40);
+		
+		btnAddProblem.setBounds(521, 660, 190, 40);
 		contentPane.add(btnAddProblem);
 		
 		JButton btnCreate = new JButton("Create");
 		if (System.getProperty("os.name").toLowerCase().indexOf("win") >= 0) {
-			btnAddProblem.setBorderPainted(false);
+			btnCreate.setBorderPainted(false);
 		}
 		btnCreate.setFocusPainted(false);
 		btnCreate.setForeground(Color.BLACK);
@@ -294,7 +305,7 @@ public class AssignmentCreationGUI extends JFrame {
 				dispose(); // Destroy the JFrame object
 			}
 		});
-		btnCreate.setBounds(720, 630, 107, 40);
+		btnCreate.setBounds(720, 660, 107, 40);
 		contentPane.add(btnCreate);
 	}
 }
