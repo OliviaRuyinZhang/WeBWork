@@ -30,6 +30,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.JRadioButton;
 import java.awt.Dimension;
 import javax.swing.SwingConstants;
+import javax.swing.UIManager;
 
 public class AssignmentCreationGUI extends JFrame {
 	private int problemID = 1;
@@ -214,7 +215,9 @@ public class AssignmentCreationGUI extends JFrame {
 		
 		
 		JButton btnAddProblem = new JButton("+ Add This Problem");
-		btnAddProblem.setBorderPainted(false);
+		if (System.getProperty("os.name").toLowerCase().indexOf("win") >= 0) {
+			btnAddProblem.setBorderPainted(false);
+		}
 		btnAddProblem.setFocusPainted(false);
 		btnAddProblem.setBackground(Color.LIGHT_GRAY);
 		btnAddProblem.setFont(new Font("Segoe UI", Font.PLAIN, 15));
@@ -257,7 +260,9 @@ public class AssignmentCreationGUI extends JFrame {
 		contentPane.add(btnAddProblem);
 		
 		JButton btnCreate = new JButton("Create");
-		btnCreate.setBorderPainted(false);
+		if (System.getProperty("os.name").toLowerCase().indexOf("win") >= 0) {
+			btnAddProblem.setBorderPainted(false);
+		}
 		btnCreate.setFocusPainted(false);
 		btnCreate.setForeground(Color.BLACK);
 		btnCreate.setFont(new Font("Segoe UI", Font.PLAIN, 15));

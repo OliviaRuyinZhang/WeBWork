@@ -40,7 +40,7 @@ public class JTextFieldHintUI extends BasicTextFieldUI implements FocusListener 
             g.setColor(hintColor);
             int padding = (component.getHeight() - component.getFont().getSize()) / 2;
             int inset = 3;
-            g.drawString(hint, inset, component.getHeight() - padding - inset);
+            g.drawString(hint, 10, component.getHeight() - padding - inset);
         }
     }
 
