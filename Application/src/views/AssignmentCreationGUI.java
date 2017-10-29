@@ -155,30 +155,30 @@ public class AssignmentCreationGUI extends JFrame {
 		textArea.setBounds(24, 53, 718, 38);
 		problemPanel.add(textArea);
 		
-		txtOptionA = new JTextField();
+		txtOptionA = new JTextField(); 
 		txtOptionA.setFont(new Font("Segoe UI", Font.PLAIN, 15));
-		txtOptionA.setText("Option A");
+		txtOptionA.setUI(new JTextFieldHintUI("Option A", Color.gray)); 
 		txtOptionA.setBounds(24, 134, 286, 30);
 		problemPanel.add(txtOptionA);
 		txtOptionA.setColumns(10);
 		
 		txtOptionB = new JTextField();
-		txtOptionB.setText("Option B");
 		txtOptionB.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+		txtOptionB.setUI(new JTextFieldHintUI("Option B", Color.gray)); 
 		txtOptionB.setColumns(10);
 		txtOptionB.setBounds(24, 175, 286, 30);
 		problemPanel.add(txtOptionB);
 		
 		txtOptionC = new JTextField();
-		txtOptionC.setText("Option C");
 		txtOptionC.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+		txtOptionC.setUI(new JTextFieldHintUI("Option C", Color.gray)); 
 		txtOptionC.setColumns(10);
 		txtOptionC.setBounds(24, 216, 286, 30);
 		problemPanel.add(txtOptionC);
 		
 		txtOptionD = new JTextField();
-		txtOptionD.setText("Option D");
 		txtOptionD.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+		txtOptionD.setUI(new JTextFieldHintUI("Option D", Color.gray)); 
 		txtOptionD.setColumns(10);
 		txtOptionD.setBounds(24, 257, 286, 30);
 		problemPanel.add(txtOptionD);		
@@ -214,6 +214,8 @@ public class AssignmentCreationGUI extends JFrame {
 		
 		
 		JButton btnAddProblem = new JButton("+ Add This Problem");
+		btnAddProblem.setBorderPainted(false);
+		btnAddProblem.setFocusPainted(false);
 		btnAddProblem.setBackground(Color.LIGHT_GRAY);
 		btnAddProblem.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 		btnAddProblem.addActionListener(new ActionListener() {
@@ -255,6 +257,8 @@ public class AssignmentCreationGUI extends JFrame {
 		contentPane.add(btnAddProblem);
 		
 		JButton btnCreate = new JButton("Create");
+		btnCreate.setBorderPainted(false);
+		btnCreate.setFocusPainted(false);
 		btnCreate.setForeground(Color.BLACK);
 		btnCreate.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 		btnCreate.setBackground(new Color(51, 204, 153));
