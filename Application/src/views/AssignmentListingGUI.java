@@ -313,7 +313,7 @@ class updateStatus implements ActionListener{
 		String replacedtext;
         try {
 			BufferedReader reader = new BufferedReader(new FileReader(file));
-			String line = "", oldtext = "";
+			String oldtext = "";
 			oldtext = reader.readLine();
 			reader.close();
 			if(originalStatus.equals("Unreleased")) {
@@ -326,7 +326,6 @@ class updateStatus implements ActionListener{
 			writer.write(replacedtext);
 			writer.close();
 		} catch (Exception e) {
-			// TODO: handle exception
 			 e.printStackTrace();
 		}
 	}
