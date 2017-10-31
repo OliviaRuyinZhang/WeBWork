@@ -313,10 +313,10 @@ class updateStatus implements ActionListener{
 			oldtext = reader.readLine();
 			reader.close();
 			if(originalStatus.equals("Unreleased")) {
-				replacedtext = oldtext.replaceAll(originalStatus, "Released");
+				replacedtext = oldtext.replaceFirst(originalStatus, "Released");
 			}
 			else {
-				replacedtext = oldtext.replaceAll(originalStatus, "Unreleased");
+				replacedtext = oldtext.replaceFirst(originalStatus, "Unreleased");
 			}
 			FileWriter writer = new FileWriter(file);
 			writer.write(replacedtext);
