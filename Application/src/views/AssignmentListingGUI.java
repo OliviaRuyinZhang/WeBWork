@@ -139,21 +139,17 @@ public class AssignmentListingGUI extends JFrame{
 				JButton unReleasedButton = new JButton("Unrelease");
 				unReleasedButton.setHorizontalTextPosition(SwingConstants.CENTER);
 				unReleasedButton.setBounds(600, 20, 120, 50);
-				updateStatus changeSatus = new updateStatus(file, "Released");
+				updateStatus changeSatus = new updateStatus(file, info[0]);
 				unReleasedButton.addActionListener(changeSatus);
-				
 				
 				// Add to the panel.
 				assignReleasedPanel.add(unReleasedButton);
-			
+				
 				i += 90;
 				
 			}
 			//assignmentPanel.setLayout(null);
-			
 			releasedPanel.add(assignReleasedPanel);
-		
-			
 		}
 		
 		/*
@@ -200,19 +196,19 @@ public class AssignmentListingGUI extends JFrame{
 				JButton releasedButton = new JButton("Release");
 				releasedButton.setHorizontalTextPosition(SwingConstants.CENTER);
 				releasedButton.setBounds(600, 20, 120, 50);
-				updateStatus changeSatus = new updateStatus(file, "Unreleased");
+				updateStatus changeSatus = new updateStatus(file, info[0]);
 				releasedButton.addActionListener(changeSatus);
 				
 				
 				// Add to the panel.
 				assignUnreleasedPanel.add(releasedButton);
-				
+
 				
 				i += 90;
 			}
 			
 			releasedPanel.add(assignUnreleasedPanel);
-	
+			
 		}
 		
 		
@@ -325,6 +321,7 @@ class updateStatus implements ActionListener{
 			FileWriter writer = new FileWriter(file);
 			writer.write(replacedtext);
 			writer.close();
+			AssignmentListingGUI.main(null);
 		} catch (Exception e) {
 			 e.printStackTrace();
 		}
