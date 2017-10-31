@@ -1,8 +1,15 @@
 package views;
 
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.Graphics2D;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -13,13 +20,20 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.swing.BorderFactory;
+import javax.swing.Icon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
+import com.sun.prism.Graphics;
+import com.sun.xml.internal.ws.api.Component;
+
 public class AssignmentListingGUI extends JFrame{
+	private static final Color GREEN = null;
 	private JPanel contentPane;
 	private JScrollPane scroll;
 	private JPanel releasedPanel;
@@ -41,7 +55,7 @@ public class AssignmentListingGUI extends JFrame{
 			}
 		});
 	}
-	
+
 	public AssignmentListingGUI() {
 				
 		setResizable(true);
@@ -116,6 +130,21 @@ public class AssignmentListingGUI extends JFrame{
 				lblDeadline.setBounds(50, 22, 350, 70);
 				lblDeadline.setBackground(Color.BLACK);
 				assignReleasedPanel.add(lblDeadline);
+				
+				// Create the button JButton
+				/*
+				 * functionality
+				 */
+				
+				JButton unReleasedButton = new JButton("Unrelease");
+				unReleasedButton.setHorizontalTextPosition(SwingConstants.CENTER);
+				unReleasedButton.setBounds(600, 20, 120, 50);
+				updateStatus changeSatus = new updateStatus(file, "Released");
+				unReleasedButton.addActionListener(changeSatus);
+				
+				
+				// Add to the panel.
+				assignReleasedPanel.add(unReleasedButton);
 			
 				i += 90;
 				
@@ -126,6 +155,10 @@ public class AssignmentListingGUI extends JFrame{
 		
 			
 		}
+		
+		/*
+		 * Unreleased Assignments Section
+		 */
 
 		// Unreleased label.
 		JLabel lblUnreleased = new JLabel("Unreleased");
@@ -158,6 +191,22 @@ public class AssignmentListingGUI extends JFrame{
 				lblDeadline.setFont(new Font("Segoe UI Regular", Font.PLAIN, 13));
 				lblDeadline.setBounds(50, 22, 350, 70);
 				assignUnreleasedPanel.add(lblDeadline);
+				
+				// Create the button JButton
+				/*
+				 * functionality
+				 */
+				
+				JButton releasedButton = new JButton("Release");
+				releasedButton.setHorizontalTextPosition(SwingConstants.CENTER);
+				releasedButton.setBounds(600, 20, 120, 50);
+				updateStatus changeSatus = new updateStatus(file, "Unreleased");
+				releasedButton.addActionListener(changeSatus);
+				
+				
+				// Add to the panel.
+				assignUnreleasedPanel.add(releasedButton);
+				
 				
 				i += 90;
 			}
@@ -239,4 +288,49 @@ public class AssignmentListingGUI extends JFrame{
     	return info;
 
     }
+	
 }
+
+
+class updateStatus implements ActionListener{
+	private File csvFile;
+	private String status;
+	
+	public updateStatus(File file, String originalStatus) {
+		this.csvFile = file;
+		this.status = originalStatus;
+	}
+
+	public void actionPerformed(ActionEvent e) {
+		updateStatusInfo(csvFile, status);
+	}
+	
+	 /**
+	    * @param file: The file object which we want to change release status
+	    * @param originalStatus: the assignment's original status
+	    */
+	private void updateStatusInfo(File file, String originalStatus) {	
+		String replacedtext;
+        try {
+			BufferedReader reader = new BufferedReader(new FileReader(file));
+			String line = "", oldtext = "";
+			oldtext = reader.readLine();
+			reader.close();
+			if(originalStatus.equals("Unreleased")) {
+				replacedtext = oldtext.replaceAll(originalStatus, "Released");
+			}
+			else {
+				replacedtext = oldtext.replaceAll(originalStatus, "Unreleased");
+			}
+			FileWriter writer = new FileWriter(file);
+			writer.write(replacedtext);
+			writer.close();
+		} catch (Exception e) {
+			// TODO: handle exception
+			 e.printStackTrace();
+		}
+	}
+}
+
+
+
