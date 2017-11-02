@@ -172,7 +172,7 @@ public class AssignmentEditingGUI extends JFrame {
 		//Text area to type choice B
 		txtOptionB = new JTextField();
 		txtOptionB.setText("Option B");
-		txtOptionB.setFont(new Font("Sego	e UI", Font.PLAIN, 15));
+		txtOptionB.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 		txtOptionB.setColumns(10);
 		txtOptionB.setBounds(24, 175, 286, 30);
 		problemPanel.add(txtOptionB);
