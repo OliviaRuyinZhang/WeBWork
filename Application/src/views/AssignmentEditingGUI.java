@@ -20,6 +20,10 @@ import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -168,7 +172,7 @@ public class AssignmentEditingGUI extends JFrame {
 		//Text area to type choice B
 		txtOptionB = new JTextField();
 		txtOptionB.setText("Option B");
-		txtOptionB.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+		txtOptionB.setFont(new Font("Sego	e UI", Font.PLAIN, 15));
 		txtOptionB.setColumns(10);
 		txtOptionB.setBounds(24, 175, 286, 30);
 		problemPanel.add(txtOptionB);
@@ -295,4 +299,34 @@ public class AssignmentEditingGUI extends JFrame {
 		btnSave.setBounds(720, 630, 107, 40);
 		contentPane.add(btnSave);
 	}
+	
+	public String[] getAssignmentOptions(String fileName){
+		String[] options = new String[4];
+		String line = "";
+		BufferedReader br = null;
+		
+		try {
+    		FileReader fr = new FileReader(fileName);
+    		br = new BufferedReader(fr);
+    		while ((line = br.readLine())!= null){
+    			options = line.split(",");
+    		}
+    		
+    	} catch (FileNotFoundException e) {
+    		e.printStackTrace();
+        } catch (IOException e) {
+        	e.printStackTrace();
+        } finally {
+        	if (br != null) {
+        		try {
+        			br.close();
+        		} catch (IOException e) {
+        			e.printStackTrace();
+        		}
+        	}
+        } 
+		
+		return options;
+	}
+	
 }
