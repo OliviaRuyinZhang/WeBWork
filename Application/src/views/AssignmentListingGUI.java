@@ -139,7 +139,7 @@ public class AssignmentListingGUI extends JFrame{
 				JButton unReleasedButton = new JButton("Unrelease");
 				unReleasedButton.setHorizontalTextPosition(SwingConstants.CENTER);
 				unReleasedButton.setBounds(600, 20, 120, 50);
-				updateStatus changeSatus = new updateStatus(file, info[0]);
+				updateStatus changeSatus = new updateStatus(file, info[0], this);
 				unReleasedButton.addActionListener(changeSatus);
 				
 				// Add to the panel.
@@ -196,7 +196,7 @@ public class AssignmentListingGUI extends JFrame{
 				JButton releasedButton = new JButton("Release");
 				releasedButton.setHorizontalTextPosition(SwingConstants.CENTER);
 				releasedButton.setBounds(600, 20, 120, 50);
-				updateStatus changeSatus = new updateStatus(file, info[0]);
+				updateStatus changeSatus = new updateStatus(file, info[0], this);
 				releasedButton.addActionListener(changeSatus);
 				
 				
@@ -214,7 +214,7 @@ public class AssignmentListingGUI extends JFrame{
 		
 		releasedPanel.setBounds(62, 145, 765, 150 + i);
 		contentPane.add(releasedPanel);
-
+		
 	
 	}
 	
@@ -291,21 +291,22 @@ public class AssignmentListingGUI extends JFrame{
 class updateStatus implements ActionListener{
 	private File csvFile;
 	private String status;
-	
-	public updateStatus(File file, String originalStatus) {
+	private JFrame board;
+	public updateStatus(File file, String originalStatus, JFrame board) {
 		this.csvFile = file;
 		this.status = originalStatus;
+		this.board = board;
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		updateStatusInfo(csvFile, status);
+		updateStatusInfo(csvFile, status, board);
 	}
 	
 	 /**
 	    * @param file: The file object which we want to change release status
 	    * @param originalStatus: the assignment's original status
 	    */
-	private void updateStatusInfo(File file, String originalStatus) {	
+	private void updateStatusInfo(File file, String originalStatus, JFrame board) {	
 		String replacedtext;
         try {
 			BufferedReader reader = new BufferedReader(new FileReader(file));
@@ -321,12 +322,11 @@ class updateStatus implements ActionListener{
 			FileWriter writer = new FileWriter(file);
 			writer.write(replacedtext);
 			writer.close();
-			AssignmentListingGUI.main(null);
+			AssignmentListingGUI frame = new AssignmentListingGUI();
+			frame.setVisible(true);
+			board.dispose();
 		} catch (Exception e) {
 			 e.printStackTrace();
 		}
 	}
 }
-
-
-
