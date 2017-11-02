@@ -2,17 +2,13 @@ package views;
 
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Font;
-import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,22 +16,16 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.swing.BorderFactory;
-import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
-import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
-import com.sun.prism.Graphics;
-import com.sun.xml.internal.ws.api.Component;
-
-/*
- * Class to display's an Instructors GUI of the
- * assignment listing window.
+/**
+ * Class to display a list of assignments for an instructor.
  */
 public class InstructorListingGUI extends JFrame{
 	private static final Color GREEN = null;

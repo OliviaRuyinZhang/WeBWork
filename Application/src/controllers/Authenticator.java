@@ -11,6 +11,9 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Scanner;
 
+/**
+ * Class to handle authentication of users.
+ */
 public class Authenticator {
 	
 	// csv file name.

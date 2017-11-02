@@ -2,6 +2,9 @@ package models;
 
 import java.util.ArrayList;
 
+/**
+ * Class to represent an assignment problem.
+ */
 public class Problem {
 	private int problemID;
 	private String problemString;
