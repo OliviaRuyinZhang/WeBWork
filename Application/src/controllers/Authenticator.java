@@ -86,19 +86,16 @@ public class Authenticator {
 					 * same as the hashed password in the file.
 					 */
 					if(user_info[1].equals(hash_val)) {
-						System.out.println("Login successful.");
 						return true;
 					} else {
-						System.out.println("Invalid password.");
 						return false;
 					}
 				}
 			}
 			
-			System.out.println("The user \"" + email + "\" does not exist.");
-			
 			br.close();
 			fr.close();
+			return false;
 		} catch (FileNotFoundException fnfe) {
 			fnfe.printStackTrace();
 		} catch (IOException e) {

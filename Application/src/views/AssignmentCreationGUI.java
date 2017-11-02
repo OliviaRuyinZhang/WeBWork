@@ -41,22 +41,6 @@ public class AssignmentCreationGUI extends JFrame {
 	private JTextField txtAssignmentNum;
 
 	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					AssignmentCreationGUI frame = new AssignmentCreationGUI();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
 	 * Create the frame.
 	 */
 	public AssignmentCreationGUI() {
