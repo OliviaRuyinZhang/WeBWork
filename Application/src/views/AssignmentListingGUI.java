@@ -142,6 +142,7 @@ public class AssignmentListingGUI extends JFrame{
 				updateStatus changeSatus = new updateStatus(file, info[0]);
 				unReleasedButton.addActionListener(changeSatus);
 				
+				
 				// Add to the panel.
 				assignReleasedPanel.add(unReleasedButton);
 				
