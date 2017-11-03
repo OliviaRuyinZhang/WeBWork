@@ -27,6 +27,9 @@ import javax.swing.JRadioButton;
 import java.awt.Dimension;
 import javax.swing.SwingConstants;
 
+/**
+ * Class to create a new assignment for an instructor.
+ */
 public class AssignmentCreationGUI extends JFrame {
 	private int problemID = 1;
 	private ArrayList<Problem> problems = new ArrayList<>();

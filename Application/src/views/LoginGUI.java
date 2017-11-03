@@ -3,6 +3,9 @@ package views;
 import controllers.Authenticator;
 import javax.swing.JOptionPane;
 
+/**
+ * Class to allow users to log in and register.
+ */
 public class LoginGUI extends javax.swing.JFrame {
 
 	/**

@@ -2,17 +2,13 @@ package views;
 
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Font;
-import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,24 +16,22 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.swing.BorderFactory;
-import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
+import javax.swing.JScrollBar;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
-import com.sun.prism.Graphics;
-import com.sun.xml.internal.ws.api.Component;
-
-public class AssignmentListingGUI extends JFrame{
+/**
+ * Class to display a list of assignments for an instructor.
+ */
+public class InstructorListingGUI extends JFrame{
 	private static final Color GREEN = null;
 	private JPanel contentPane;
-	private JScrollPane scroll;
-	private JPanel releasedPanel;
-	private JPanel unreleasedPanel;
+	private JScrollBar scroll;
+	private JPanel listAssignmentsPanel;
 	private List<File> assignments;
 
 	/**
@@ -47,7 +41,7 @@ public class AssignmentListingGUI extends JFrame{
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					AssignmentListingGUI frame = new AssignmentListingGUI();
+					InstructorListingGUI frame = new InstructorListingGUI();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -56,9 +50,8 @@ public class AssignmentListingGUI extends JFrame{
 		});
 	}
 
-	public AssignmentListingGUI() {
-				
-		setResizable(true);
+	public InstructorListingGUI() {
+		setResizable(true); // Temporarily until we add a scroll bar.
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 900, 731);
 		setTitle("WebWork");
@@ -93,17 +86,17 @@ public class AssignmentListingGUI extends JFrame{
 		 */
 		
 		// Released Assignments Panel
-		releasedPanel = new JPanel();
-		releasedPanel.setBackground(Color.WHITE);
-		contentPane.add(releasedPanel);
-		releasedPanel.setLayout(null);
+		listAssignmentsPanel = new JPanel();
+		listAssignmentsPanel.setBackground(Color.WHITE);
+		contentPane.add(listAssignmentsPanel);
+		listAssignmentsPanel.setLayout(null);
 		
 		// Released label.
 		JLabel lblReleased = new JLabel("Released");
 		lblReleased.setFont(new Font("Segoe UI Light", Font.PLAIN, 35));
 		lblReleased.setBounds(0, 0, 350, 70);
 		lblReleased.setSize(lblReleased.getPreferredSize());
-		releasedPanel.add(lblReleased);
+		listAssignmentsPanel.add(lblReleased);
 		
 		JLabel lblAssignment;
 		JLabel lblDeadline;
@@ -135,14 +128,13 @@ public class AssignmentListingGUI extends JFrame{
 				JButton unReleaseButton = new JButton("Unrelease");
 				unReleaseButton.setHorizontalTextPosition(SwingConstants.CENTER);
 				unReleaseButton.setBounds(600, 20, 120, 50);
-				updateStatus changeSatus = new updateStatus(file, info[0]);
+				updateStatus changeSatus = new updateStatus(file, info[0], this);
 				unReleaseButton.addActionListener(changeSatus);
 				
 				// Create edit assignment button.
 				JButton editAssignment = new JButton("Edit");
 				unReleaseButton.setHorizontalTextPosition(SwingConstants.CENTER);
 				unReleaseButton.setBounds(600, 20, 120, 50);
-				
 				
 				
 				// Add to the panel.
@@ -152,7 +144,7 @@ public class AssignmentListingGUI extends JFrame{
 				
 			}
 			//assignmentPanel.setLayout(null);
-			releasedPanel.add(assignReleasedPanel);
+			listAssignmentsPanel.add(assignReleasedPanel);
 		}
 		
 		/*
@@ -166,7 +158,7 @@ public class AssignmentListingGUI extends JFrame{
 		lblUnreleased.setBounds(0,  75 + i , lblUnreleased.getWidth(), 
 				lblUnreleased.getHeight());
 		
-		releasedPanel.add(lblUnreleased);
+		listAssignmentsPanel.add(lblUnreleased);
 		
 		
 
@@ -195,28 +187,42 @@ public class AssignmentListingGUI extends JFrame{
 				JButton releaseButton = new JButton("Release");
 				releaseButton.setHorizontalTextPosition(SwingConstants.CENTER);
 				releaseButton.setBounds(600, 20, 120, 50);
-				updateStatus changeSatus = new updateStatus(file, info[0]);
+				updateStatus changeSatus = new updateStatus(file, info[0], this);
 				releaseButton.addActionListener(changeSatus);
 				
 				
 				// Add to the panel.
 				assignUnreleasedPanel.add(releaseButton);
-
-				
+/*
+				// Released Button
+				JButton releasedButton = new JButton("Release");
+				releasedButton.setHorizontalTextPosition(SwingConstants.CENTER);
+				releasedButton.setBounds(600, 20, 120, 50);
+				updateStatus changeSatus = new updateStatus(file, info[0], this);
+				releasedButton.addActionListener(changeSatus);
+				assignUnreleasedPanel.add(releasedButton);
+	*/			
+				// Set y for the next assignment panel.
 				i += 90;
 			}
-			
-			releasedPanel.add(assignUnreleasedPanel);
+			listAssignmentsPanel.add(assignUnreleasedPanel);
 			
 		}
 		
+		listAssignmentsPanel.setBounds(62, 145, 765, 150 + i);
+		contentPane.add(listAssignmentsPanel);
 		
-		releasedPanel.setBounds(62, 145, 765, 150 + i);
-		contentPane.add(releasedPanel);
-
+		
+		
 	
 	}
 	
+	/**
+	 * Return an ArrayList of assignment files from the user's
+	 * default project directory. 
+	 * 
+	 * @return ArrayList of files.
+	 */
 	private ArrayList<File> gatherExistingAssignments(){
 		
 		ArrayList<File> assignments = new ArrayList<>();
@@ -234,34 +240,15 @@ public class AssignmentListingGUI extends JFrame{
 	    }  
 	    return assignments;
 	}
-	
-   /**
-    * Returns true if the first cell of assignment#.csv is "Released"
-    * @param fileName: The file where release status is to be checked
-    * @return: True if first cell is "Released"
-    */
-    @SuppressWarnings("resource")
-	public static boolean isReleased(String fileName){
-
-    	try {
-    		FileReader fr = new FileReader(fileName);
-    		BufferedReader br = new BufferedReader(fr);
-    		// Check first cell for unreleased
-    		String line = br.readLine();
-    		if (line.equals("Unreleased")){
-    			return false;
-    		}
-    		br.close();
-    		fr.close();
-    		
-    	} catch (IOException e) {
-    		e.printStackTrace();
-        }
-        return true;
-    }
     
-    /*
+    /**
+     * Returns a String array of the assignment
+     * information, located in it's respective
+     * assignment csv file.
+     * 
      * [(Un)released/Due-date/date of creation]
+     * 
+     * @param fileName: String name of the assignment's csv file.
      */
     public String[] getAssignmentInfo(String fileName) {
     	
@@ -287,24 +274,31 @@ public class AssignmentListingGUI extends JFrame{
 }
 
 
+/*
+ * Class that handles the released buttons.
+ */
 class updateStatus implements ActionListener{
 	private File csvFile;
 	private String status;
-	
-	public updateStatus(File file, String originalStatus) {
+	private JFrame board;
+	public updateStatus(File file, String originalStatus, JFrame board) {
 		this.csvFile = file;
 		this.status = originalStatus;
+		this.board = board;
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		updateStatusInfo(csvFile, status);
+		updateStatusInfo(csvFile, status, board);
 	}
 	
-	 /**
-	    * @param file: The file object which we want to change release status
-	    * @param originalStatus: the assignment's original status
-	    */
-	private void updateStatusInfo(File file, String originalStatus) {	
+	/**
+	 * Changes the Released/Unreleased flag string in the corresponding assignment
+	 * csv file.
+	 * 
+     * @param file: The file object which we want to change release status
+	 * @param originalStatus: the assignment's original status
+	 */
+	private void updateStatusInfo(File file, String originalStatus, JFrame board) {	
 		String replacedtext;
         try {
 			BufferedReader reader = new BufferedReader(new FileReader(file));
@@ -320,12 +314,11 @@ class updateStatus implements ActionListener{
 			FileWriter writer = new FileWriter(file);
 			writer.write(replacedtext);
 			writer.close();
-			AssignmentListingGUI.main(null);
+			InstructorListingGUI frame = new InstructorListingGUI();
+			frame.setVisible(true);
+			board.dispose();
 		} catch (Exception e) {
 			 e.printStackTrace();
 		}
 	}
 }
-
-
-

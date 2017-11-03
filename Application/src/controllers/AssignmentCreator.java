@@ -13,6 +13,9 @@ import java.util.Scanner;
 
 import models.Problem;
 
+/**
+ * Class to handle creation of assignments as .csv files.
+ */
 public class AssignmentCreator {
 
 	// Number of multiple choice options per problem
@@ -60,74 +63,74 @@ public class AssignmentCreator {
 
 		return false;
 	}
-        
-        /**
+
+	/**
 	 * Returns true if the first cell of assignment#.csv is "Released"
 	 * @param fileName: The file where release status is to be checked
-         * @return: true if first cell is "Released"
+	 * @return: true if first cell is "Released"
 	 */
-        public static boolean isReleased(String fileName){
-                boolean status = true;
-                try {
-                      FileReader fr = new FileReader(fileName);
-                      BufferedReader br = new BufferedReader(fr);
-                      // Check first cell for unreleased
-                      String line = br.readLine();
-                      if (line.charAt(0) == 'U'){
-                              status = false;
-                      }
-                } catch (IOException e) {
-			e.printStackTrace();
-		}
-                return status;
-        }
-        
-        /**
-	 * Toggles first row first col cell between Unreleased and Released
-         * strings.
-	 * @param fileName: The file where release status is to be toggled
-	 */
-        public static void toggleReleaseStatus(String fileName){
-                try {
+	public static boolean isReleased(String fileName){
+		boolean status = true;
+		try {
 			FileReader fr = new FileReader(fileName);
 			BufferedReader br = new BufferedReader(fr);
-			
-                        // Get old string
+			// Check first cell for unreleased
 			String line = br.readLine();
-                        
-                        // Make new string
-                        String newLine = "";
-                        // Toggle status for new line
-                        if (!isReleased(fileName)){
-                                newLine = "Released";
-                        } else {
-                                newLine = "Unreleased";
-                        }
-                        // Add rest of old line
-                        int addFromIndex = line.indexOf(",");
-                        for(int i = addFromIndex; i < line.length(); i ++){
-                                newLine = newLine + line.charAt(i);
-                        }
-                      
-			br.close();
-			fr.close();
-                        
-                        // Write new status
-                        FileWriter fw = new FileWriter(fileName, false);
-			BufferedWriter bf = new BufferedWriter(fw);
-                        
-			bf.write(newLine + "\n");
-                        
-			bf.close();
-			fw.close();
-                } catch (IOException e) {
+			if (line.charAt(0) == 'U'){
+				status = false;
+			}
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
-        }
+		return status;
+	}
+
+	/**
+	 * Toggles first row first col cell between Unreleased and Released
+	 * strings.
+	 * @param fileName: The file where release status is to be toggled
+	 */
+	public static void toggleReleaseStatus(String fileName){
+		try {
+			FileReader fr = new FileReader(fileName);
+			BufferedReader br = new BufferedReader(fr);
+
+			// Get old string
+			String line = br.readLine();
+
+			// Make new string
+			String newLine = "";
+			// Toggle status for new line
+			if (!isReleased(fileName)){
+				newLine = "Released";
+			} else {
+				newLine = "Unreleased";
+			}
+			// Add rest of old line
+			int addFromIndex = line.indexOf(",");
+			for(int i = addFromIndex; i < line.length(); i ++){
+				newLine = newLine + line.charAt(i);
+			}
+
+			br.close();
+			fr.close();
+
+			// Write new status
+			FileWriter fw = new FileWriter(fileName, false);
+			BufferedWriter bf = new BufferedWriter(fw);
+
+			bf.write(newLine + "\n");
+
+			bf.close();
+			fw.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 
 	/**
 	 * Wipes out the given file and adds the unreleased tag, current date 
-         * due date and as the first row in the assignment csv file.
+	 * due date and as the first row in the assignment csv file.
 	 * @param fileName: The file to be initialized
 	 * @param dueDate: The assignment's due date
 	 */
@@ -135,17 +138,17 @@ public class AssignmentCreator {
 		try {
 			FileWriter fw = new FileWriter(fileName, false);
 			BufferedWriter bf = new BufferedWriter(fw);
-			
+
 			// Format today's date
 			DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 			LocalDate localDate = LocalDate.now();
-			
+
 			// Add unreleased tag today's date and the due date 
-                        // to the file
+			// to the file
 			bf.write("Unreleased," + dtf.format(localDate) + "," + dueDate + "\n");
 			bf.close();
 			fw.close();
-                        
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
