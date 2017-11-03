@@ -22,11 +22,13 @@ import java.awt.Color;
 import javax.swing.JTextField;
 import javax.swing.JPasswordField;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 
 public class LoginRegisterGUI extends JFrame {
 	private JPanel contentPane;
 	private JTextField emailField;
 	private JPasswordField passwordField;
+	private JCheckBox chckbxInstructor;
 	
 	/**
 	 * Clears all text fields.
@@ -34,6 +36,7 @@ public class LoginRegisterGUI extends JFrame {
 	public void clearTextFields(){
 		emailField.setText("");
 		passwordField.setText("");
+		chckbxInstructor.setSelected(false);
 	}
 
 	/**
@@ -48,6 +51,13 @@ public class LoginRegisterGUI extends JFrame {
 	 */
 	public String getPassword(){
 		return new String(passwordField.getPassword());
+	}
+	
+	/**
+	 * @return: true if user checked instructor box
+	 */
+	public boolean getIsInstructor(){
+		return chckbxInstructor.isSelected();
 	}
 
 	/**
@@ -120,7 +130,7 @@ public class LoginRegisterGUI extends JFrame {
 				clearTextFields();
 			}
 		});
-		btnLogin.setBounds(329, 441, 115, 32);
+		btnLogin.setBounds(329, 465, 115, 32);
 		contentPane.add(btnLogin);
 		
 		JButton btnRegister = new JButton("Register");
@@ -132,7 +142,7 @@ public class LoginRegisterGUI extends JFrame {
 		btnRegister.setBackground(Color.LIGHT_GRAY);
 		btnRegister.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				boolean validRegister = Authenticator.register(getEmail(), getPassword());
+				boolean validRegister = Authenticator.register(getIsInstructor(), getEmail(), getPassword());
 				if(validRegister){
 					JOptionPane.showMessageDialog(LoginRegisterGUI.this, "Registration successful!");
 				}else{
@@ -141,7 +151,13 @@ public class LoginRegisterGUI extends JFrame {
 				clearTextFields();
 			}
 		});
-		btnRegister.setBounds(454, 441, 115, 32);
+		btnRegister.setBounds(454, 465, 115, 32);
 		contentPane.add(btnRegister);
+		
+		chckbxInstructor = new JCheckBox("Instructor");
+		chckbxInstructor.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+		chckbxInstructor.setBackground(Color.WHITE);
+		chckbxInstructor.setBounds(395, 425, 97, 23);
+		contentPane.add(chckbxInstructor);
 	}
 }

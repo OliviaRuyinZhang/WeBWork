@@ -21,11 +21,13 @@ public class Authenticator {
 	
 	
 	/**
-	 * Writes the user's email and password into the users.csv file.
+	 * Writes the user's email and password and whether they
+	 * are an instructor or not into the users.csv file.
+	 * @param is_instructor: true if the user is an instructor, false if they are a student
 	 * @param email: user's email address
 	 * @param password: user's password
 	 */
-	public static boolean register(String email, String password) 
+	public static boolean register(boolean is_instructor, String email, String password) 
 	
 	{
 		try {
@@ -37,6 +39,8 @@ public class Authenticator {
 				BufferedWriter bf = new BufferedWriter(fw);
 			
 				StringBuilder sb = new StringBuilder();
+				sb.append(is_instructor);
+				sb.append(","); // Next column.
 				sb.append(email);
 				sb.append(","); // Next column.
 				sb.append(hashVal.toString());
@@ -44,12 +48,10 @@ public class Authenticator {
 				bf.write(sb.toString());
 				bf.close();
 		
-				System.out.println("Registration successful");
 				return true;
-			} else {
-				System.out.println("This email is already registered.");
 			}
 			fw.close();
+			return false;
 			
 		} catch (IOException e) {
 			e.printStackTrace();
