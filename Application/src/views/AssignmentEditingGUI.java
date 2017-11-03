@@ -21,6 +21,7 @@ import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -29,13 +30,16 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.Locale;
+import java.util.Random;
 import java.awt.event.ActionEvent;
 import javax.swing.JRadioButton;
 import java.awt.Dimension;
 import javax.swing.SwingConstants;
 
 public class AssignmentEditingGUI extends JFrame {
+	File file;
 	private int problemID = 1;
 	private ArrayList<Problem> problems = new ArrayList<>();
 	private JPanel contentPane;
@@ -46,25 +50,10 @@ public class AssignmentEditingGUI extends JFrame {
 	private JTextField txtAssignmentNum;
 	
 	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					AssignmentEditingGUI frame = new AssignmentEditingGUI();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-	
-	/**
 	 * Create the frame.
 	 */
-	public AssignmentEditingGUI() {
+	public AssignmentEditingGUI(File file) {
+		this.file = file;
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 900, 731);
@@ -73,14 +62,21 @@ public class AssignmentEditingGUI extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		contentPane.setLayout(null);
+		File assignmentFile;
 		
 		//Name of assignment to be edited
-		JLabel lblNewAssignment = new JLabel("Assignment #");
+		JLabel lblNewAssignment = new JLabel("Assignment");
 		lblNewAssignment.setFont(new Font("Segoe UI Light", Font.PLAIN, 52));
 		lblNewAssignment.setBounds(62, 45, 377, 71);
 		lblNewAssignment.setSize(lblNewAssignment.getPreferredSize());
 		contentPane.add(lblNewAssignment);
+		
+		//JTextField to edit assignment number.
+		JTextField txtAssignmentNum = new JTextField();
+		txtAssignmentNum.setHorizontalAlignment(SwingConstants.CENTER);
+		txtAssignmentNum.setFont(new Font("Segoe UI Light", Font.PLAIN, 52)); // Only allow numbers and restrict to 2 characters.
+		txtAssignmentNum.setBounds(lblNewAssignment.getWidth() + 70, 60, 60, 55);
+		contentPane.add(txtAssignmentNum);
 		
 		//Due date
 		JLabel lblDueDate = new JLabel("Due Date");
@@ -88,13 +84,6 @@ public class AssignmentEditingGUI extends JFrame {
 		lblDueDate.setBounds(62, 139, 72, 14);
 		lblDueDate.setSize(lblDueDate.getPreferredSize());
 		contentPane.add(lblDueDate);
-		
-//		JLabel poundSymbol = new JLabel("#");
-//		poundSymbol.setSize(new Dimension(365, 71));
-//		poundSymbol.setFont(new Font("Segoe UI Light", Font.PLAIN, 52));
-//		poundSymbol.setBounds(725, 45, 36, 71);
-//		poundSymbol.setSize(poundSymbol.getPreferredSize());
-//		contentPane.add(poundSymbol);
 		
 		//List of months for drop down list
 		String[] monthStrings = { "January", "February", "March", "April",
@@ -142,7 +131,7 @@ public class AssignmentEditingGUI extends JFrame {
 		problemPanel.setLayout(null);
 		
 		//Problem mini label
-		JLabel lblProblem = new JLabel("Problem " + problemID);
+		JLabel lblProblem = new JLabel("Problem: ");
 		lblProblem.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 		lblProblem.setBounds(24, 21, 56, 21);
 		lblProblem.setSize(lblProblem.getPreferredSize());
@@ -155,14 +144,18 @@ public class AssignmentEditingGUI extends JFrame {
 		lblOptions.setSize(lblOptions.getPreferredSize());
 		problemPanel.add(lblOptions);
 		
-		//Text area to type question
-		JTextArea textArea = new JTextArea();
-		textArea.setBounds(24, 53, 718, 38);
-		problemPanel.add(textArea);
+		//Retrieve all problems from the assignment.
+		ArrayList<ArrayList<String>> data = getAssignmentQData(this.file);
+		int qsize = data.get(1).size() - 1; // Does not work if there are no questions.
+		String[] questions = new String[qsize];
+		for(int i = 0; i < qsize; i++) {
+			questions[i] = data.get(1).get(i);
+		}
+		JComboBox cbProblems = new JComboBox(questions);
+		cbProblems.setBounds(24, 42, 720, 55);
+		problemPanel.add(cbProblems);
+
 		
-		//Retrieve options in csv file to parse through for options
-		//String [] optionList =  
-		//Text area to type choice A
 		txtOptionA = new JTextField();
 		txtOptionA.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 		txtOptionA.setText("Option A");
@@ -228,7 +221,7 @@ public class AssignmentEditingGUI extends JFrame {
 		btnEditProblem.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 		btnEditProblem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				String problemString = textArea.getText();
+				//String problemString = textArea.getText();
 				ArrayList<String> options = new ArrayList<>();
 				options.add(txtOptionA.getText());
 				options.add(txtOptionB.getText());
@@ -247,13 +240,13 @@ public class AssignmentEditingGUI extends JFrame {
 					solution = txtOptionD.getText();
 				}
 				
-				Problem newProblem = new Problem(problemID, problemString, options, solution);
-				problems.add(newProblem);
+				//Problem newProblem = new Problem(problemID, problemString, options, solution);
+				//problems.add(newProblem);
 				problemID++;
 				
 				// Reset items
 				lblProblem.setText("Problem " + problemID);
-				textArea.setText("");
+				//textArea.setText("");
 				txtOptionA.setText("Option A");
 				txtOptionB.setText("Option B");
 				txtOptionC.setText("Option C");
@@ -298,35 +291,80 @@ public class AssignmentEditingGUI extends JFrame {
 		});
 		btnSave.setBounds(720, 630, 107, 40);
 		contentPane.add(btnSave);
+		
 	}
 	
-	public String[] getAssignmentOptions(String fileName){
-		String[] options = new String[4];
-		String line = "";
-		BufferedReader br = null;
+	/**
+	 * Returns ArrayList of ArrayList of Assignment Question data.
+	 * @param file
+	 * @return
+	 */
+	private ArrayList<ArrayList<String>> getAssignmentQData(File file) {
 		
-		try {
-    		FileReader fr = new FileReader(fileName);
-    		br = new BufferedReader(fr);
-    		while ((line = br.readLine())!= null){
-    			options = line.split(",");
+		ArrayList<String> orderedQInfo1 = new ArrayList<>();
+		ArrayList<String> orderedQInfo2 = new ArrayList<>();
+		ArrayList<String> orderedQInfo3 = new ArrayList<>();
+		ArrayList<String>orderedQInfo4 = new ArrayList<>();
+		ArrayList<ArrayList<String>> data = new ArrayList<>();
+		data.add(orderedQInfo1);
+		data.add(orderedQInfo2);
+		data.add(orderedQInfo3);
+		data.add(orderedQInfo4);
+		String line;
+		String[] placeHolder = new String[4];
+		
+    	try {
+    		FileReader fr = new FileReader(file);
+    		BufferedReader br = new BufferedReader(fr);
+    		br.readLine();
+    		line = br.readLine();
+    		while(line != null) {
+    			placeHolder = line.split(",");
+    			data.get(0).add(placeHolder[0]);
+    			data.get(1).add(placeHolder[1]);
+    			data.get(2).add(placeHolder[2]);
+    			data.get(3).add(placeHolder[3]);
+    			line = br.readLine();
     		}
-    		
-    	} catch (FileNotFoundException e) {
+    		br.close();
+			fr.close();
+    	} catch (IOException e) {
     		e.printStackTrace();
-        } catch (IOException e) {
-        	e.printStackTrace();
-        } finally {
-        	if (br != null) {
-        		try {
-        			br.close();
-        		} catch (IOException e) {
-        			e.printStackTrace();
-        		}
-        	}
-        } 
-		
-		return options;
+        }
+    	
+    	System.out.println(data);
+    	return data;
+
 	}
 	
+	
+//	public String[] getAssignmentOptions(String fileName){
+//		String[] options = new String[4];
+//		String line = "";
+//		BufferedReader br = null;
+//		
+//		try {
+//    		FileReader fr = new FileReader(fileName);
+//    		br = new BufferedReader(fr);
+//    		while ((line = br.readLine())!= null){
+//    			options = line.split(",");
+//    		}
+//    		
+//    	} catch (FileNotFoundException e) {
+//    		e.printStackTrace();
+//        } catch (IOException e) {
+//        	e.printStackTrace();
+//        } finally {
+//        	if (br != null) {
+//        		try {
+//        			br.close();
+//        		} catch (IOException e) {
+//        			e.printStackTrace();
+//        		}
+//        	}
+//        } 
+//		
+//		return options;
+//	}
+//	
 }

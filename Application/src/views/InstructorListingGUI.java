@@ -9,6 +9,7 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -152,7 +153,7 @@ public class InstructorListingGUI extends JFrame{
 						EventQueue.invokeLater(new Runnable() {
 							public void run() {
 								try {
-									AssignmentEditingGUI frame = new AssignmentEditingGUI();
+									AssignmentEditingGUI frame = new AssignmentEditingGUI(file);
 									frame.setVisible(true);
 								} catch (Exception e) {
 									e.printStackTrace();
@@ -332,11 +333,17 @@ class updateStatus implements ActionListener{
 	 * @param originalStatus: the assignment's original status
 	 */
 	private void updateStatusInfo(File file, String originalStatus, JFrame board) {	
+		
 		String replacedtext;
         try {
 			BufferedReader reader = new BufferedReader(new FileReader(file));
 			String oldtext = "";
-			oldtext = reader.readLine();
+			String temptext = "";
+			oldtext = reader.readLine() + '\n';
+			while((temptext = reader.readLine()) != null) {
+				oldtext += temptext + '\n';
+				temptext = "";
+			}
 			reader.close();
 			if(originalStatus.equals("Unreleased")) {
 				replacedtext = oldtext.replaceFirst(originalStatus, "Released");
