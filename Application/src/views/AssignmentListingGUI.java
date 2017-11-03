@@ -131,19 +131,22 @@ public class AssignmentListingGUI extends JFrame{
 				lblDeadline.setBackground(Color.BLACK);
 				assignReleasedPanel.add(lblDeadline);
 				
-				// Create the button JButton
-				/*
-				 * functionality
-				 */
-				
-				JButton unReleasedButton = new JButton("Unrelease");
-				unReleasedButton.setHorizontalTextPosition(SwingConstants.CENTER);
-				unReleasedButton.setBounds(600, 20, 120, 50);
+				// Create toggle unrelease button.
+				JButton unReleaseButton = new JButton("Unrelease");
+				unReleaseButton.setHorizontalTextPosition(SwingConstants.CENTER);
+				unReleaseButton.setBounds(600, 20, 120, 50);
 				updateStatus changeSatus = new updateStatus(file, info[0]);
-				unReleasedButton.addActionListener(changeSatus);
+				unReleaseButton.addActionListener(changeSatus);
+				
+				// Create edit assignment button.
+				JButton editAssignment = new JButton("Edit");
+				unReleaseButton.setHorizontalTextPosition(SwingConstants.CENTER);
+				unReleaseButton.setBounds(600, 20, 120, 50);
+				
+				
 				
 				// Add to the panel.
-				assignReleasedPanel.add(unReleasedButton);
+				assignReleasedPanel.add(unReleaseButton);
 				
 				i += 90;
 				
@@ -188,20 +191,16 @@ public class AssignmentListingGUI extends JFrame{
 				lblDeadline.setBounds(50, 22, 350, 70);
 				assignUnreleasedPanel.add(lblDeadline);
 				
-				// Create the button JButton
-				/*
-				 * functionality
-				 */
-				
-				JButton releasedButton = new JButton("Release");
-				releasedButton.setHorizontalTextPosition(SwingConstants.CENTER);
-				releasedButton.setBounds(600, 20, 120, 50);
+				// Create toggle release button. 
+				JButton releaseButton = new JButton("Release");
+				releaseButton.setHorizontalTextPosition(SwingConstants.CENTER);
+				releaseButton.setBounds(600, 20, 120, 50);
 				updateStatus changeSatus = new updateStatus(file, info[0]);
-				releasedButton.addActionListener(changeSatus);
+				releaseButton.addActionListener(changeSatus);
 				
 				
 				// Add to the panel.
-				assignUnreleasedPanel.add(releasedButton);
+				assignUnreleasedPanel.add(releaseButton);
 
 				
 				i += 90;
