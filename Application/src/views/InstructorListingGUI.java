@@ -3,6 +3,7 @@ package views;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -127,18 +128,45 @@ public class InstructorListingGUI extends JFrame{
 				// Create toggle unrelease button.
 				JButton unReleaseButton = new JButton("Unrelease");
 				unReleaseButton.setHorizontalTextPosition(SwingConstants.CENTER);
-				unReleaseButton.setBounds(600, 20, 120, 50);
+				unReleaseButton.setBounds(620, 20, 100, 50);
+				unReleaseButton.setFocusPainted(false);
+				unReleaseButton.setBackground(Color.decode("#EC7063"));
+				unReleaseButton.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 				updateStatus changeSatus = new updateStatus(file, info[0], this);
 				unReleaseButton.addActionListener(changeSatus);
 				
+				// Add to the panel.
+				assignReleasedPanel.add(unReleaseButton);
+				
 				// Create edit assignment button.
-				JButton editAssignment = new JButton("Edit");
-				unReleaseButton.setHorizontalTextPosition(SwingConstants.CENTER);
-				unReleaseButton.setBounds(600, 20, 120, 50);
+				JButton editAssignmentButton = new JButton("Edit");
+				editAssignmentButton.setHorizontalTextPosition(SwingConstants.CENTER);
+				editAssignmentButton.setBounds(500, 20, 100, 50);
+				editAssignmentButton.setFocusPainted(false);
+				editAssignmentButton.setBackground(Color.decode("#B2BABB"));
+				editAssignmentButton.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+				editAssignmentButton.addActionListener(new ActionListener() {
+
+					@Override
+					public void actionPerformed(ActionEvent arg0) {
+						EventQueue.invokeLater(new Runnable() {
+							public void run() {
+								try {
+									AssignmentEditingGUI frame = new AssignmentEditingGUI();
+									frame.setVisible(true);
+								} catch (Exception e) {
+									e.printStackTrace();
+								}
+							}
+						});
+					}
+					
+				});
 				
 				
 				// Add to the panel.
-				assignReleasedPanel.add(unReleaseButton);
+				assignReleasedPanel.add(editAssignmentButton);
+				
 				
 				i += 90;
 				
@@ -186,22 +214,26 @@ public class InstructorListingGUI extends JFrame{
 				// Create toggle release button. 
 				JButton releaseButton = new JButton("Release");
 				releaseButton.setHorizontalTextPosition(SwingConstants.CENTER);
-				releaseButton.setBounds(600, 20, 120, 50);
+				releaseButton.setBounds(620, 20, 100, 50);
+				releaseButton.setBackground(new Color(51, 204, 153));
+				releaseButton.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 				updateStatus changeSatus = new updateStatus(file, info[0], this);
 				releaseButton.addActionListener(changeSatus);
 				
-				
 				// Add to the panel.
 				assignUnreleasedPanel.add(releaseButton);
-/*
-				// Released Button
-				JButton releasedButton = new JButton("Release");
-				releasedButton.setHorizontalTextPosition(SwingConstants.CENTER);
-				releasedButton.setBounds(600, 20, 120, 50);
-				updateStatus changeSatus = new updateStatus(file, info[0], this);
-				releasedButton.addActionListener(changeSatus);
-				assignUnreleasedPanel.add(releasedButton);
-	*/			
+				
+				// Create edit assignment button.
+				JButton editAssignmentButton = new JButton("Edit");
+				editAssignmentButton.setHorizontalTextPosition(SwingConstants.CENTER);
+				editAssignmentButton.setBounds(500, 20, 100, 50);
+				editAssignmentButton.setFocusPainted(false);
+				editAssignmentButton.setBackground(Color.decode("#B2BABB"));
+				editAssignmentButton.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+				
+				assignUnreleasedPanel.add(editAssignmentButton);
+				
+
 				// Set y for the next assignment panel.
 				i += 90;
 			}
@@ -270,6 +302,7 @@ public class InstructorListingGUI extends JFrame{
     	return info;
 
     }
+  
 	
 }
 
