@@ -89,7 +89,7 @@ public class LoginRegisterGUI extends JFrame {
 		
 		JLabel lblEmailAddress = new JLabel("Email Address");
 		lblEmailAddress.setFont(new Font("Segoe UI", Font.PLAIN, 15));
-		lblEmailAddress.setBounds(306, 267, 94, 16);
+		lblEmailAddress.setBounds(306, 267, 138, 16);
 		contentPane.add(lblEmailAddress);
 		
 		emailField = new JTextField();
@@ -103,7 +103,7 @@ public class LoginRegisterGUI extends JFrame {
 		
 		JLabel lblPassword = new JLabel("Password");
 		lblPassword.setFont(new Font("Segoe UI", Font.PLAIN, 15));
-		lblPassword.setBounds(306, 350, 94, 16);
+		lblPassword.setBounds(306, 350, 138, 16);
 		contentPane.add(lblPassword);
 		
 		passwordField = new JPasswordField();
@@ -158,6 +158,7 @@ public class LoginRegisterGUI extends JFrame {
 		chckbxInstructor.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 		chckbxInstructor.setBackground(Color.WHITE);
 		chckbxInstructor.setBounds(395, 425, 97, 23);
+		chckbxInstructor.setSize(lblWebwork.getPreferredSize());
 		contentPane.add(chckbxInstructor);
 	}
 }
