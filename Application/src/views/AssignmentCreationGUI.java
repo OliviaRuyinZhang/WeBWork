@@ -68,7 +68,6 @@ public class AssignmentCreationGUI extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		contentPane.setLayout(null);
 		
 		Border border = BorderFactory.createLineBorder(Color.decode("#7A7A7A"), 2);
 		
@@ -262,10 +261,10 @@ public class AssignmentCreationGUI extends JFrame {
 				// Reset items
 				lblProblem.setText("Problem " + problemID);
 				textArea.setText("");
-				txtOptionA.setText("Option A");
-				txtOptionB.setText("Option B");
-				txtOptionC.setText("Option C");
-				txtOptionD.setText("Option D");
+				txtOptionA.setText("");
+				txtOptionB.setText("");
+				txtOptionC.setText("");
+				txtOptionD.setText("");
 				option_A_radio.setSelected(true);
 			}
 		});
