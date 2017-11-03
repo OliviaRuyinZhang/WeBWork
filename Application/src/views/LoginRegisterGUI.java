@@ -157,8 +157,7 @@ public class LoginRegisterGUI extends JFrame {
 		chckbxInstructor = new JCheckBox("Instructor");
 		chckbxInstructor.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 		chckbxInstructor.setBackground(Color.WHITE);
-		chckbxInstructor.setBounds(395, 425, 97, 23);
-		chckbxInstructor.setSize(lblWebwork.getPreferredSize());
+		chckbxInstructor.setBounds(395, 425, 130, 23);
 		contentPane.add(chckbxInstructor);
 	}
 }
