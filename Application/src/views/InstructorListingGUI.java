@@ -3,13 +3,11 @@ package views;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -34,7 +32,6 @@ public class InstructorListingGUI extends JFrame{
 	private JPanel contentPane;
 	private JScrollBar scroll;
 	private JPanel listAssignmentsPanel;
-	private List<File> assignments;
 
 	/**
 	 * Launch the application.
@@ -78,194 +75,22 @@ public class InstructorListingGUI extends JFrame{
 		lblName.setBounds(62, 45, 350, 70);
 		lblName.setSize(lblName.getPreferredSize());
 		contentPane.add(lblName);
-		
-		// Every existing assignment copied into an ArrayList.
-		assignments = gatherExistingAssignments();
-		
 
-		/*
-		 * Released Assignments Section
-		 */
-		
+
 		// Released Assignments Panel
 		listAssignmentsPanel = new JPanel();
 		listAssignmentsPanel.setBackground(Color.WHITE);
 		contentPane.add(listAssignmentsPanel);
 		listAssignmentsPanel.setLayout(null);
-		
-		// Released label.
-		JLabel lblReleased = new JLabel("Released");
-		lblReleased.setFont(new Font("Segoe UI Light", Font.PLAIN, 35));
-		lblReleased.setBounds(0, 0, 350, 70);
-		lblReleased.setSize(lblReleased.getPreferredSize());
-		listAssignmentsPanel.add(lblReleased);
-		
-		JLabel lblAssignment;
-		JLabel lblDeadline;
-		// Make a JPanel for every existing assignment.
-		int i = 0;
-		for(File file: assignments) {
-			JPanel assignReleasedPanel = new JPanel();
-			assignReleasedPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
-			assignReleasedPanel.setLayout(null);
-			String fileName = file.getName();
-			String[] info = getAssignmentInfo(fileName);
-			if(info[0].equals("Released")) {
-				assignReleasedPanel.setBounds(0, 55 + i, 765, 85);
-				assignReleasedPanel.setBackground(Color.decode("#F0F0F0"));
-				assignReleasedPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder());
-				
-				lblAssignment = new JLabel(fileName.replaceFirst("[.][^.]+$", "")); // Strips the .csv extension.
-				lblAssignment.setFont(new Font("Segoe UI Semibold", Font.PLAIN, 16));
-				lblAssignment.setBounds(50, -3, 350, 70);
-				assignReleasedPanel.add(lblAssignment);
-				
-				lblDeadline = new JLabel("Due " + info[2]);
-				lblDeadline.setFont(new Font("Segoe UI Regular", Font.PLAIN, 13));
-				lblDeadline.setBounds(50, 22, 350, 70);
-				lblDeadline.setBackground(Color.BLACK);
-				assignReleasedPanel.add(lblDeadline);
-				
-				// Create toggle unrelease button.
-				JButton unReleaseButton = new JButton("Unrelease");
-				unReleaseButton.setHorizontalTextPosition(SwingConstants.CENTER);
-				unReleaseButton.setBounds(640, 26, 100, 35);
-				unReleaseButton.setFocusPainted(false);
-				unReleaseButton.setBackground(Color.decode("#EC7063"));
-				unReleaseButton.setFont(new Font("Segoe UI", Font.PLAIN, 15));
-				updateStatus changeSatus = new updateStatus(file, info[0], this);
-				unReleaseButton.addActionListener(changeSatus);
-				
-				// Add to the panel.
-				assignReleasedPanel.add(unReleaseButton);
-				
-				// Create edit assignment button.
-				JButton editAssignmentButton = new JButton("Edit");
-				editAssignmentButton.setHorizontalTextPosition(SwingConstants.CENTER);
-				editAssignmentButton.setBounds(500, 26, 100, 35);
-				editAssignmentButton.setFocusPainted(false);
-				editAssignmentButton.setBackground(Color.decode("#B2BABB"));
-				editAssignmentButton.setFont(new Font("Segoe UI", Font.PLAIN, 15));
-				editAssignmentButton.addActionListener(new ActionListener() {
 
-					@Override
-					public void actionPerformed(ActionEvent arg0) {
-						EventQueue.invokeLater(new Runnable() {
-							public void run() {
-								try {
-									AssignmentEditingGUI frame = new AssignmentEditingGUI(file);
-									frame.setVisible(true);
-								} catch (Exception e) {
-									e.printStackTrace();
-								}
-							}
-						});
-					}
-					
-				});
-				
-				
-				// Add to the panel.
-				assignReleasedPanel.add(editAssignmentButton);
-				
-				
-				i += 90;
-				
-			}
-			//assignmentPanel.setLayout(null);
-			listAssignmentsPanel.add(assignReleasedPanel);
-		}
-		
-		/*
-		 * Unreleased Assignments Section
-		 */
-
-		// Unreleased label.
-		JLabel lblUnreleased = new JLabel("Unreleased");
-		lblUnreleased.setFont(new Font("Segoe UI Light", Font.PLAIN, 35));
-		lblUnreleased.setSize(lblUnreleased.getPreferredSize());
-		lblUnreleased.setBounds(0,  75 + i , lblUnreleased.getWidth(), 
-				lblUnreleased.getHeight());
-		
-		listAssignmentsPanel.add(lblUnreleased);
-		
-		
-
-		for(File file: assignments) {
-			JPanel assignUnreleasedPanel = new JPanel();
-			assignUnreleasedPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
-			assignUnreleasedPanel.setLayout(null);
-			String fileName = file.getName();
-			String[] info = getAssignmentInfo(fileName);
-			if(info[0].equals("Unreleased")) {
-				assignUnreleasedPanel.setBounds(0, 130 + i, 765, 85);
-				assignUnreleasedPanel.setBackground(Color.decode("#F0F0F0"));
-				assignUnreleasedPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder());
-
-				lblAssignment = new JLabel(fileName.replaceFirst("[.][^.]+$", "")); // Strips the .csv extension.
-				lblAssignment.setFont(new Font("Segoe UI Semibold", Font.PLAIN, 16));
-				lblAssignment.setBounds(50, -3, 350, 70);
-				assignUnreleasedPanel.add(lblAssignment);
-				
-				lblDeadline = new JLabel("Due " + info[2]);
-				lblDeadline.setFont(new Font("Segoe UI Regular", Font.PLAIN, 13));
-				lblDeadline.setBounds(50, 22, 350, 70);
-				assignUnreleasedPanel.add(lblDeadline);
-				
-				// Create toggle release button. 
-				JButton releaseButton = new JButton("Release");
-				releaseButton.setHorizontalTextPosition(SwingConstants.CENTER);
-				releaseButton.setBounds(640, 26, 100, 35);
-				releaseButton.setBackground(new Color(51, 204, 153));
-				releaseButton.setFont(new Font("Segoe UI", Font.PLAIN, 15));
-				updateStatus changeSatus = new updateStatus(file, info[0], this);
-				releaseButton.addActionListener(changeSatus);
-				
-				// Add to the panel.
-				assignUnreleasedPanel.add(releaseButton);
-				
-				// Create edit assignment button.
-				JButton editAssignmentButton = new JButton("Edit");
-				editAssignmentButton.setHorizontalTextPosition(SwingConstants.CENTER);
-				editAssignmentButton.setBounds(500, 26, 100, 35);
-				editAssignmentButton.setFocusPainted(false);
-				editAssignmentButton.setBackground(Color.decode("#B2BABB"));
-				editAssignmentButton.setFont(new Font("Segoe UI", Font.PLAIN, 15));
-				editAssignmentButton.addActionListener(new ActionListener() {
-
-					@Override
-					public void actionPerformed(ActionEvent arg0) {
-						EventQueue.invokeLater(new Runnable() {
-							public void run() {
-								try {
-									AssignmentEditingGUI frame = new AssignmentEditingGUI(file);
-									frame.setVisible(true);
-								} catch (Exception e) {
-									e.printStackTrace();
-								}
-							}
-						});
-					}
-					
-				});
-				
-				
-				assignUnreleasedPanel.add(editAssignmentButton);
-				
-
-				// Set y for the next assignment panel.
-				i += 90;
-			}
-			listAssignmentsPanel.add(assignUnreleasedPanel);
+		displayAssignments();
 			
-		}
-		
-		listAssignmentsPanel.setBounds(62, 145, 765, 150 + i);
-		contentPane.add(listAssignmentsPanel);
-		
-		
-		
+	}
 	
+	public void clearAssignmentListing() {
+		listAssignmentsPanel.removeAll();
+		listAssignmentsPanel.revalidate();
+		listAssignmentsPanel.repaint();
 	}
 	
 	/**
@@ -321,6 +146,190 @@ public class InstructorListingGUI extends JFrame{
     	return info;
 
     }
+    
+    private void addToAssignmentListing() {
+    	
+    }
+    
+    /**
+     * Adds all the assignments to the screen in a well
+     * formated way.
+     * @param panel
+     */
+    public void displayAssignments() {
+    		
+    	// Every existing assignment copied into an ArrayList.
+    			List<File> assignments = gatherExistingAssignments();
+    			
+
+    			/*
+    			 * Released Assignments Section
+    			 */
+    			
+    			// Released label.
+    			JLabel lblReleased = new JLabel("Released");
+    			lblReleased.setFont(new Font("Segoe UI Light", Font.PLAIN, 35));
+    			lblReleased.setBounds(0, 0, 350, 70);
+    			lblReleased.setSize(lblReleased.getPreferredSize());
+    			listAssignmentsPanel.add(lblReleased);
+    			
+    			JLabel lblAssignment;
+    			JLabel lblDeadline;
+    			// Make a JPanel for every existing assignment.
+    			int i = 0;
+    			for(File file: assignments) {
+    				JPanel assignReleasedPanel = new JPanel();
+    				assignReleasedPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+    				assignReleasedPanel.setLayout(null);
+    				String fileName = file.getName();
+    				String[] info = getAssignmentInfo(fileName);
+    				if(info[0].equals("Released")) {
+    					assignReleasedPanel.setBounds(0, 55 + i, 765, 85);
+    					assignReleasedPanel.setBackground(Color.decode("#F0F0F0"));
+    					assignReleasedPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+    					
+    					lblAssignment = new JLabel(fileName.replaceFirst("[.][^.]+$", "")); // Strips the .csv extension.
+    					lblAssignment.setFont(new Font("Segoe UI Semibold", Font.PLAIN, 16));
+    					lblAssignment.setBounds(50, -3, 350, 70);
+    					assignReleasedPanel.add(lblAssignment);
+    					
+    					lblDeadline = new JLabel("Due " + info[2]);
+    					lblDeadline.setFont(new Font("Segoe UI Regular", Font.PLAIN, 13));
+    					lblDeadline.setBounds(50, 22, 350, 70);
+    					lblDeadline.setBackground(Color.BLACK);
+    					assignReleasedPanel.add(lblDeadline);
+    					
+    					// Create toggle unrelease button.
+    					JButton unReleaseButton = new JButton("Unrelease");
+    					unReleaseButton.setHorizontalTextPosition(SwingConstants.CENTER);
+    					unReleaseButton.setBounds(640, 26, 100, 35);
+    					unReleaseButton.setFocusPainted(false);
+    					unReleaseButton.setBackground(Color.decode("#EC7063"));
+    					unReleaseButton.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+    					updateStatus changeSatus = new updateStatus(file, info[0], this);
+    					unReleaseButton.addActionListener(changeSatus);
+    					
+    					// Add to the panel.
+    					assignReleasedPanel.add(unReleaseButton);
+    					
+    					// Create edit assignment button.
+    					JButton editAssignmentButton = new JButton("Edit");
+    					editAssignmentButton.setHorizontalTextPosition(SwingConstants.CENTER);
+    					editAssignmentButton.setBounds(500, 26, 100, 35);
+    					editAssignmentButton.setFocusPainted(false);
+    					editAssignmentButton.setBackground(Color.decode("#B2BABB"));
+    					editAssignmentButton.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+    					editAssignmentButton.addActionListener(new ActionListener() {
+
+    						@Override
+    						public void actionPerformed(ActionEvent arg0) {
+    							EventQueue.invokeLater(new Runnable() {
+    								public void run() {
+    									try {
+    										AssignmentEditingGUI frame = new AssignmentEditingGUI(file);
+    										frame.setVisible(true);
+    									} catch (Exception e) {
+    										e.printStackTrace();
+    									}
+    								}
+    							});
+    						}
+    						
+    					});
+    										
+    					// Add to the panel.
+    					assignReleasedPanel.add(editAssignmentButton);
+    					
+    					
+    					i += 90;
+    					
+    				}
+    				//assignmentPanel.setLayout(null);
+    				listAssignmentsPanel.add(assignReleasedPanel);
+    			}
+    			
+    			/*
+    			 * Unreleased Assignments Section
+    			 */
+
+    			// Unreleased label.
+    			JLabel lblUnreleased = new JLabel("Unreleased");
+    			lblUnreleased.setFont(new Font("Segoe UI Light", Font.PLAIN, 35));
+    			lblUnreleased.setSize(lblUnreleased.getPreferredSize());
+    			lblUnreleased.setBounds(0,  75 + i , lblUnreleased.getWidth(), 
+    					lblUnreleased.getHeight());
+    			
+    			listAssignmentsPanel.add(lblUnreleased);
+    			
+    			for(File file: assignments) {
+    				JPanel assignUnreleasedPanel = new JPanel();
+    				assignUnreleasedPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+    				assignUnreleasedPanel.setLayout(null);
+    				String fileName = file.getName();
+    				String[] info = getAssignmentInfo(fileName);
+    				if(info[0].equals("Unreleased")) {
+    					assignUnreleasedPanel.setBounds(0, 130 + i, 765, 85);
+    					assignUnreleasedPanel.setBackground(Color.decode("#F0F0F0"));
+    					assignUnreleasedPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+
+    					lblAssignment = new JLabel(fileName.replaceFirst("[.][^.]+$", "")); // Strips the .csv extension.
+    					lblAssignment.setFont(new Font("Segoe UI Semibold", Font.PLAIN, 16));
+    					lblAssignment.setBounds(50, -3, 350, 70);
+    					assignUnreleasedPanel.add(lblAssignment);
+    					
+    					lblDeadline = new JLabel("Due " + info[2]);
+    					lblDeadline.setFont(new Font("Segoe UI Regular", Font.PLAIN, 13));
+    					lblDeadline.setBounds(50, 22, 350, 70);
+    					assignUnreleasedPanel.add(lblDeadline);
+    					
+    					// Create toggle release button. 
+    					JButton releaseButton = new JButton("Release");
+    					releaseButton.setHorizontalTextPosition(SwingConstants.CENTER);
+    					releaseButton.setBounds(640, 26, 100, 35);
+    					releaseButton.setBackground(new Color(51, 204, 153));
+    					releaseButton.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+    					updateStatus changeSatus = new updateStatus(file, info[0], this);
+    					releaseButton.addActionListener(changeSatus);
+    					
+    					// Add to the panel.
+    					assignUnreleasedPanel.add(releaseButton);
+    					
+    					// Create edit assignment button.
+    					JButton editAssignmentButton = new JButton("Edit");
+    					editAssignmentButton.setHorizontalTextPosition(SwingConstants.CENTER);
+    					editAssignmentButton.setBounds(500, 26, 100, 35);
+    					editAssignmentButton.setFocusPainted(false);
+    					editAssignmentButton.setBackground(Color.decode("#B2BABB"));
+    					editAssignmentButton.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+    					editAssignmentButton.addActionListener(new ActionListener() {
+
+    						@Override
+    						public void actionPerformed(ActionEvent arg0) {
+    							EventQueue.invokeLater(new Runnable() {
+    								public void run() {
+    									try {
+    										AssignmentEditingGUI frame = new AssignmentEditingGUI(file);
+    										frame.setVisible(true);
+    									} catch (Exception e) {
+    										e.printStackTrace();
+    									}
+    								}
+    							});
+    						}
+    						
+    					});
+    					
+    					assignUnreleasedPanel.add(editAssignmentButton);
+    					
+
+    					// Set y for the next assignment panel.
+    					i += 90;
+    				}
+    				listAssignmentsPanel.add(assignUnreleasedPanel);
+    			}
+    			
+    			listAssignmentsPanel.setBounds(62, 145, 765, 150 + i);		
+    }
   
 	
 }
@@ -332,8 +341,8 @@ public class InstructorListingGUI extends JFrame{
 class updateStatus implements ActionListener{
 	private File csvFile;
 	private String status;
-	private JFrame board;
-	public updateStatus(File file, String originalStatus, JFrame board) {
+	private InstructorListingGUI board;
+	public updateStatus(File file, String originalStatus, InstructorListingGUI board) {
 		this.csvFile = file;
 		this.status = originalStatus;
 		this.board = board;
@@ -372,9 +381,10 @@ class updateStatus implements ActionListener{
 			FileWriter writer = new FileWriter(file);
 			writer.write(replacedtext);
 			writer.close();
-			InstructorListingGUI frame = new InstructorListingGUI();
-			frame.setVisible(true);
-			board.dispose();
+			
+			this.board.clearAssignmentListing();
+			this.board.displayAssignments();
+			
 		} catch (Exception e) {
 			 e.printStackTrace();
 		}
