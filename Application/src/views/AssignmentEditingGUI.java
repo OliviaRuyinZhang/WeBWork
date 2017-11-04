@@ -146,14 +146,25 @@ public class AssignmentEditingGUI extends JFrame {
 		
 		//Retrieve all problems from the assignment.
 		ArrayList<ArrayList<String>> data = getAssignmentQData(this.file);
-		int qsize = data.get(1).size() - 1; // Does not work if there are no questions.
+		int qsize = data.get(1).size(); // Does not work if there are no questions.
 		String[] questions = new String[qsize];
 		for(int i = 0; i < qsize; i++) {
-			questions[i] = data.get(1).get(i);
+			questions[i] = data.get(0).get(i) + ". " + data.get(1).get(i);
 		}
 		JComboBox cbProblems = new JComboBox(questions);
 		cbProblems.setBounds(24, 42, 720, 55);
+		cbProblems.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+		cbProblems.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				updateOptions(cbProblems, data, txtOptionA, txtOptionB, txtOptionC, txtOptionD);
+			}
+			
+		});
+		
 		problemPanel.add(cbProblems);
+
 
 		
 		txtOptionA = new JTextField();
@@ -183,6 +194,9 @@ public class AssignmentEditingGUI extends JFrame {
 		txtOptionD.setColumns(10);
 		txtOptionD.setBounds(24, 257, 286, 30);
 		problemPanel.add(txtOptionD);
+
+		
+		updateOptions(cbProblems, data,txtOptionA, txtOptionB, txtOptionC, txtOptionD);
 		
 		//Which solution is correct radio buttons
 		//Need to fetch the old solution choice
@@ -337,34 +351,27 @@ public class AssignmentEditingGUI extends JFrame {
 
 	}
 	
-	
-//	public String[] getAssignmentOptions(String fileName){
-//		String[] options = new String[4];
-//		String line = "";
-//		BufferedReader br = null;
-//		
-//		try {
-//    		FileReader fr = new FileReader(fileName);
-//    		br = new BufferedReader(fr);
-//    		while ((line = br.readLine())!= null){
-//    			options = line.split(",");
-//    		}
-//    		
-//    	} catch (FileNotFoundException e) {
-//    		e.printStackTrace();
-//        } catch (IOException e) {
-//        	e.printStackTrace();
-//        } finally {
-//        	if (br != null) {
-//        		try {
-//        			br.close();
-//        		} catch (IOException e) {
-//        			e.printStackTrace();
-//        		}
-//        	}
-//        } 
-//		
-//		return options;
-//	}
-//	
+	/**
+	 * Updates the JTextField option components for the corresponding
+	 * problem. 
+	 * WARNING: Raises NullPointerException if the assignment has no problems.
+	 * NOTE: prevent user from making an "empty" assignment.
+	 * @param questions: JComboBox that contains all questions to select from
+	 * @param data: This assignments data
+	 * @param optionA: JTextField first option
+	 * @param optionB: JTextField second option
+	 * @param optionC: JTextField third option
+	 * @param optionD: JTextField fourth option
+	 */
+	private void updateOptions(JComboBox<String> questions, ArrayList<ArrayList<String>> data,JTextField optionA, JTextField optionB, JTextField optionC, JTextField optionD) {
+
+		String selectedID = ((String) questions.getSelectedItem()).substring(0, 1); // ID of problem.
+		String options[] = (data.get(3).get(Integer.parseInt(selectedID) - 1)).split("\\|");
+
+		optionA.setText(options[0]);
+		optionB.setText(options[1]);
+		optionC.setText(options[2]);
+		optionD.setText(options[3]);		
+	}
+		
 }
