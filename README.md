@@ -24,7 +24,7 @@ The first version of our personas and user stories (version 0) can be found [her
 
 ## Deliverable 4: Project Execution
 ##### October 30, 2017
-- This week, we implemented the user login/register interface, InstructorAssignmentListing panel and the .
+- This week, we implemented the user login/register interface, InstructorAssignmentListing panel and the assignment creator interface.
 ### Login Screen
 ![Login Screen](https://github.com/CSCC01F17/L02_11/blob/master/Documents/Deliverable_4/Login_Screen.png)
 ### Professor Dashboard
