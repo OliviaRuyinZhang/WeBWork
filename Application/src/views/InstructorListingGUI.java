@@ -33,6 +33,7 @@ public class InstructorListingGUI extends JFrame{
 	private JScrollBar scroll;
 	private JPanel listAssignmentsPanel;
 	private List<File> assignments;
+	
 
 	public InstructorListingGUI() {
 		setResizable(true); // Temporarily until we add a scroll bar.
@@ -208,23 +209,7 @@ public class InstructorListingGUI extends JFrame{
 		editAssignmentButton.setFocusPainted(false);
 		editAssignmentButton.setBackground(Color.decode("#B2BABB"));
 		editAssignmentButton.setFont(new Font("Segoe UI", Font.PLAIN, 15));
-		editAssignmentButton.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				EventQueue.invokeLater(new Runnable() {
-					public void run() {
-						try {
-							AssignmentEditingGUI frame = new AssignmentEditingGUI(file);
-							frame.setVisible(true);
-						} catch (Exception e) {
-							e.printStackTrace();
-						}
-					}
-				});
-			}
-
-		});
+		// Add handler for editAssignmentButton here.
 		
 		// Add to the panel.
 		panel.add(editAssignmentButton);
