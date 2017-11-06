@@ -24,7 +24,7 @@ The first version of our personas and user stories (version 0) can be found [her
 
 ## Deliverable 4: Project Execution
 ##### October 30, 2017
-- This week, we implemented the user login/register interface and the InstructorAssignmentListing panel.
+- This week, we implemented the user login/register interface, InstructorAssignmentListing panel and the .
 ### Login Screen
 ![Login Screen](https://github.com/CSCC01F17/L02_11/blob/master/Documents/Deliverable_4/Login_Screen.png)
 ### Professor Dashboard
@@ -42,6 +42,6 @@ The first version of our personas and user stories (version 0) can be found [her
   - After you have entered all the required information for the question, you can click "Add this Problem" to add the problem into the problem set
   - Repeatly do the steps above until you have added all the problems to the problem set for the current assignment. 
   - You can click the "create" button after you have done creating an assignment. 
-  - Close the assignment creation interface by clicking the x button at the left most corner, you will see your new added assignment on the dashboard under the unreleased assignments session
+  - For this delieverable only, you can see your new added assignment by relogin to the interface again.
 - As an instructor, you can release and unrelease assignments by clicking the labeled buttons corresponding to the appropriate assignments
 ###### Note: GitHub may have problems displaying some of our documents. For this reason, it is recommended you download the document instead of using GitHub's preview to view it.
