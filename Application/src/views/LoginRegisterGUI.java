@@ -131,6 +131,8 @@ public class LoginRegisterGUI extends JFrame {
 							try {
 								InstructorListingGUI frame = new InstructorListingGUI();
 								frame.setVisible(true);
+								setVisible(false);
+								dispose(); // Destroy the JFrame object
 							} catch (Exception e) {
 								e.printStackTrace();
 							}
