@@ -26,8 +26,9 @@ The first version of our personas and user stories (version 0) can be found [her
 ##### October 30, 2017
 - This week, we implemented the user login/register interface and the InstructorAssignmentListing panel.
 ### Login Screen
-
+![Login Screen](https://github.com/CSCC01F17/L02_11/blob/master/Documents/Deliverable 4/Login_Screen.png)
 ### Professor Dashboard
+![Professor Dashboard](https://github.com/CSCC01F17/L02_11/blob/master/Documents/Deliverable 4/Instructor_Dashboard.png)
 
 ### User Instructions
 - Go to ApplicationDriver.java under the controllers package
