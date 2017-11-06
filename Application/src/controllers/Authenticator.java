@@ -81,13 +81,13 @@ public class Authenticator {
 
 				String[] user_info = line.split(","); // [email, password]
 				// If the email exists in the file.
-				if(user_info[0].equals(email)) {
+				if(user_info[1].equals(email)) {
 					String hash_val = hashPassword(password);
 					
 					/* If password argument hashed is the 
 					 * same as the hashed password in the file.
 					 */
-					if(user_info[1].equals(hash_val)) {
+					if(user_info[2].equals(hash_val)) {
 						return true;
 					} else {
 						return false;
@@ -127,7 +127,7 @@ public class Authenticator {
 			String[] user_info = line.split(","); // [email, password]
 			
 			// If the user name exists in the file.
-			if (user_info[0].equals(email)) {
+			if (user_info[1].equals(email)) {
 				return true;	
 			}
 		}
