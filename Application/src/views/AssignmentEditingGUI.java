@@ -1,6 +1,7 @@
 package views;
 
 import controllers.AssignmentCreator;
+import controllers.ExtractData;
 import models.Problem;
 
 import java.awt.EventQueue;
@@ -40,7 +41,7 @@ import javax.swing.SwingConstants;
 
 public class AssignmentEditingGUI extends JFrame {
 	File file;
-	private int problemID = 1;
+	private int selectedPID;
 	private ArrayList<Problem> problems = new ArrayList<>();
 	private JPanel contentPane;
 	private JTextField txtOptionA;
@@ -48,6 +49,20 @@ public class AssignmentEditingGUI extends JFrame {
 	private JTextField txtOptionC;
 	private JTextField txtOptionD;
 	private JTextField txtAssignmentNum;
+	
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					File file = new File("Assignment1.csv");
+					AssignmentEditingGUI a = new AssignmentEditingGUI(file);
+					a.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});		
+	}
 	
 	/**
 	 * Create the frame.
@@ -63,6 +78,10 @@ public class AssignmentEditingGUI extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		File assignmentFile;
+		
+		//Retrieve all problems from the assignment.
+		ArrayList<ArrayList<String>> data = ExtractData.getAssignmentQData(this.file);
+		String[] info = ExtractData.getAssignmentInfo(this.file.getName());
 		
 		//Name of assignment to be edited
 		JLabel lblNewAssignment = new JLabel("Assignment");
@@ -84,16 +103,21 @@ public class AssignmentEditingGUI extends JFrame {
 		lblDueDate.setBounds(62, 139, 72, 14);
 		lblDueDate.setSize(lblDueDate.getPreferredSize());
 		contentPane.add(lblDueDate);
+
+		// All due date related info.
+		String[] currDueDate = info[1].split("\\/");
 		
 		//List of months for drop down list
 		String[] monthStrings = { "January", "February", "March", "April",
 				"May", "June", "July", "August",
 				"September", "October", "November", "December" };
 		//Month drop down list
-		JComboBox monthDropDown = new JComboBox(monthStrings);
+		int monthInd = Integer.parseInt(currDueDate[0]) - 1;
+		JComboBox<String> monthDropDown = new JComboBox<>(monthStrings);
 		monthDropDown.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 		monthDropDown.setBounds(62, 164, 91, 27);
 		monthDropDown.setSize(monthDropDown.getPreferredSize());
+		monthDropDown.setSelectedItem(monthStrings[monthInd]);
 		contentPane.add(monthDropDown);
 		
 		//List of days for drop down list
@@ -102,22 +126,41 @@ public class AssignmentEditingGUI extends JFrame {
 			days[i] = Integer.toString(i + 1);
 		}
 		//Day drop down list
-		JComboBox dateDropDown = new JComboBox(days);
+		String day = currDueDate[1];
+		JComboBox<String> dateDropDown = new JComboBox<>(days);
 		dateDropDown.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 		dateDropDown.setBounds(189, 164, 46, 27);
 		dateDropDown.setSize(dateDropDown.getPreferredSize());
+		dateDropDown.setSelectedItem(day);
 		contentPane.add(dateDropDown);
 		
+		String year = currDueDate[2];
 		//List of years for drop down list
 		String[] yearStrings = { "2017", "2018", "2019"};
 		//Year drop down list
-		JComboBox yearDropDown = new JComboBox(yearStrings);
+		JComboBox<String> yearDropDown = new JComboBox<>(yearStrings);
 		yearDropDown.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 		yearDropDown.setBounds(260, 164, 64, 27);
 		yearDropDown.setSize(yearDropDown.getPreferredSize());
+		yearDropDown.setSelectedItem(year);
 		contentPane.add(yearDropDown);
 		
 		//Problems
+		int pid;
+		String question;
+		String solution;
+		for(int i = 0; i < data.get(0).size(); i++) { // Every subindex has same num of elements.
+			pid = Integer.parseInt(data.get(0).get(i));
+			question = data.get(1).get(i);
+			solution = data.get(2).get(i);
+			String[] splitOptions = data.get(3).get(i).split("\\|");
+			ArrayList<String> options = new ArrayList<>();
+			for(int j = 0; j < splitOptions.length; j++) {
+				options.add(splitOptions[j]);
+			}
+			problems.add(new Problem(pid, question, options, solution));
+		}
+		
 		JLabel lblProblems = new JLabel("Problems");
 		lblProblems.setFont(new Font("Segoe UI Light", Font.PLAIN, 38));
 		lblProblems.setBounds(62, 220, 155, 51);
@@ -144,28 +187,12 @@ public class AssignmentEditingGUI extends JFrame {
 		lblOptions.setSize(lblOptions.getPreferredSize());
 		problemPanel.add(lblOptions);
 		
-		//Retrieve all problems from the assignment.
-		ArrayList<ArrayList<String>> data = getAssignmentQData(this.file);
-		int qsize = data.get(1).size(); // Does not work if there are no questions.
+
+		int qsize = problems.size(); // Does not work if there are no questions.
 		String[] questions = new String[qsize];
-		for(int i = 0; i < qsize; i++) {
-			questions[i] = data.get(0).get(i) + ". " + data.get(1).get(i);
+		for(Problem prob: problems) {
+			questions[prob.getProblemID() - 1] = prob.getProblemString();
 		}
-		JComboBox cbProblems = new JComboBox(questions);
-		cbProblems.setBounds(24, 42, 720, 55);
-		cbProblems.setFont(new Font("Segoe UI", Font.PLAIN, 15));
-		cbProblems.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				updateOptions(cbProblems, data, txtOptionA, txtOptionB, txtOptionC, txtOptionD);
-			}
-			
-		});
-		
-		problemPanel.add(cbProblems);
-
-
 		
 		txtOptionA = new JTextField();
 		txtOptionA.setFont(new Font("Segoe UI", Font.PLAIN, 15));
@@ -194,10 +221,7 @@ public class AssignmentEditingGUI extends JFrame {
 		txtOptionD.setColumns(10);
 		txtOptionD.setBounds(24, 257, 286, 30);
 		problemPanel.add(txtOptionD);
-
-		
-		updateOptions(cbProblems, data,txtOptionA, txtOptionB, txtOptionC, txtOptionD);
-		
+				
 		//Which solution is correct radio buttons
 		//Need to fetch the old solution choice
 		JLabel lblSolution = new JLabel("Solution");
@@ -207,21 +231,25 @@ public class AssignmentEditingGUI extends JFrame {
 		problemPanel.add(lblSolution);
 		//Choice A
 		JRadioButton option_A_radio = new JRadioButton("");
-		option_A_radio.setSelected(true);
 		option_A_radio.setBounds(336, 134, 23, 30);
+		option_A_radio.setSelected(false);
 		problemPanel.add(option_A_radio);
 		//Choice B
 		JRadioButton option_B_radio = new JRadioButton("");
 		option_B_radio.setBounds(336, 175, 23, 30);
+		option_B_radio.setSelected(false);
 		problemPanel.add(option_B_radio);
 		//Choice C
 		JRadioButton option_C_radio = new JRadioButton("");
 		option_C_radio.setBounds(336, 216, 23, 30);
+		option_C_radio.setSelected(false);
 		problemPanel.add(option_C_radio);
 		//Choice D
 		JRadioButton option_D_radio = new JRadioButton("");
 		option_D_radio.setBounds(336, 257, 23, 30);
+		option_D_radio.setSelected(false);
 		problemPanel.add(option_D_radio);
+		
 		//Group
 		ButtonGroup bg = new ButtonGroup();
 		bg.add(option_A_radio);
@@ -229,11 +257,31 @@ public class AssignmentEditingGUI extends JFrame {
 		bg.add(option_C_radio);
 		bg.add(option_D_radio);
 		
+		JComboBox<String> cbProblems = new JComboBox<String>(questions);
+		cbProblems.setBounds(54, 42, 700, 55);
+		cbProblems.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+		cbProblems.setEditable(true);
+		cbProblems.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				int solI = updateOptions(cbProblems,txtOptionA, txtOptionB, txtOptionC, txtOptionD);
+				updateSolutionSelection(solI, option_A_radio, option_B_radio, option_C_radio, option_D_radio);
+
+			}
+		});
+		
+		problemPanel.add(cbProblems);
+		
+		int solI = updateOptions(cbProblems,txtOptionA, txtOptionB, txtOptionC, txtOptionD);
+		updateSolutionSelection(solI, option_A_radio, option_B_radio, option_C_radio, option_D_radio);
+
+		
+		
 		//Edit problem button
-		JButton btnEditProblem = new JButton("Save This Problem");
-		btnEditProblem.setBackground(Color.LIGHT_GRAY);
-		btnEditProblem.setFont(new Font("Segoe UI", Font.PLAIN, 15));
-		btnEditProblem.addActionListener(new ActionListener() {
+		JButton btnSaveProblem = new JButton("Save This Problem");
+		btnSaveProblem.setBackground(Color.LIGHT_GRAY);
+		btnSaveProblem.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+		btnSaveProblem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				//String problemString = textArea.getText();
 				ArrayList<String> options = new ArrayList<>();
@@ -241,35 +289,10 @@ public class AssignmentEditingGUI extends JFrame {
 				options.add(txtOptionB.getText());
 				options.add(txtOptionC.getText());
 				options.add(txtOptionD.getText());
-				
-				String solution;
-				
-				if (option_A_radio.isSelected()) {
-					solution = txtOptionA.getText();
-				} else if (option_B_radio.isSelected()) {
-					solution = txtOptionB.getText();
-				} else if (option_C_radio.isSelected()) {
-					solution = txtOptionC.getText();
-				} else {
-					solution = txtOptionD.getText();
-				}
-				
-				//Problem newProblem = new Problem(problemID, problemString, options, solution);
-				//problems.add(newProblem);
-				problemID++;
-				
-				// Reset items
-				lblProblem.setText("Problem " + problemID);
-				//textArea.setText("");
-				txtOptionA.setText("Option A");
-				txtOptionB.setText("Option B");
-				txtOptionC.setText("Option C");
-				txtOptionD.setText("Option D");
-				option_A_radio.setSelected(true);
 			}
 		});
-		btnEditProblem.setBounds(521, 630, 190, 40);
-		contentPane.add(btnEditProblem);
+		btnSaveProblem.setBounds(521, 630, 190, 40);
+		contentPane.add(btnSaveProblem);
 		
 		//Save the new edited assignment
 		JButton btnSave = new JButton("Save");
@@ -308,52 +331,9 @@ public class AssignmentEditingGUI extends JFrame {
 		
 	}
 	
-	/**
-	 * Returns ArrayList of ArrayList of Assignment Question data.
-	 * @param file
-	 * @return
-	 */
-	private ArrayList<ArrayList<String>> getAssignmentQData(File file) {
-		
-		ArrayList<String> orderedQInfo1 = new ArrayList<>();
-		ArrayList<String> orderedQInfo2 = new ArrayList<>();
-		ArrayList<String> orderedQInfo3 = new ArrayList<>();
-		ArrayList<String>orderedQInfo4 = new ArrayList<>();
-		ArrayList<ArrayList<String>> data = new ArrayList<>();
-		data.add(orderedQInfo1);
-		data.add(orderedQInfo2);
-		data.add(orderedQInfo3);
-		data.add(orderedQInfo4);
-		String line;
-		String[] placeHolder = new String[4];
-		
-    	try {
-    		FileReader fr = new FileReader(file);
-    		BufferedReader br = new BufferedReader(fr);
-    		br.readLine();
-    		line = br.readLine();
-    		while(line != null) {
-    			placeHolder = line.split(",");
-    			data.get(0).add(placeHolder[0]);
-    			data.get(1).add(placeHolder[1]);
-    			data.get(2).add(placeHolder[2]);
-    			data.get(3).add(placeHolder[3]);
-    			line = br.readLine();
-    		}
-    		br.close();
-			fr.close();
-    	} catch (IOException e) {
-    		e.printStackTrace();
-        }
-    	
-    	System.out.println(data);
-    	return data;
-
-	}
 	
 	/**
-	 * Updates the JTextField option components for the corresponding
-	 * problem. 
+	 * [EDIT]: Returns index of solution in options.
 	 * WARNING: Raises NullPointerException if the assignment has no problems.
 	 * NOTE: prevent user from making an "empty" assignment.
 	 * @param questions: JComboBox that contains all questions to select from
@@ -362,16 +342,48 @@ public class AssignmentEditingGUI extends JFrame {
 	 * @param optionB: JTextField second option
 	 * @param optionC: JTextField third option
 	 * @param optionD: JTextField fourth option
+	 * @return 
 	 */
-	private void updateOptions(JComboBox<String> questions, ArrayList<ArrayList<String>> data,JTextField optionA, JTextField optionB, JTextField optionC, JTextField optionD) {
+	private int updateOptions(JComboBox<String> questions, JTextField optionA, 
+			JTextField optionB, JTextField optionC, JTextField optionD) {
 
-		String selectedID = ((String) questions.getSelectedItem()).substring(0, 1); // ID of problem.
-		String options[] = (data.get(3).get(Integer.parseInt(selectedID) - 1)).split("\\|");
+		String selectedProblem = ((String) questions.getSelectedItem());
+		for(int i = 0; i < problems.size();i++) {
+			if(problems.get(i).getProblemString().equals(selectedProblem)) {
+				selectedPID = i;
+			}
+		}
+		
+		ArrayList<String> options = problems.get(selectedPID).getOptions();
 
-		optionA.setText(options[0]);
-		optionB.setText(options[1]);
-		optionC.setText(options[2]);
-		optionD.setText(options[3]);		
+		optionA.setText(options.get(0));
+		optionB.setText(options.get(1));
+		optionC.setText(options.get(2));
+		optionD.setText(options.get(3));	
+		
+		String sol = problems.get(selectedPID).getSolution();
+		int j = 0;
+		while (j < problems.get(selectedPID).getOptions().size()) {
+			if(problems.get(selectedPID).getOptions().get(j).equals(sol)) {
+				return j;
+			}
+			j++;
+		}
+		
+		return j - 1; // Returns last index if no solution was found.
+			
+	}
+	
+	public void updateSolutionSelection(int solIndex, JRadioButton rbA, JRadioButton rbB, JRadioButton rbC, JRadioButton rbD) {
+		if(solIndex == 0){
+			rbA.setSelected(true);
+		} else if (solIndex == 1) {
+			rbB.setSelected(true);
+		} else if (solIndex == 2) {
+			rbC.setSelected(true);
+		} else if (solIndex == 3) {
+			rbD.setSelected(true);
+		}
 	}
 		
 }
