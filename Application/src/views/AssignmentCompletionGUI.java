@@ -20,10 +20,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.swing.BorderFactory;
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
@@ -47,7 +49,7 @@ public class AssignmentCompletionGUI extends JFrame implements ActionListener{
                 contentPane.setSize(600,400);
                 contentPane.setBackground(Color.WHITE);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-                contentPane.setLayout(new GridLayout(1000,1));
+                contentPane.setLayout(new GridLayout(getGridLayoutCount(fileName),1));
                 
                 // Assignment Label
 		JLabel lblAssignment = new JLabel(getAssignmentName(fileName));
@@ -74,17 +76,17 @@ public class AssignmentCompletionGUI extends JFrame implements ActionListener{
                         lblQuestion.setSize(lblQuestion.getPreferredSize());
                         contentPane.add(lblQuestion);
                         
-                        System.out.println(p.getOptions().get(0));
-                        
+                        ButtonGroup questionGroup = new ButtonGroup();
                         // Answers 
                         for (String a: p.getOptions()){
-                          JButton answer = new JButton(a);
+                          JRadioButton answer = new JRadioButton(a);
                           answer.setFont(new Font("Segoe UI Light", Font.PLAIN, 15));
                           answer.setSize(answer.getPreferredSize());
                           answer.addActionListener(this);
                           // On button press, actionlistener event e = problemID,answer pressed
                           answer.setActionCommand(p.getProblemID() + "," + a);
                           contentPane.add(answer);
+                          questionGroup.add(answer);
                         }
                 }
 
@@ -129,6 +131,27 @@ public class AssignmentCompletionGUI extends JFrame implements ActionListener{
 			e.printStackTrace();
 		}
                 return result;
+        }
+        
+        public int getGridLayoutCount(String fileName){
+          // 1 For assignment name at least
+          int count = 1;
+          
+          try {
+			FileReader fr = new FileReader(fileName);
+			BufferedReader br = new BufferedReader(fr);
+			// Skip first cell
+			String line = br.readLine();
+                        // Read all questions
+			while((line = br.readLine()) != null){
+                                // Add one blank line + question + 4 answers
+                                count += 6;
+                        }
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+          
+          return count;
         }
 
   @Override
