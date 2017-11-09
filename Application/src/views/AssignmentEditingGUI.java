@@ -16,27 +16,13 @@ import java.awt.Font;
 import java.awt.Color;
 import javax.swing.JComboBox;
 import javax.swing.JTextField;
-import javax.swing.JTextArea;
-import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.sql.Date;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Enumeration;
-import java.util.List;
-import java.util.Locale;
-import java.util.Random;
 import java.awt.event.ActionEvent;
 import javax.swing.JRadioButton;
-import java.awt.Dimension;
 import javax.swing.SwingConstants;
 
 public class AssignmentEditingGUI extends JFrame {
@@ -47,14 +33,12 @@ public class AssignmentEditingGUI extends JFrame {
 	private JTextField txtOptionA;
 	private JTextField txtOptionB;
 	private JTextField txtOptionC;
-	private JTextField txtOptionD;
-	private JTextField txtAssignmentNum;
-	
+	private JTextField txtOptionD;	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					File file = new File("Assignment1.csv");
+					File file = new File("Assignment43.csv");
 					AssignmentEditingGUI a = new AssignmentEditingGUI(file);
 					a.setVisible(true);
 				} catch (Exception e) {
@@ -77,7 +61,7 @@ public class AssignmentEditingGUI extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		File assignmentFile;
+		String fileName = this.file.getName();
 		
 		//Retrieve all problems from the assignment.
 		ArrayList<ArrayList<String>> data = ExtractData.getAssignmentQData(this.file);
@@ -90,8 +74,9 @@ public class AssignmentEditingGUI extends JFrame {
 		lblNewAssignment.setSize(lblNewAssignment.getPreferredSize());
 		contentPane.add(lblNewAssignment);
 		
+		String assignmentNum = fileName.substring(10, fileName.indexOf("."));
 		//JTextField to edit assignment number.
-		JTextField txtAssignmentNum = new JTextField();
+		JTextField txtAssignmentNum = new JTextField(assignmentNum);
 		txtAssignmentNum.setHorizontalAlignment(SwingConstants.CENTER);
 		txtAssignmentNum.setFont(new Font("Segoe UI Light", Font.PLAIN, 52)); // Only allow numbers and restrict to 2 characters.
 		txtAssignmentNum.setBounds(lblNewAssignment.getWidth() + 70, 60, 60, 55);
@@ -105,7 +90,7 @@ public class AssignmentEditingGUI extends JFrame {
 		contentPane.add(lblDueDate);
 
 		// All due date related info.
-		String[] currDueDate = info[1].split("\\/");
+		String[] currDueDate = info[2].split("\\/");
 		
 		//List of months for drop down list
 		String[] monthStrings = { "January", "February", "March", "April",
@@ -154,11 +139,11 @@ public class AssignmentEditingGUI extends JFrame {
 			question = data.get(1).get(i);
 			solution = data.get(2).get(i);
 			String[] splitOptions = data.get(3).get(i).split("\\|");
-			ArrayList<String> options = new ArrayList<>();
+			ArrayList<String> oldOptions = new ArrayList<>();
 			for(int j = 0; j < splitOptions.length; j++) {
-				options.add(splitOptions[j]);
+				oldOptions.add(splitOptions[j]);
 			}
-			problems.add(new Problem(pid, question, options, solution));
+			problems.add(new Problem(pid, question, oldOptions, solution));
 		}
 		
 		JLabel lblProblems = new JLabel("Problems");
@@ -176,7 +161,7 @@ public class AssignmentEditingGUI extends JFrame {
 		//Problem mini label
 		JLabel lblProblem = new JLabel("Problem: ");
 		lblProblem.setFont(new Font("Segoe UI", Font.PLAIN, 15));
-		lblProblem.setBounds(24, 21, 56, 21);
+		lblProblem.setBounds(24, 16, 56, 21);
 		lblProblem.setSize(lblProblem.getPreferredSize());
 		problemPanel.add(lblProblem);
 		
@@ -186,7 +171,6 @@ public class AssignmentEditingGUI extends JFrame {
 		lblOptions.setBounds(24, 102, 56, 21);
 		lblOptions.setSize(lblOptions.getPreferredSize());
 		problemPanel.add(lblOptions);
-		
 
 		int qsize = problems.size(); // Does not work if there are no questions.
 		String[] questions = new String[qsize];
@@ -258,7 +242,7 @@ public class AssignmentEditingGUI extends JFrame {
 		bg.add(option_D_radio);
 		
 		JComboBox<String> cbProblems = new JComboBox<String>(questions);
-		cbProblems.setBounds(54, 42, 700, 55);
+		cbProblems.setBounds(36, 42, 700, 55);
 		cbProblems.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 		cbProblems.setEditable(true);
 		cbProblems.addActionListener(new ActionListener() {
@@ -266,7 +250,6 @@ public class AssignmentEditingGUI extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				int solI = updateOptions(cbProblems,txtOptionA, txtOptionB, txtOptionC, txtOptionD);
 				updateSolutionSelection(solI, option_A_radio, option_B_radio, option_C_radio, option_D_radio);
-
 			}
 		});
 		
@@ -274,8 +257,6 @@ public class AssignmentEditingGUI extends JFrame {
 		
 		int solI = updateOptions(cbProblems,txtOptionA, txtOptionB, txtOptionC, txtOptionD);
 		updateSolutionSelection(solI, option_A_radio, option_B_radio, option_C_radio, option_D_radio);
-
-		
 		
 		//Edit problem button
 		JButton btnSaveProblem = new JButton("Save This Problem");
@@ -283,12 +264,57 @@ public class AssignmentEditingGUI extends JFrame {
 		btnSaveProblem.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 		btnSaveProblem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				//String problemString = textArea.getText();
+				boolean unfilledFields = false;
+
+				// Check if user entered a problem
+				String problemString = (String) cbProblems.getSelectedItem();
+				if (problemString.equals("")) {
+					unfilledFields = true;
+				}
 				ArrayList<String> options = new ArrayList<>();
 				options.add(txtOptionA.getText());
 				options.add(txtOptionB.getText());
 				options.add(txtOptionC.getText());
 				options.add(txtOptionD.getText());
+
+				// Check if user entered all options
+				if (!unfilledFields) {
+					for (String option : options) {
+						if(option.equals("")) {
+							unfilledFields = true;
+						}
+					} 
+				}
+
+				if (unfilledFields) {
+					JOptionPane.showMessageDialog(null, "Please enter all fields!");
+				} else {
+					String solution;
+
+					if (option_A_radio.isSelected()) {
+						solution = txtOptionA.getText();
+					} else if (option_B_radio.isSelected()) {
+						solution = txtOptionB.getText();
+					} else if (option_C_radio.isSelected()) {
+						solution = txtOptionC.getText();
+					} else {
+						solution = txtOptionD.getText();
+					}
+
+					Problem newProblem = new Problem(selectedPID + 1, problemString, options, solution);
+					
+					// If the user actually made a modification to the original question.
+					if(!newProblem.equals(problems.get(selectedPID))) {
+						problems.remove(selectedPID);
+						problems.add(selectedPID, newProblem);
+						cbProblems.insertItemAt(newProblem.getProblemString(), selectedPID);
+						cbProblems.removeItemAt(selectedPID + 1); // Removes previous question from the problems JComboBox
+						
+					} else {
+						JOptionPane.showMessageDialog(null, "You did not make any changes to this problem.");
+					}
+						
+				}
 			}
 		});
 		btnSaveProblem.setBounds(521, 630, 190, 40);
@@ -328,7 +354,6 @@ public class AssignmentEditingGUI extends JFrame {
 		});
 		btnSave.setBounds(720, 630, 107, 40);
 		contentPane.add(btnSave);
-		
 	}
 	
 	
@@ -369,7 +394,6 @@ public class AssignmentEditingGUI extends JFrame {
 			}
 			j++;
 		}
-		
 		return j - 1; // Returns last index if no solution was found.
 			
 	}

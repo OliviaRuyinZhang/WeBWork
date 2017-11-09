@@ -26,6 +26,7 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
 import controllers.Authenticator;
+import controllers.ExtractData;
 
 /**
  * Class to display a list of assignments for an instructor.
@@ -124,7 +125,7 @@ public class InstructorListingGUI extends JFrame{
 					assignReleasedPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 					assignReleasedPanel.setLayout(null);
 					String fileName = file.getName();
-					String[] info = getAssignmentInfo(fileName);
+					String[] info = ExtractData.getAssignmentInfo(fileName);
 					if(info[0].equals("Released")) {
 						assignReleasedPanel.setBounds(0, 55 + i, 765, 85);
 						assignReleasedPanel.setBackground(Color.decode("#F0F0F0"));
@@ -158,7 +159,7 @@ public class InstructorListingGUI extends JFrame{
 					assignUnreleasedPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 					assignUnreleasedPanel.setLayout(null);
 					String fileName = file.getName();
-					String[] info = getAssignmentInfo(fileName);
+					String[] info = ExtractData.getAssignmentInfo(fileName);
 					if(info[0].equals("Unreleased")) {
 						assignUnreleasedPanel.setBounds(0, 130 + i, 765, 85);
 						assignUnreleasedPanel.setBackground(Color.decode("#F0F0F0"));
@@ -188,7 +189,7 @@ public class InstructorListingGUI extends JFrame{
 	 */
 	private void addToAssignmentPanel(boolean released, JPanel panel, File file, int position) {
 		String fileName = file.getName();
-		String[] info = getAssignmentInfo(fileName);
+		String[] info = ExtractData.getAssignmentInfo(fileName);
 		
 		JLabel lblAssignment = new JLabel(fileName.replaceFirst("[.][^.]+$", "")); // Strips the .csv extension.
 		lblAssignment.setFont(new Font("Segoe UI Semibold", Font.PLAIN, 16));
@@ -236,7 +237,15 @@ public class InstructorListingGUI extends JFrame{
 		editAssignmentButton.setFocusPainted(false);
 		editAssignmentButton.setBackground(Color.decode("#B2BABB"));
 		editAssignmentButton.setFont(new Font("Segoe UI", Font.PLAIN, 15));
-		// Add handler for editAssignmentButton here.
+		editAssignmentButton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				AssignmentEditingGUI aeg = new AssignmentEditingGUI(file);
+				aeg.setVisible(true);
+			}
+			
+		});
 		
 		// Add to the panel.
 		panel.add(editAssignmentButton);
@@ -277,35 +286,6 @@ public class InstructorListingGUI extends JFrame{
 	    }  
 	    return assignments;
 	}
-    
-    /**
-     * Returns a String array of the assignment
-     * information, located in it's respective
-     * assignment csv file.
-     * 
-     * [(Un)released/Due-date/date of creation]
-     * 
-     * @param fileName: String name of the assignment's csv file.
-     */
-    public String[] getAssignmentInfo(String fileName) {
-    	
-    	String[] info = new String[3];
-    	
-    	try {
-    		FileReader fr = new FileReader(fileName);
-    		BufferedReader br = new BufferedReader(fr);
-    		// Check first cell for unreleased
-    		String line = br.readLine();
-    		info = line.split(",");
-    		br.close();
-    		fr.close();
-    		
-    	} catch (IOException e) {
-    		e.printStackTrace();
-        }
-    	
-    	return info;
-    }
 }
 
 

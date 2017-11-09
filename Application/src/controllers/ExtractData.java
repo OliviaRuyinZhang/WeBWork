@@ -45,9 +45,7 @@ public class ExtractData {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        
-        System.out.println(data);
-        return data;
+                return data;
     }
     
     /**
@@ -55,7 +53,7 @@ public class ExtractData {
      * information, located in it's respective
      * assignment csv file.
      * 
-     * [(Un)released/Due-date/date of creation]
+     * [(Un)released/Date of creation/Due-date]
      * 
      * @param fileName: String name of the assignment's csv file.
      */
