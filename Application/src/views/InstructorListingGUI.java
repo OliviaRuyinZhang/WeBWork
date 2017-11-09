@@ -19,10 +19,13 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
+
+import controllers.Authenticator;
 
 /**
  * Class to display a list of assignments for an instructor.
@@ -78,6 +81,30 @@ public class InstructorListingGUI extends JFrame{
 	public void displayAssignments() {
 		// Every existing assignment copied into an ArrayList.
 				assignments = gatherExistingAssignments();
+				
+				JButton btnAddAssignment = new JButton("+ Add Assignment");
+				btnAddAssignment.setBounds(585, 10, 179, 35);
+				btnAddAssignment.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+				btnAddAssignment.setFocusPainted(false);
+				btnAddAssignment.setBackground(Color.decode("#B2BABB"));
+				btnAddAssignment.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent arg0) {
+						//Creates an InstructorListingGUI
+						EventQueue.invokeLater(new Runnable() {
+							public void run() {
+								try {
+									AssignmentCreationGUI frame = new AssignmentCreationGUI();
+									frame.setVisible(true);
+									frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+								} catch (Exception e) {
+									e.printStackTrace();
+								}
+							}
+						});
+					}
+				});
+				listAssignmentsPanel.add(btnAddAssignment);
+				
 				
 				/*
 				 * Released Assignments Section
@@ -151,7 +178,7 @@ public class InstructorListingGUI extends JFrame{
 	
 	/**
 	 * Adds interactive JButtons to each listed assignment. One button either
-	 * releases or unreleased an assignment, and the other handles editting
+	 * releases or unreleased an assignment, and the other handles editing
 	 * an assignment. 
 	 * 
 	 * @param released: boolean Flag whether assignment is released or not.

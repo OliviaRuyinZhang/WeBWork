@@ -305,7 +305,7 @@ public class AssignmentCreationGUI extends JFrame {
 					String alreadyExistsMessage = "Warning: An assignment already exists with this number.\n"
 							+ "If you proceed, the existing assignment will be wiped. Continue?";
 
-					int result = 1;
+					int result = 0;
 					if (assignment.exists()) {
 						result = JOptionPane.showConfirmDialog((Component) null, alreadyExistsMessage,
 								"alert", JOptionPane.YES_NO_OPTION);

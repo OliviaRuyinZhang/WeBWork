@@ -22,4 +22,18 @@ The first version of our personas and user stories (version 0) can be found [her
 ### Professor Dashboard
 ![Professor Dashboard](https://github.com/CSCC01F17/L02_11/blob/master/Documents/Mockups/professor_dashboard.png)
 
+## Deliverable 4: Project Execution
+##### October 30, 2017
+- This week, we implemented the user login/register interface and the InstructorAssignmentListing panel.
+### Login Screen
+
+### Professor Dashboard
+
+### User Instructions
+- Go to ApplicationDriver.java under the controllers package
+- Run ApplicationDriver.java and you will see a login/register interface
+- For first time users, you must register your account by typing in your email address and passwords and then click the register button
+    - For this delieverable, you should register as an instructor by checking the instructor checkbox in order to see the futher features about this application
+- After you have registered successfully, you will be able to login to the instructor dashboard using the same email address and passwords that you just registered (do not forget to login as a instructor by clicking the instructor checkbox)
+- As an instructor, you can release and unrelease assignments by clicking the labeled buttons corresponding to the appropriate assignments
 ###### Note: GitHub may have problems displaying some of our documents. For this reason, it is recommended you download the document instead of using GitHub's preview to view it.

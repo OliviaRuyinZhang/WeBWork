@@ -122,8 +122,26 @@ public class LoginRegisterGUI extends JFrame {
 		btnLogin.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 		btnLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if(Authenticator.authenticate(getEmail(), getPassword())){
-					JOptionPane.showMessageDialog(LoginRegisterGUI.this, "Login successful!");
+				//This checks if authentication is right as well as if user is an instructor
+				if((Authenticator.authenticate(getEmail(), getPassword())) && (Authenticator.isInstructor(getEmail()))){
+					JOptionPane.showMessageDialog(LoginRegisterGUI.this, "Login successful! Welcome instructor.");
+					//Creates an InstructorListingGUI
+					EventQueue.invokeLater(new Runnable() {
+						public void run() {
+							try {
+								InstructorListingGUI frame = new InstructorListingGUI();
+								frame.setVisible(true);
+								setVisible(false);
+								dispose(); // Destroy the JFrame object
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
+						}
+					});
+				}
+				//If not an instructor
+				else if((Authenticator.authenticate(getEmail(), getPassword())) && (Authenticator.isInstructor(getEmail()) == false)){
+					JOptionPane.showMessageDialog(LoginRegisterGUI.this, "Login successful! Welcome student.");
 				}else{
 					JOptionPane.showMessageDialog(LoginRegisterGUI.this, "Invalid email address or password!");
 				}

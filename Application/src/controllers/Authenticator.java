@@ -79,15 +79,15 @@ public class Authenticator {
 			// Reads every line of the file.
 			while((line = br.readLine()) != null) {
 
-				String[] user_info = line.split(","); // [email, password]
+				String[] user_info = line.split(","); // [isInstructor, email, password]
 				// If the email exists in the file.
-				if(user_info[0].equals(email)) {
+				if(user_info[1].equals(email)) {
 					String hash_val = hashPassword(password);
 					
 					/* If password argument hashed is the 
 					 * same as the hashed password in the file.
 					 */
-					if(user_info[1].equals(hash_val)) {
+					if(user_info[2].equals(hash_val)) {
 						return true;
 					} else {
 						return false;
@@ -124,11 +124,11 @@ public class Authenticator {
 		// Reads every line of the file.
 		while((line = br.readLine()) != null) {
 
-			String[] user_info = line.split(","); // [email, password]
+			String[] user_info = line.split(","); // [isInstuctor, email, password]
 			
-			// If the user name exists in the file.
-			if (user_info[0].equals(email)) {
-				return true;	
+			// If the email exists in the file.
+			if (user_info[1].equals(email)) {
+				return true;
 			}
 		}
 		
@@ -157,6 +157,37 @@ public class Authenticator {
 		byte[] digest = md.digest();
 		md.reset() ;
 		return String.format("%064x", new java.math.BigInteger(1, digest));
-
+	}
+	
+	/**
+	 * Checks if the corresponding login email is an instructor or not by checking
+	 * information in the corresponding userscsv file.
+	 * @param email: user's email
+	 * @return: a boolean (true/false) if login email is an instructor
+	 * @throws IOException
+	 */
+	public static boolean isInstructor(String email) {
+		try {
+			boolean isInstruc = false;
+			FileReader fr = new FileReader(userscsv);
+			@SuppressWarnings("resource")
+			BufferedReader br = new BufferedReader (fr);
+			String line = "";
+			while((line = br.readLine()) != null) {
+				String [] user_info = line.split(",");
+				if (user_info [1].equals(email)) {
+					if (user_info[0].equalsIgnoreCase("true")) {
+						isInstruc = true;
+					}
+				}
+			}
+			
+			br.close();
+			fr.close();
+			return isInstruc;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return false;
 	}
 }
