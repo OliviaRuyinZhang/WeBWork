@@ -26,7 +26,7 @@ import javax.swing.JRadioButton;
 import javax.swing.SwingConstants;
 
 public class AssignmentEditingGUI extends JFrame {
-	File file;
+	private File file;
 	private int selectedPID;
 	private ArrayList<Problem> problems = new ArrayList<>();
 	private JPanel contentPane;
@@ -38,7 +38,7 @@ public class AssignmentEditingGUI extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					File file = new File("Assignment43.csv");
+					File file = new File("Assignment1.csv");
 					AssignmentEditingGUI a = new AssignmentEditingGUI(file);
 					a.setVisible(true);
 				} catch (Exception e) {
@@ -330,14 +330,15 @@ public class AssignmentEditingGUI extends JFrame {
 				String month = Integer.toString(monthDropDown.getSelectedIndex() + 1);
 			    String date = dateDropDown.getSelectedItem().toString();
 			    String year = yearDropDown.getSelectedItem().toString();
+			    String newFileName = "Assignment" + txtAssignmentNum.getText() + ".csv";
 			    
-			    String fileName = "Assignment" + txtAssignmentNum.getText() + ".csv";
+			    AssignmentCreator.initializeFile(newFileName, month+"/"+date+"/"+year);
 			    
-				AssignmentCreator.initializeFile(fileName, month+"/"+date+"/"+year);
+			    
 				
 				int numSuccessfullyAdded = 0;
 				for (Problem problem : problems) {
-					if(AssignmentCreator.addProblem(fileName, problem)) {
+					if(AssignmentCreator.addProblem(newFileName, problem)) {
 						numSuccessfullyAdded++;
 					}
 				}
@@ -347,6 +348,8 @@ public class AssignmentEditingGUI extends JFrame {
 				} else {
 					JOptionPane.showMessageDialog(null, "There was a problem saving one or more problems.");
 				}
+				
+				file.delete();
 				
 				setVisible(false);
 				dispose(); // Destroy the JFrame object
