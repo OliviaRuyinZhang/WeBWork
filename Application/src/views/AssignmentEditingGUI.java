@@ -19,8 +19,11 @@ import javax.swing.JTextField;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.awt.event.ActionEvent;
 import javax.swing.JRadioButton;
 import javax.swing.SwingConstants;
@@ -38,7 +41,7 @@ public class AssignmentEditingGUI extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					File file = new File("Assignment2.csv");
+					File file = new File("Assignment1.csv");
 					AssignmentEditingGUI a = new AssignmentEditingGUI(file);
 					a.setVisible(true);
 				} catch (Exception e) {
@@ -62,6 +65,9 @@ public class AssignmentEditingGUI extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		String fileName = this.file.getName();
+		JButton btnRemove = new JButton("Remove problem");
+		JButton btnAdd = new JButton("Add new problem");
+		JButton btnClear = new JButton("Clear");
 		
 		//Retrieve all problems from the assignment.
 		ArrayList<ArrayList<String>> data = ExtractData.getAssignmentQData(this.file);
@@ -180,27 +186,27 @@ public class AssignmentEditingGUI extends JFrame {
 		
 		txtOptionA = new JTextField();
 		txtOptionA.setFont(new Font("Segoe UI", Font.PLAIN, 15));
-		txtOptionA.setText("Option A");
+		txtOptionA.setText("");
 		txtOptionA.setBounds(24, 134, 286, 30);
 		problemPanel.add(txtOptionA);
 		txtOptionA.setColumns(10);
 		//Text area to type choice B
 		txtOptionB = new JTextField();
-		txtOptionB.setText("Option B");
+		txtOptionB.setText("");
 		txtOptionB.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 		txtOptionB.setColumns(10);
 		txtOptionB.setBounds(24, 175, 286, 30);
 		problemPanel.add(txtOptionB);
 		//Text area to type choice C
 		txtOptionC = new JTextField();
-		txtOptionC.setText("Option C");
+		txtOptionC.setText("");
 		txtOptionC.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 		txtOptionC.setColumns(10);
 		txtOptionC.setBounds(24, 216, 286, 30);
 		problemPanel.add(txtOptionC);
 		//Text area to type choice D
 		txtOptionD = new JTextField();
-		txtOptionD.setText("Option D");
+		txtOptionD.setText("");
 		txtOptionD.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 		txtOptionD.setColumns(10);
 		txtOptionD.setBounds(24, 257, 286, 30);
@@ -216,7 +222,7 @@ public class AssignmentEditingGUI extends JFrame {
 		//Choice A
 		JRadioButton option_A_radio = new JRadioButton("");
 		option_A_radio.setBounds(336, 134, 23, 30);
-		option_A_radio.setSelected(false);
+		option_A_radio.setSelected(true);
 		problemPanel.add(option_A_radio);
 		//Choice B
 		JRadioButton option_B_radio = new JRadioButton("");
@@ -246,20 +252,39 @@ public class AssignmentEditingGUI extends JFrame {
 		cbProblems.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 		cbProblems.setEditable(true);
 		cbProblems.addActionListener(new ActionListener() {
+			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				int solI = updateOptions(cbProblems,txtOptionA, txtOptionB, txtOptionC, txtOptionD);
-				updateSolutionSelection(solI, option_A_radio, option_B_radio, option_C_radio, option_D_radio);
+				if(problems.size() != 0) {
+					int solI = updateOptions(cbProblems,txtOptionA, txtOptionB, txtOptionC, txtOptionD);
+					if(solI != -1) {
+						updateSolutionSelection(solI, option_A_radio, option_B_radio, option_C_radio, option_D_radio);
+						if(!btnClear.isEnabled()) {
+							btnClear.setEnabled(true);
+							btnRemove.setEnabled(true);
+						}
+					}
+				}
+
 			}
+			
 		});
 		
 		problemPanel.add(cbProblems);
 		
-		int solI = updateOptions(cbProblems,txtOptionA, txtOptionB, txtOptionC, txtOptionD);
-		updateSolutionSelection(solI, option_A_radio, option_B_radio, option_C_radio, option_D_radio);
+		if(problems.size() != 0) {
+			int solI = updateOptions(cbProblems,txtOptionA, txtOptionB, txtOptionC, txtOptionD);
+			if(solI != -1) {
+				updateSolutionSelection(solI, option_A_radio, option_B_radio, option_C_radio, option_D_radio);
+			}
+		}
+		
+		ArrayList<JTextField> options = new ArrayList<JTextField>(Arrays.asList(txtOptionA, txtOptionB, txtOptionC, txtOptionD));
+		JRadioButton[] rbSolutions = {option_A_radio, option_B_radio, option_C_radio, option_D_radio};
+		
 		
 		//Edit problem button
-		JButton btnSaveProblem = new JButton("Save This Problem");
+		JButton btnSaveProblem = new JButton("Save Edited Problem");
 		btnSaveProblem.setBackground(Color.LIGHT_GRAY);
 		btnSaveProblem.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 		btnSaveProblem.addActionListener(new ActionListener() {
@@ -304,6 +329,8 @@ public class AssignmentEditingGUI extends JFrame {
 					Problem newProblem = new Problem(selectedPID + 1, problemString, options, solution);
 					
 					// If the user actually made a modification to the original question.
+					for(int k = 0; k < problems.size(); k++) { System.out.println(problems.get(k).getProblemID());}
+					System.out.println("SELECTED = " + selectedPID);
 					if(!newProblem.equals(problems.get(selectedPID))) {
 						problems.remove(selectedPID);
 						problems.add(selectedPID, newProblem);
@@ -359,7 +386,84 @@ public class AssignmentEditingGUI extends JFrame {
 		});
 		btnSave.setBounds(720, 630, 107, 40);
 		contentPane.add(btnSave);
+
+		
+		//Remove problem from existing assignment.
+		//JButton btnRemove = new JButton("Remove problem");
+		btnRemove.setBackground(Color.LIGHT_GRAY);
+		btnRemove.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+		btnRemove.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				removeProblem(cbProblems, options, rbSolutions);
+				
+				if(problems.size() == 0) {
+					btnAdd.setEnabled(true);
+					btnRemove.setEnabled(false);
+					btnClear.setEnabled(false);
+				}
+			}
+			
+		});
+			
+		btnRemove.setBounds(580, 150, 160, 40);
+		problemPanel.add(btnRemove);
+		
+		//Add new problem to existing assignment.
+		//JButton btnAdd = new JButton("Add new problem");
+		btnAdd.setBackground(Color.LIGHT_GRAY);
+		btnAdd.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+		btnAdd.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				if(addNewProblem(cbProblems, options, rbSolutions)) {
+					btnClear.setEnabled(true);
+					btnAdd.setEnabled(false);
+					btnRemove.setEnabled(true);
+					btnSaveProblem.setEnabled(true);
+				}
+			}
+			
+		});
+		
+		btnAdd.setBounds(400, 150, 160, 40);
+		problemPanel.add(btnAdd);
+		
+		//Clear all components button.
+		//JButton btnClear = new JButton("Clear");
+		
+		btnClear.setBackground(Color.LIGHT_GRAY);
+		btnClear.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+		btnClear.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				clearProblem(cbProblems, options, rbSolutions);
+				btnAdd.setEnabled(true);
+				btnClear.setEnabled(false);
+				btnRemove.setEnabled(false);
+				btnSaveProblem.setEnabled(false);
+				
+			}
+			
+		});
+		btnClear.setBounds(400, 200, 107, 40);
+		problemPanel.add(btnClear);
+		
+		
+		if(problems.size() == 0) {
+			btnAdd.setEnabled(true);
+			btnRemove.setEnabled(false);
+			btnClear.setEnabled(false);
+		} else {
+			btnClear.setEnabled(true);
+			btnRemove.setEnabled(true);
+		}
 	}
+	
+	
 	
 	
 	/**
@@ -378,28 +482,34 @@ public class AssignmentEditingGUI extends JFrame {
 			JTextField optionB, JTextField optionC, JTextField optionD) {
 
 		String selectedProblem = ((String) questions.getSelectedItem());
+		//selectedPID = -1;
 		for(int i = 0; i < problems.size();i++) {
 			if(problems.get(i).getProblemString().equals(selectedProblem)) {
 				selectedPID = i;
 			}
 		}
 		
-		ArrayList<String> options = problems.get(selectedPID).getOptions();
-
-		optionA.setText(options.get(0));
-		optionB.setText(options.get(1));
-		optionC.setText(options.get(2));
-		optionD.setText(options.get(3));	
-		
-		String sol = problems.get(selectedPID).getSolution();
 		int j = 0;
-		while (j < problems.get(selectedPID).getOptions().size()) {
-			if(problems.get(selectedPID).getOptions().get(j).equals(sol)) {
-				return j;
-			}
-			j++;
+		//The problem exists.
+		if(selectedPID != -1) {
+			ArrayList<String> options = problems.get(selectedPID).getOptions();
+
+			optionA.setText(options.get(0));
+			optionB.setText(options.get(1));
+			optionC.setText(options.get(2));
+			optionD.setText(options.get(3));	
+
+			String sol = problems.get(selectedPID).getSolution();
+
+			while (j < problems.get(selectedPID).getOptions().size()) {
+				if(problems.get(selectedPID).getOptions().get(j).equals(sol)) {
+					return j;
+				}
+				j++;
+			}		
 		}
-		return j - 1; // Returns last index if no solution was found.
+		
+		return j - 1; // Returns -1 if the question is not existing.
 			
 	}
 	
@@ -414,5 +524,89 @@ public class AssignmentEditingGUI extends JFrame {
 			rbD.setSelected(true);
 		}
 	}
+	
+	public void clearProblem(JComboBox<String> problem, ArrayList<JTextField> options, JRadioButton[] rbSolutions) {
+		problem.setSelectedItem("");
+		for(int i = 0; i < options.size(); i++) {
+			options.get(i).setText("");
+			rbSolutions[i].setSelected(false);
+		}
+		rbSolutions[0].setSelected(true);
+		selectedPID = -1;
 		
+	}
+	
+	public boolean addNewProblem(JComboBox<String> existingProblems, ArrayList<JTextField> options, JRadioButton[] rbSolutions) {
+		boolean filledFields = true;
+		if(((String)existingProblems.getSelectedItem()).equals("")) {
+			filledFields = false;
+		}
+		ArrayList<String> optionsStr = new ArrayList<>();
+		if(filledFields) {
+			for(int i = 0; i < 4; i++) {
+				String currOption = options.get(i).getText();
+				if(currOption.equals("")) {
+					filledFields = false;
+				} else {
+					optionsStr.add(currOption);
+				}
+			}
+		}
+		String solutionStr = "";
+		if(filledFields) {
+			if(rbSolutions[0].isSelected()) {
+				solutionStr = options.get(0).getText();
+			} else if (rbSolutions[1].isSelected()) {
+				solutionStr = options.get(1).getText();
+			} else if (rbSolutions[2].isSelected()) {
+				solutionStr = options.get(2).getText();
+			} else {
+				solutionStr = options.get(3).getText();
+			} 
+			if(solutionStr.equals("")) {
+				filledFields = false;
+			}
+		}
+		if(filledFields) {
+			Problem newProblem = new Problem(problems.size() + 1, (String) existingProblems.getSelectedItem(), optionsStr, solutionStr);
+			problems.add(newProblem);
+			existingProblems.addItem(newProblem.getProblemString());
+			selectedPID = newProblem.getProblemID() - 1;
+			return true;
+		} else {
+			JOptionPane.showMessageDialog(null, "Please enter all fields!");
+		}
+		return false;
+	}
+	
+	// Returns True if problems is not empty.
+	public boolean removeProblem(JComboBox<String> existingProblems, ArrayList<JTextField> options, JRadioButton[] rbSolutions) {
+		String selectedP = (String)existingProblems.getSelectedItem();
+		for(int i = 0; i < problems.size(); i++) {
+			if(selectedP.equals(problems.get(i).getProblemString())) {
+				existingProblems.removeItem(selectedP);
+
+				// About to delete the last existing problem.
+				if(problems.size() == 1) {
+					clearProblem(existingProblems, options, rbSolutions);
+					problems.remove(i);
+					return false;
+				// If the selected problem is the last one in existingProblems.	
+				}else if(i == problems.size() - 1) {
+					problems.remove(i);
+					existingProblems.setSelectedIndex(i-1);
+				} else {
+					problems.remove(i);
+					existingProblems.setSelectedIndex(i);
+					// Updates the PIDs of the following questions.
+					for(int k = i; k < problems.size(); k++) {
+						
+						problems.get(k).setProblemID(k + 1);
+					}
+				}
+				break;
+			}
+		}
+		return true;
+	}
 }
