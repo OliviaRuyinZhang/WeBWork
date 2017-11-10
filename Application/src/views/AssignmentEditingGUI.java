@@ -447,6 +447,7 @@ public class AssignmentEditingGUI extends JFrame {
 		} else {
 			btnClear.setEnabled(true);
 			btnRemove.setEnabled(true);
+			btnAdd.setEnabled(false);
 		}
 	}
 	
