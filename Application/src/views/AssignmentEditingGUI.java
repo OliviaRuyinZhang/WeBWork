@@ -37,19 +37,6 @@ public class AssignmentEditingGUI extends JFrame {
 	private JTextField txtOptionB;
 	private JTextField txtOptionC;
 	private JTextField txtOptionD;	
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					File file = new File("Assignment1.csv");
-					AssignmentEditingGUI a = new AssignmentEditingGUI(file);
-					a.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});		
-	}
 	
 	/**
 	 * Create the frame.
