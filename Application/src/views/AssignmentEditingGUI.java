@@ -38,7 +38,7 @@ public class AssignmentEditingGUI extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					File file = new File("Assignment1.csv");
+					File file = new File("Assignment2.csv");
 					AssignmentEditingGUI a = new AssignmentEditingGUI(file);
 					a.setVisible(true);
 				} catch (Exception e) {
@@ -349,7 +349,9 @@ public class AssignmentEditingGUI extends JFrame {
 					JOptionPane.showMessageDialog(null, "There was a problem saving one or more problems.");
 				}
 				
-				file.delete();
+				if(!file.getName().equals(newFileName)) {
+					file.delete();
+				}
 				
 				setVisible(false);
 				dispose(); // Destroy the JFrame object
