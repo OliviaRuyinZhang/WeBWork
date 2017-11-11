@@ -34,6 +34,7 @@ public class StudentListingGUI extends JFrame{
 	private JPanel listAssignmentsPanel;
 	private List<File> assignments;
 
+
 	public StudentListingGUI() {
 		setResizable(true); // Temporarily until we add a scroll bar.
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

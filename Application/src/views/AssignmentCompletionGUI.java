@@ -40,6 +40,8 @@ public class AssignmentCompletionGUI extends JFrame implements ActionListener{
 	private JPanel contentPane = new JPanel();
 	private JScrollPane scroll;
 
+	
+
 	public AssignmentCompletionGUI(String fileName) {
                 setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 900, 731);
@@ -95,7 +97,7 @@ public class AssignmentCompletionGUI extends JFrame implements ActionListener{
                 setSize(600,400);
                 setVisible(true);
         }
-        
+         
         public String getAssignmentName(String fileName){
                 String result = "";
                 int upTo = fileName.indexOf(".csv");
