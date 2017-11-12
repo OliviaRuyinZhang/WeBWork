@@ -13,8 +13,10 @@ import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -34,16 +36,25 @@ import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
+import java.util.Scanner;
 import models.Problem;
 
 /**
  * Class to display a list of assignments for an instructor.
  */
-public class AssignmentCompletionGUI extends JFrame{
+public class AssignmentCompletionGUI extends JFrame implements ActionListener{
 	private JPanel contentPane = new JPanel();
 	private JScrollPane scroll;
+	public HashMap<String, String> answersInfo = new HashMap<String, String>();
+	public ArrayList<String> infoTitle = new ArrayList<String>();
+	public String fileName;
+	public String studentNo;
 
-	public AssignmentCompletionGUI(String fileName) {
+
+	public AssignmentCompletionGUI(String fileName, String studentNo) {
+		this.fileName = fileName;
+		this.studentNo = studentNo;
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 900, 731);
 		setTitle("WebWork");
@@ -54,6 +65,8 @@ public class AssignmentCompletionGUI extends JFrame{
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new GridLayout(getGridLayoutCount(fileName), 1));
 
+		
+		
 		// Assignment Label
 		JLabel lblAssignment = new JLabel(getAssignmentName(fileName));
 		lblAssignment.setFont(new Font("Segoe UI Light", Font.PLAIN, 30));
@@ -64,7 +77,10 @@ public class AssignmentCompletionGUI extends JFrame{
 		ArrayList<Problem> problems = getAllProblems(fileName);
 		int totalNoProblems = problems.size();
 		Collections.shuffle(problems);
-
+		
+		// construct assignment answers template
+		constructAssignmentAnswersTemplate(totalNoProblems);
+		
 		// Add problems to gui
 		for (Problem p : problems) {
 
@@ -86,22 +102,60 @@ public class AssignmentCompletionGUI extends JFrame{
 				JRadioButton answer = new JRadioButton(a);
 				answer.setFont(new Font("Segoe UI Light", Font.PLAIN, 15));
 				answer.setSize(answer.getPreferredSize());
-				selectedAnswers save = new selectedAnswers(fileName,totalNoProblems,p.getProblemString(), a);
-				answer.addActionListener(save); 
 				
-				// On button press, actionlistener event e = problemID,answer pressed
+				// auto-save user's selected answer
+				answer.addActionListener(this);
 				answer.setActionCommand(p.getProblemID() + "," + a);
+				
 				contentPane.add(answer);
 				questionGroup.add(answer);
 			}
 		}
-
+		
+		// save & close button
+		JButton saveButton = new JButton("Save and Close");
+		// close the current Jframe while the main method still running in the back, other opened Jframe will remain open
+	    saveButton.addActionListener(this);
+		contentPane.add(saveButton);
+		
+		// submit & grade button
+		JButton submitButton = new JButton("Submit and Grade");
+		// increment the number of tries
+		submitButton.addActionListener(this);
+		contentPane.add(submitButton);
+		
 		scroll = new JScrollPane(contentPane);
 		c.add(scroll);
 		setSize(600, 400);
 		setVisible(true);
 	}
 
+	public void constructAssignmentAnswersTemplate(int totalNoProblems) {
+		// add titles
+		answersInfo.put("StudentID",studentNo);
+		infoTitle.add("StudentID");
+		// add title for each question
+		for (int i = 1; i <= totalNoProblems; i++) {
+			String title = "Question " + i + " Answer";
+			infoTitle.add(title);
+			answersInfo.put(title, null);
+		}
+		//add titles and set initial value 
+		infoTitle.add("Average Mark");
+		answersInfo.put("Average Mark", null);
+		infoTitle.add("Number of Tries");
+		answersInfo.put("Number of Tries", "0");
+		infoTitle.add("Time (in seconds)");
+		answersInfo.put("Time (in seconds)", null);
+		infoTitle.add("Final Mark");
+		answersInfo.put("Final Mark", null);
+	}
+	
+	public void storeAssignmentAnswers(int questionNo, String answer) {
+		// update answer 
+		answersInfo.put("Question " + questionNo + " Answer", answer);
+	}
+	
 	public String getAssignmentName(String fileName) {
 		String result = "";
 		int upTo = fileName.indexOf(".csv");
@@ -115,7 +169,6 @@ public class AssignmentCompletionGUI extends JFrame{
 
 	public ArrayList<Problem> getAllProblems(String fileName) {
 		ArrayList<Problem> result = new <Problem>ArrayList();
-
 		try {
 			FileReader fr = new FileReader(fileName);
 			BufferedReader br = new BufferedReader(fr);
@@ -133,6 +186,7 @@ public class AssignmentCompletionGUI extends JFrame{
 				// Add new question to results
 				result.add(new Problem(Integer.parseInt(problemLine[0]), problemLine[1], options, problemLine[2]));
 			}
+			br.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -153,146 +207,134 @@ public class AssignmentCompletionGUI extends JFrame{
 				// Add one blank line + question + 4 answers
 				count += 6;
 			}
+			// add save and submit buttons
+			count += 2;
+			br.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
 		return count;
 	}
-}
-
-class selectedAnswers implements ActionListener{
-	String fileName;
-	String answer;
-	String questionNo;
-	int totalNoProblems;
-	HashMap<String, String> answersInfo;
-	ArrayList<String> infoTitle;
 	
-	public selectedAnswers(String fileName, int totalNoProblems, String questionNo, String answer) {
-		this.fileName = fileName.substring(0, fileName.length()-4) + "Answers.csv";
-		this.totalNoProblems = totalNoProblems;
-		this.questionNo = questionNo;
-		this.answer = answer;
-		this.answersInfo = new HashMap<String, String>();
-		this.infoTitle = new ArrayList<String>();
-	}
-	
-	@Override
-	public void actionPerformed(ActionEvent e) {
+	public void updateCsvFile() {
 		try {
-			saveAnswers();
-		} catch (IOException e1) {
+			String file = fileName.substring(0, fileName.length() - 4) + "Submission.csv";
+			File filePath = new File(file);
+			
+			String tempLine;
+			StringBuilder sb = new StringBuilder();	
+			
+			// if the answerSubmission csv file does not exist
+			if (filePath.exists() == false) {	
+				// write title
+				for (int i = 0; i < infoTitle.size(); i++) {
+					sb.append(infoTitle.get(i));
+					if (i < infoTitle.size()) {
+						sb.append(",");
+					} else if (i == infoTitle.size() - 1) {
+						sb.append("\n");
+					}
+				}
+
+				// change row
+				sb.append("\n");
+
+				// write content
+				for (int j = 0; j < infoTitle.size(); j++) {
+					sb.append(answersInfo.get(infoTitle.get(j)));
+					if (j < infoTitle.size()) {
+						sb.append(",");
+					} else if (j == infoTitle.size() - 1) {
+						sb.append("\n");
+					}
+				}
+				FileWriter fw = new FileWriter(file);
+				BufferedWriter bf = new BufferedWriter(fw);
+				bf.write(sb.toString());
+				bf.close();
+			}
+			
+			// existence file
+			else {
+				FileReader fr = new FileReader(file);
+				BufferedReader reader = new BufferedReader(fr);
+				boolean found = false;
+				while((tempLine = reader.readLine()) != null) {
+					String[] individualAnswerInfo = tempLine.split(","); 
+					// If the studentNo exists in the file.
+					if (individualAnswerInfo[0].equals(studentNo)) {
+						found = true;
+						// update the new selected answer for this student
+						for( int i = 0; i < individualAnswerInfo.length; i++)
+						{
+						    sb.append(answersInfo.get(infoTitle.get(i)));
+							if (i < individualAnswerInfo.length - 1) {
+								sb.append(",");
+							} else if (i == individualAnswerInfo.length - 1) {
+								sb.append("\n");
+							}			    
+						}
+					}// continue to record answers for other students
+					else {
+						sb.append(tempLine + "\n");
+					}
+				}// if the studentNo is not in the submission list
+				if(found != true) {
+					// append this student's answers to the end of the list
+					for (int j = 0; j < infoTitle.size(); j++) {
+						sb.append(answersInfo.get(infoTitle.get(j)));
+						if (j < infoTitle.size()) {
+							sb.append(",");
+						} else if (j == infoTitle.size() - 1) {
+							sb.append("\n");
+						}
+				}
+				}
+				reader.close();
+				FileWriter fw = new FileWriter(file);
+				BufferedWriter bf = new BufferedWriter(fw);
+				bf.write(sb.toString());
+				bf.close();
+				reader.close();
+			}
+
+		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
 	}
-	
-	public void saveAnswers() throws IOException{		
-		
-		//System.out.print(answersInfo.get(questionTitle));
-		try {
-			File tmpDir = new File(fileName);
-			boolean exists = tmpDir.exists();
-			if(exists) {
-				String questionTitle = "Question " + questionNo + " Answer";
-				answersInfo.put(questionTitle, answer);
-				csvFileContent();
-			}
-			else {
-				fileInitialization();
-			}		
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	public void fileInitialization() {			
-		answersInfo.put("StudentID", null);
-		infoTitle.add("StudentID");
-		for (int i = 1; i <= totalNoProblems; i++) {
-			String title = "Question " + i + " Answer";
-			infoTitle.add(title);
-			answersInfo.put(title, null);
-		}
-		infoTitle.add("Average Mark");
-		answersInfo.put("Average Mark", null);
-		infoTitle.add("Number of Tries");
-		answersInfo.put("Number of Tries", null);
-		infoTitle.add("Time (in seconds)");
-		answersInfo.put("Time (in seconds)", null);
-		infoTitle.add("Final Mark");
-		answersInfo.put("Final Mark", null);
-		answersInfo.put("Question " + questionNo + " Answer", answer);
-		
-		// store user's selected answer
-		String questionTitle = "Question " + questionNo + " Answer";
-		answersInfo.put(questionTitle, answer);
 
-		try {
-			csvFileTitles();
-			csvFileContent();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// get the object that currently come through actionListener
+		Object source = e.getSource();
+		// if the user select an answer
+	    if (source instanceof JRadioButton) {
+	    			// get question number and updated answer
+				ArrayList<String> modifiedAnswer = new ArrayList<String>(
+						Arrays.asList(e.getActionCommand().split(",")));
+				// edit and update the answer
+				storeAssignmentAnswers(Integer.parseInt(modifiedAnswer.get(0)), modifiedAnswer.get(1));
+				updateCsvFile();
+				
+		} 
+	    else if(source instanceof JButton){    	
+	    	 	JButton button = (JButton)source;
+	        String buttonText = button.getText();
+	        
+	        // if the user click the save and close button
+	        if(buttonText.equals("Save and Close")) {
+	        		// close current display Jframe
+	        		setVisible(false);
+	        		dispose();
+	        }// if the user click the submit and grade button
+	        if(buttonText.equals("Submit and Grade")) {
+	        		// increment the number of tries
+	        		int numOfTries = Integer.parseInt(answersInfo.get("Number of Tries"));
+	        		numOfTries += 1;
+	        		answersInfo.put("Number of Tries", Integer.toString(numOfTries));
+	        		updateCsvFile();
+	        }
+	    }
 	}
-	
-	public void csvFileTitles() throws IOException {
-		try {
-			FileWriter fw = new FileWriter(fileName);
-			BufferedWriter bf = new BufferedWriter(fw);
-			StringBuilder sb = new StringBuilder();
-			// print titles
-			for (int j = 0; j < infoTitle.size(); j++ ) {
-				sb.append(infoTitle.get(j));
-				if(j < infoTitle.size()) {
-					sb.append(",");
-				}
-				else if (j == infoTitle.size()-1){
-					sb.append("\n");
-				}
-			}
-			bf.write(sb.toString());
-			bf.close();
-			fw.close();
-	
-		}catch (Exception e) {
-			 e.printStackTrace();
-		}
-		
-	}
-	
-	public void csvFileContent() throws IOException{
-		
-		try {
-			
-			StringBuilder sb = new StringBuilder();
-			FileReader file = new FileReader(fileName);
-			BufferedReader reader = new BufferedReader(file);
-			sb.append(reader.readLine() + '\n');
-			reader.close();
-			FileWriter fw = new FileWriter(fileName);
-			BufferedWriter bf = new BufferedWriter(fw);
-
-			for(int k = 0; k < infoTitle.size(); k++) {
-				String key = (String)infoTitle.get(k);
-				sb.append(answersInfo.get(key));
-				if(k < answersInfo.size()-1) {
-					sb.append(",");
-				}
-				else {
-					sb.append("\n");
-				}
-			}
-			bf.write(sb.toString());
-			bf.close();
-			fw.close();
-		}catch (Exception e) {
-			 e.printStackTrace();
-		}
-		
-	}
-
-	
-
 }
