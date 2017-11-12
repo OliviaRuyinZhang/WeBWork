@@ -49,6 +49,38 @@ public class AssignmentCompletionGUI extends JFrame implements ActionListener{
 	public ArrayList<String> infoTitle = new ArrayList<String>();
 	public String fileName;
 	public String studentNo;
+	
+	/**
+	 * Grades the current student's submission by comparing the submission
+	 * to the solutions.
+	 * @return The student's grade for this submission
+	 */
+	private double gradeSubmission() {
+		ArrayList<Problem> problems = getAllProblems(fileName);
+		String file = fileName.substring(0, fileName.length() - 4) + "Submission.csv";
+		String tempLine;
+		double finalGrade = 0;
+
+		try {
+			FileReader fr = new FileReader(file);
+			BufferedReader reader = new BufferedReader(fr);
+			while((tempLine = reader.readLine()) != null) {
+                String[] submissionElements = tempLine.split(",");
+				if (submissionElements[0].equals(studentNo)) {
+					for (int i = 0; i < problems.size(); i ++) {
+						if (submissionElements[i+1].equals(problems.get(i).getSolution())) {
+							finalGrade++;
+						}
+					}
+				}
+			}
+			finalGrade = (finalGrade / problems.size()) * 100;
+			reader.close();
+			return finalGrade;
+		} catch (Exception e){
+			return 0;
+		}
+	}
 
 
 	public AssignmentCompletionGUI(String fileName, String studentNo) {
@@ -64,8 +96,6 @@ public class AssignmentCompletionGUI extends JFrame implements ActionListener{
 		contentPane.setBackground(Color.WHITE);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new GridLayout(getGridLayoutCount(fileName), 1));
-
-		
 		
 		// Assignment Label
 		JLabel lblAssignment = new JLabel(getAssignmentName(fileName));
@@ -125,6 +155,7 @@ public class AssignmentCompletionGUI extends JFrame implements ActionListener{
 		contentPane.add(submitButton);
 		
 		scroll = new JScrollPane(contentPane);
+		scroll.getVerticalScrollBar().setUnitIncrement(16);
 		c.add(scroll);
 		setSize(600, 400);
 		setVisible(true);
@@ -142,13 +173,13 @@ public class AssignmentCompletionGUI extends JFrame implements ActionListener{
 		}
 		//add titles and set initial value 
 		infoTitle.add("Average Mark");
-		answersInfo.put("Average Mark", null);
+		answersInfo.put("Average Mark", "0");
 		infoTitle.add("Number of Tries");
 		answersInfo.put("Number of Tries", "0");
 		infoTitle.add("Time (in seconds)");
 		answersInfo.put("Time (in seconds)", null);
 		infoTitle.add("Final Mark");
-		answersInfo.put("Final Mark", null);
+		answersInfo.put("Final Mark", "0");
 	}
 	
 	public void storeAssignmentAnswers(int questionNo, String answer) {
@@ -332,7 +363,15 @@ public class AssignmentCompletionGUI extends JFrame implements ActionListener{
 	        		// increment the number of tries
 	        		int numOfTries = Integer.parseInt(answersInfo.get("Number of Tries"));
 	        		numOfTries += 1;
+	        		
+	        		double currentSubmissionGrade = gradeSubmission();
+	        		
+	        		double averageGrade = Double.parseDouble(answersInfo.get("Average Mark"));
+	        		averageGrade = averageGrade + currentSubmissionGrade / numOfTries;
+	        		
+	        		answersInfo.put("Final Mark", Double.toString(currentSubmissionGrade));
 	        		answersInfo.put("Number of Tries", Integer.toString(numOfTries));
+	        		answersInfo.put("Average Mark", Double.toString(averageGrade));
 	        		updateCsvFile();
 	        }
 	    }
