@@ -262,12 +262,13 @@ public class InstructorListingGUI extends JFrame{
 				aeg.addWindowListener(new WindowListener() {
 
 					@Override
-					public void windowActivated(WindowEvent e) {											
+					public void windowActivated(WindowEvent arg0) {
 					}
-
+					
 					@Override
 					public void windowClosed(WindowEvent e) {
-						System.out.println("CLOSED!");
+						resetAssignmentListing();
+						displayAssignments();						
 					}
 
 					@Override
@@ -293,6 +294,8 @@ public class InstructorListingGUI extends JFrame{
 				});
 
 				aeg.setVisible(true);
+				aeg.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
 			}
 			
 		});

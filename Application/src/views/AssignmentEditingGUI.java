@@ -610,7 +610,6 @@ public class AssignmentEditingGUI extends JFrame {
 	 * @param rbSolutions Array of solution RadioButtons.
 	 * @return true iff problems is not empty, false otherwise.
 	 */
-	// Returns True if problems is not empty.
 	public boolean removeProblem(JComboBox<String> existingProblems, ArrayList<JTextField> options, JRadioButton[] rbSolutions) {
 		String selectedP = (String)existingProblems.getSelectedItem();
 		for(int i = 0; i < problems.size(); i++) {
