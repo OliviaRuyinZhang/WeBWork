@@ -7,6 +7,9 @@ import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+import java.awt.event.WindowStateListener;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -39,6 +42,19 @@ public class InstructorListingGUI extends JFrame{
 	private List<File> assignments;
 	
 
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					InstructorListingGUI frame = new InstructorListingGUI();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+	
 	public InstructorListingGUI() {
 		setResizable(true); // Temporarily until we add a scroll bar.
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -100,6 +116,7 @@ public class InstructorListingGUI extends JFrame{
 								} catch (Exception e) {
 									e.printStackTrace();
 								}
+								
 							}
 						});
 					}
@@ -242,6 +259,39 @@ public class InstructorListingGUI extends JFrame{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				AssignmentEditingGUI aeg = new AssignmentEditingGUI(file);
+				aeg.addWindowListener(new WindowListener() {
+
+					@Override
+					public void windowActivated(WindowEvent e) {											
+					}
+
+					@Override
+					public void windowClosed(WindowEvent e) {
+						System.out.println("CLOSED!");
+					}
+
+					@Override
+					public void windowClosing(WindowEvent e) {
+					}
+
+					@Override
+					public void windowDeactivated(WindowEvent e) {
+					}
+
+					@Override
+					public void windowDeiconified(WindowEvent e) {
+					}
+
+					@Override
+					public void windowIconified(WindowEvent e) {
+					}
+
+					@Override
+					public void windowOpened(WindowEvent e) {
+					}
+					
+				});
+
 				aeg.setVisible(true);
 			}
 			
