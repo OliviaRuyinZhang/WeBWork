@@ -171,6 +171,7 @@ public class AssignmentEditingGUI extends JFrame {
 			questions[prob.getProblemID() - 1] = prob.getProblemString();
 		}
 		
+		//Test area to type choice A
 		txtOptionA = new JTextField();
 		txtOptionA.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 		txtOptionA.setText("");
@@ -234,15 +235,19 @@ public class AssignmentEditingGUI extends JFrame {
 		bg.add(option_C_radio);
 		bg.add(option_D_radio);
 		
+		
+		//ComboBox to list existing problems.
 		JComboBox<String> cbProblems = new JComboBox<String>(questions);
 		cbProblems.setBounds(36, 42, 700, 55);
 		cbProblems.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 		cbProblems.setEditable(true);
 		cbProblems.addActionListener(new ActionListener() {
 			
+			//When an existing problem has been selected.
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				if(problems.size() != 0) {
+					//Display it's existing options and solution on UI.
 					int solI = updateOptions(cbProblems,txtOptionA, txtOptionB, txtOptionC, txtOptionD);
 					if(solI != -1) {
 						updateSolutionSelection(solI, option_A_radio, option_B_radio, option_C_radio, option_D_radio);
@@ -256,9 +261,9 @@ public class AssignmentEditingGUI extends JFrame {
 			}
 			
 		});
-		
 		problemPanel.add(cbProblems);
 		
+		// If there is at least 1 problem, then display options and solutions by default.
 		if(problems.size() != 0) {
 			int solI = updateOptions(cbProblems,txtOptionA, txtOptionB, txtOptionC, txtOptionD);
 			if(solI != -1) {
@@ -455,22 +460,23 @@ public class AssignmentEditingGUI extends JFrame {
 	
 	
 	/**
-	 * [EDIT]: Returns index of solution in options.
-	 * WARNING: Raises NullPointerException if the assignment has no problems.
-	 * NOTE: prevent user from making an "empty" assignment.
+	 * Updates all options JTextFields to match selected
+	 * problem's saved options. Returns index of problem
+	 * iff it exists, otherwise return -1.
+	 * 
 	 * @param questions: JComboBox that contains all questions to select from
 	 * @param data: This assignments data
 	 * @param optionA: JTextField first option
 	 * @param optionB: JTextField second option
 	 * @param optionC: JTextField third option
 	 * @param optionD: JTextField fourth option
-	 * @return 
+	 * @return index of selected problem, -1 otherwise
 	 */
 	private int updateOptions(JComboBox<String> questions, JTextField optionA, 
 			JTextField optionB, JTextField optionC, JTextField optionD) {
 
+		//Search for selected problem from existing problems.
 		String selectedProblem = ((String) questions.getSelectedItem());
-		//selectedPID = -1;
 		for(int i = 0; i < problems.size();i++) {
 			if(problems.get(i).getProblemString().equals(selectedProblem)) {
 				selectedPID = i;
@@ -501,6 +507,17 @@ public class AssignmentEditingGUI extends JFrame {
 			
 	}
 	
+	/**
+	 * Sets up the selected problem's solution by selected it's
+	 * corresponding radio button to true.
+	 * 
+	 * @param solIndex index of the solution of the currently
+	 * 		selected problem
+	 * @param rbA first radio button
+	 * @param rbB second radio button
+	 * @param rbC third radio button
+	 * @param rbD fourth radio button
+	 */
 	public void updateSolutionSelection(int solIndex, JRadioButton rbA, JRadioButton rbB, JRadioButton rbC, JRadioButton rbD) {
 		if(solIndex == 0){
 			rbA.setSelected(true);
@@ -513,6 +530,15 @@ public class AssignmentEditingGUI extends JFrame {
 		}
 	}
 	
+	
+	/**
+	 * Clears text from problem, all options and sets the first solution
+	 * radio button to true.
+	 * 
+	 * @param problem JComboBox containing all existing problems
+	 * @param options ArrayList of option JTextFields
+	 * @param rbSolutions solution Array of RadioButtons
+	 */
 	public void clearProblem(JComboBox<String> problem, ArrayList<JTextField> options, JRadioButton[] rbSolutions) {
 		problem.setSelectedItem("");
 		for(int i = 0; i < options.size(); i++) {
@@ -524,6 +550,15 @@ public class AssignmentEditingGUI extends JFrame {
 		
 	}
 	
+	/**
+	 * Returns true if a new problem has been successfully added to ArrayList
+	 * of Problems and added to existingProblems JComboBox as a String.
+	 * 
+	 * @param existingProblems JComboBox that displays all existing problems
+	 * @param options ArrayList of option JTextfields
+	 * @param rbSolutions Array of solution RadioButtons 
+	 * @return true if problem was successfully added to the existing problems.
+	 */
 	public boolean addNewProblem(JComboBox<String> existingProblems, ArrayList<JTextField> options, JRadioButton[] rbSolutions) {
 		boolean filledFields = true;
 		if(((String)existingProblems.getSelectedItem()).equals("")) {
@@ -567,6 +602,14 @@ public class AssignmentEditingGUI extends JFrame {
 		return false;
 	}
 	
+	/**
+	 * Removes a problem from the existing problems.
+	 * 
+	 * @param existingProblems JComboBox containing all existing problems
+	 * @param options ArrayList of option JTextFields
+	 * @param rbSolutions Array of solution RadioButtons.
+	 * @return true iff problems is not empty, false otherwise.
+	 */
 	// Returns True if problems is not empty.
 	public boolean removeProblem(JComboBox<String> existingProblems, ArrayList<JTextField> options, JRadioButton[] rbSolutions) {
 		String selectedP = (String)existingProblems.getSelectedItem();
