@@ -174,6 +174,7 @@ public class AssignmentEditingGUI extends JFrame {
 		//Test area to type choice A
 		txtOptionA = new JTextField();
 		txtOptionA.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+		txtOptionA.setUI(new JTextFieldHintUI("Option A", Color.gray)); 
 		txtOptionA.setText("");
 		txtOptionA.setBounds(24, 134, 286, 30);
 		problemPanel.add(txtOptionA);
@@ -182,6 +183,7 @@ public class AssignmentEditingGUI extends JFrame {
 		txtOptionB = new JTextField();
 		txtOptionB.setText("");
 		txtOptionB.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+		txtOptionB.setUI(new JTextFieldHintUI("Option B", Color.gray)); 
 		txtOptionB.setColumns(10);
 		txtOptionB.setBounds(24, 175, 286, 30);
 		problemPanel.add(txtOptionB);
@@ -189,6 +191,7 @@ public class AssignmentEditingGUI extends JFrame {
 		txtOptionC = new JTextField();
 		txtOptionC.setText("");
 		txtOptionC.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+		txtOptionC.setUI(new JTextFieldHintUI("Option C", Color.gray)); 
 		txtOptionC.setColumns(10);
 		txtOptionC.setBounds(24, 216, 286, 30);
 		problemPanel.add(txtOptionC);
@@ -196,6 +199,7 @@ public class AssignmentEditingGUI extends JFrame {
 		txtOptionD = new JTextField();
 		txtOptionD.setText("");
 		txtOptionD.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+		txtOptionD.setUI(new JTextFieldHintUI("Option D", Color.gray)); 
 		txtOptionD.setColumns(10);
 		txtOptionD.setBounds(24, 257, 286, 30);
 		problemPanel.add(txtOptionD);
@@ -321,8 +325,6 @@ public class AssignmentEditingGUI extends JFrame {
 					Problem newProblem = new Problem(selectedPID + 1, problemString, options, solution);
 					
 					// If the user actually made a modification to the original question.
-					for(int k = 0; k < problems.size(); k++) { System.out.println(problems.get(k).getProblemID());}
-					System.out.println("SELECTED = " + selectedPID);
 					if(!newProblem.equals(problems.get(selectedPID))) {
 						problems.remove(selectedPID);
 						problems.add(selectedPID, newProblem);
