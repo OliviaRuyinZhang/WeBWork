@@ -370,18 +370,18 @@ public class AssignmentEditingGUI extends JFrame {
 			    String year = yearDropDown.getSelectedItem().toString();
 			    String newFileName = "Assignment" + txtAssignmentNum.getText() + ".csv";
 				File assignment = new File(newFileName);
-				String alreadyExistsMessage = "Warning: An assignment already exists with this number.\n"
-						+ "If you proceed, the existing assignment will be wiped. Continue?";
+				String alreadyExistsMessage = "An assignment with that name already exists.";
 				
-			    int result = 0;
+			    boolean validNameFlag = true;
 				if (assignment.exists()) {
-					result = JOptionPane.showConfirmDialog((Component) null, alreadyExistsMessage,
-							"alert", JOptionPane.YES_NO_OPTION);
+					//If the file with the new name is not itself.
+					if(!assignment.getName().equals(file.getName())) { 
+						JOptionPane.showMessageDialog(AssignmentEditingGUI.this, alreadyExistsMessage);
+						validNameFlag = false;
+					}
 				}
 				
-				
-
-				if (result == 0) {
+				if (validNameFlag) {
 					AssignmentCreator.initializeFile(newFileName, month+"/"+date+"/"+year);
 			    
 					int numSuccessfullyAdded = 0;
