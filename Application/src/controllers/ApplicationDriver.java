@@ -14,7 +14,7 @@ public class ApplicationDriver {
 		EventQueue.invokeLater(new Runnable() {
 		public void run() {
 			try {
-				AssignmentCompletionGUI frame = new AssignmentCompletionGUI("Assignment1.csv");
+				LoginRegisterGUI frame = new LoginRegisterGUI();
 				frame.setVisible(true);
 			} catch (Exception e) {
 				e.printStackTrace();

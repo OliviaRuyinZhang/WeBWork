@@ -7,6 +7,7 @@ import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.awt.event.WindowStateListener;
@@ -91,12 +92,29 @@ public class InstructorListingGUI extends JFrame{
 				btnAddAssignment.setFocusPainted(false);
 				btnAddAssignment.setBackground(Color.decode("#B2BABB"));
 				btnAddAssignment.addActionListener(new ActionListener() {
+					
+					@Override
 					public void actionPerformed(ActionEvent arg0) {
 						//Creates an InstructorListingGUI
 						EventQueue.invokeLater(new Runnable() {
 							public void run() {
 								try {
 									AssignmentCreationGUI frame = new AssignmentCreationGUI();
+									frame.addWindowListener(new WindowAdapter() {
+										
+										@Override
+										public void windowOpened(WindowEvent e) {
+											hideListingFrame();
+										}
+										
+										@Override
+										public void windowClosed(WindowEvent e) {
+											showListingFrame();
+											resetAssignmentListing();
+											displayAssignments();
+										}					
+										
+									});
 									frame.setVisible(true);
 									frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 								} catch (Exception e) {
@@ -245,37 +263,19 @@ public class InstructorListingGUI extends JFrame{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				AssignmentEditingGUI aeg = new AssignmentEditingGUI(file);
-				aeg.addWindowListener(new WindowListener() {
-
+				aeg.addWindowListener(new WindowAdapter() {
+					
 					@Override
-					public void windowActivated(WindowEvent arg0) {
+					public void windowOpened(WindowEvent e) {
+						hideListingFrame();
 					}
 					
 					@Override
 					public void windowClosed(WindowEvent e) {
+						showListingFrame();
 						resetAssignmentListing();
-						displayAssignments();						
-					}
-
-					@Override
-					public void windowClosing(WindowEvent e) {
-					}
-
-					@Override
-					public void windowDeactivated(WindowEvent e) {
-					}
-
-					@Override
-					public void windowDeiconified(WindowEvent e) {
-					}
-
-					@Override
-					public void windowIconified(WindowEvent e) {
-					}
-
-					@Override
-					public void windowOpened(WindowEvent e) {
-					}
+						displayAssignments();
+					}					
 					
 				});
 
@@ -290,6 +290,22 @@ public class InstructorListingGUI extends JFrame{
 		panel.add(editAssignmentButton);
 		
 		
+	}
+	
+	/**
+	 * Sets visibility of this InstructorListingGUI
+	 * to false.
+	 */
+	public void hideListingFrame() {
+		this.setVisible(false);
+	}
+	
+	/**
+	 * Sets visibility of this InstructorListingGUI
+	 * to true.
+	 */
+	public void showListingFrame() {
+		this.setVisible(true);
 	}
 	
 	/**

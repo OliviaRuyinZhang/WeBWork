@@ -14,6 +14,8 @@ import javax.swing.JOptionPane;
 
 import java.awt.Font;
 import java.awt.Color;
+import java.awt.Component;
+
 import javax.swing.JComboBox;
 import javax.swing.JTextField;
 import javax.swing.ButtonGroup;
@@ -352,30 +354,43 @@ public class AssignmentEditingGUI extends JFrame {
 			    String date = dateDropDown.getSelectedItem().toString();
 			    String year = yearDropDown.getSelectedItem().toString();
 			    String newFileName = "Assignment" + txtAssignmentNum.getText() + ".csv";
-			    
-			    AssignmentCreator.initializeFile(newFileName, month+"/"+date+"/"+year);
-			    
-			    
+				File assignment = new File(newFileName);
+				String alreadyExistsMessage = "Warning: An assignment already exists with this number.\n"
+						+ "If you proceed, the existing assignment will be wiped. Continue?";
 				
-				int numSuccessfullyAdded = 0;
-				for (Problem problem : problems) {
-					if(AssignmentCreator.addProblem(newFileName, problem)) {
-						numSuccessfullyAdded++;
+			    int result = 0;
+				if (assignment.exists()) {
+					result = JOptionPane.showConfirmDialog((Component) null, alreadyExistsMessage,
+							"alert", JOptionPane.YES_NO_OPTION);
+				}
+				
+				
+
+				if (result == 0) {
+					AssignmentCreator.initializeFile(newFileName, month+"/"+date+"/"+year);
+			    
+					int numSuccessfullyAdded = 0;
+					for (Problem problem : problems) {
+						if(AssignmentCreator.addProblem(newFileName, problem)) {
+							numSuccessfullyAdded++;
+						}
 					}
-				}
-				
-				if (numSuccessfullyAdded == problems.size()) {
-					JOptionPane.showMessageDialog(null, "Assignment edited successfully!");
-				} else {
-					JOptionPane.showMessageDialog(null, "There was a problem saving one or more problems.");
-				}
-				
-				if(!file.getName().equals(newFileName)) {
-					file.delete();
-				}
-				
-				setVisible(false);
-				dispose(); // Destroy the JFrame object
+
+					if (numSuccessfullyAdded == problems.size()) {
+						JOptionPane.showMessageDialog(null, "Assignment edited successfully!");
+					} else {
+						JOptionPane.showMessageDialog(null, "There was a problem saving one or more problems.");
+					}
+
+					if(!file.getName().equals(newFileName)) {
+						file.delete();
+					}
+
+					setVisible(false);
+					dispose(); // Destroy the JFrame object
+
+				}			    
+			    
 			}
 		});
 		btnSave.setBounds(720, 630, 107, 40);
