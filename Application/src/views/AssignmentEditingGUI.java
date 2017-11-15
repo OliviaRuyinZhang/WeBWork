@@ -8,6 +8,7 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -15,15 +16,19 @@ import javax.swing.JOptionPane;
 import java.awt.Font;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 
 import javax.swing.JComboBox;
 import javax.swing.JTextField;
 import javax.swing.ButtonGroup;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.File;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.awt.event.ActionEvent;
@@ -83,7 +88,17 @@ public class AssignmentEditingGUI extends JFrame {
 		lblDueDate.setBounds(62, 139, 72, 14);
 		lblDueDate.setSize(lblDueDate.getPreferredSize());
 		contentPane.add(lblDueDate);
-
+		
+		//Warning message
+		Icon warnIcon = new ImageIcon("resources/warning_icon.png");
+	    JLabel lblWarning = new JLabel(warnIcon);
+	    lblWarning.setText("<html>Warning: Editing this assignment<br><center>will unrelease it!</html>");
+	    lblWarning.setHorizontalTextPosition(JLabel.RIGHT);
+	    lblWarning.setVerticalTextPosition(JLabel.CENTER);
+	    lblWarning.setSize(getPreferredSize());
+	    lblWarning.setBounds(450, 50, 300, 100);
+	    contentPane.add(lblWarning);
+		
 		// All due date related info.
 		String[] currDueDate = info[2].split("\\/");
 		
