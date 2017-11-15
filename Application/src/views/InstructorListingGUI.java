@@ -413,7 +413,53 @@ public class InstructorListingGUI extends JFrame{
     	
     	return info;
     }
+    
+    
+    /**
+     * Returns the mean value of the student grades for the given assignment
+     * @param fileName: String name of the assignment's csv file(i.e. Assignment1.csv, Assignment2.csv etc)
+     */
+	public double getMean(String fileName) throws IOException {
+		String file = fileName.substring(0, fileName.length() - 4) + "Submission.csv";
+		File filePath = new File(file);
+	
+		double sumOfFianlGrade = 0.0;
+		int numberOfStudents = 0;
+		double mean;
+		
+		
+		// if the answerSubmission csv file exist
+		if (filePath.exists() == true) {	
+			FileReader fr = new FileReader(file);
+			BufferedReader reader = new BufferedReader(fr);
+			String tempLine = reader.readLine();
+			try {
+				while((tempLine = reader.readLine()) != null) {
+					String[] individualAnswerInfo = tempLine.split(","); 
+					
+					int size = individualAnswerInfo[6].length();
+					boolean isNumber = true;
+					for(int i = 0; i < size ; i++) {
+						 if (!Character.isDigit(individualAnswerInfo[6].charAt(i))) {
+					           isNumber = false;
+					       }
+					}
+					if(isNumber) {
+						sumOfFianlGrade += Double.parseDouble(individualAnswerInfo[6]);
+						numberOfStudents += 1;
+					}
+				}
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			reader.close();
+		}
+		mean = sumOfFianlGrade/numberOfStudents;
+		return mean;
+	}
 }
+
 
 
 /*
