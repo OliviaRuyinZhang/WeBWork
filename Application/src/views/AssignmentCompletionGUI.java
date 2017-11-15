@@ -129,11 +129,12 @@ public class AssignmentCompletionGUI extends JFrame implements ActionListener{
 			ButtonGroup questionGroup = new ButtonGroup();
 			// Answers
 			for (String a : p.getOptions()) {
+				
 				JRadioButton answer = new JRadioButton(a);
 				answer.setFont(new Font("Segoe UI Light", Font.PLAIN, 15));
 				answer.setSize(answer.getPreferredSize());
 				
-				// auto-save user's selected answer
+				// save user's selected answer
 				answer.addActionListener(this);
 				answer.setActionCommand(p.getProblemID() + "," + a);
 				
@@ -180,6 +181,45 @@ public class AssignmentCompletionGUI extends JFrame implements ActionListener{
 		answersInfo.put("Time (in seconds)", null);
 		infoTitle.add("Final Mark");
 		answersInfo.put("Final Mark", "0");
+	}
+	public double getMean() throws IOException {
+		String file = fileName.substring(0, fileName.length() - 4) + "Submission.csv";
+		File filePath = new File(file);
+	
+		double sumOfFianlGrade = 0.0;
+		int numberOfStudents = 0;
+		double mean;
+		//String tempLine;
+		
+		// if the answerSubmission csv file exist
+		if (filePath.exists() == true) {	
+			FileReader fr = new FileReader(file);
+			BufferedReader reader = new BufferedReader(fr);
+			String tempLine = reader.readLine();
+			try {
+				while((tempLine = reader.readLine()) != null) {
+					String[] individualAnswerInfo = tempLine.split(","); 
+					
+					int size = individualAnswerInfo[6].length();
+					boolean isNumber = true;
+					for(int i = 0; i < size ; i++) {
+						 if (!Character.isDigit(individualAnswerInfo[6].charAt(i))) {
+					           isNumber = false;
+					       }
+					}
+					if(isNumber) {
+						sumOfFianlGrade += Double.parseDouble(individualAnswerInfo[6]);
+						numberOfStudents += 1;
+					}
+				}
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			reader.close();
+		}
+		mean = sumOfFianlGrade/numberOfStudents;
+		return mean;
 	}
 	
 	public void storeAssignmentAnswers(int questionNo, String answer) {
@@ -346,7 +386,7 @@ public class AssignmentCompletionGUI extends JFrame implements ActionListener{
 						Arrays.asList(e.getActionCommand().split(",")));
 				// edit and update the answer
 				storeAssignmentAnswers(Integer.parseInt(modifiedAnswer.get(0)), modifiedAnswer.get(1));
-				updateCsvFile();
+				
 				
 		} 
 	    else if(source instanceof JButton){    	
@@ -356,6 +396,7 @@ public class AssignmentCompletionGUI extends JFrame implements ActionListener{
 	        // if the user click the save and close button
 	        if(buttonText.equals("Save and Close")) {
 	        		// close current display Jframe
+	        		updateCsvFile();
 	        		setVisible(false);
 	        		dispose();
 	        }// if the user click the submit and grade button
