@@ -1,6 +1,9 @@
 package controllers;
 
 import java.awt.EventQueue;
+import java.util.Calendar;
+import java.util.Date;
+
 
 import views.LoginRegisterGUI;
 
@@ -13,7 +16,7 @@ public class ApplicationDriver {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					LoginRegisterGUI frame = new LoginRegisterGUI();
+					LoginRegisterGUI frame = new LoginRegisterGUI ();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
