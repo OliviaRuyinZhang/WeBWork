@@ -49,6 +49,9 @@ public class AssignmentCompletionGUI extends JFrame implements ActionListener{
 	public ArrayList<String> infoTitle = new ArrayList<String>();
 	public String fileName;
 	public String studentNo;
+        // Felix's stuff thx
+        public boolean hasPreviousSubmission;
+        public ArrayList<String> previousSubmission = new <String>ArrayList();
 	
 	/**
 	 * Grades the current student's submission by comparing the submission
@@ -86,6 +89,12 @@ public class AssignmentCompletionGUI extends JFrame implements ActionListener{
 	public AssignmentCompletionGUI(String fileName, String studentNo) {
 		this.fileName = fileName;
 		this.studentNo = studentNo;
+                this.hasPreviousSubmission = getPreviousSubmissionStatus(fileName, studentNo);
+                
+                // Get prior attempt if applicable
+                if (this.hasPreviousSubmission){
+                        this.previousSubmission = getPreviousSubmission(fileName, studentNo);
+                }
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 900, 731);
@@ -137,6 +146,12 @@ public class AssignmentCompletionGUI extends JFrame implements ActionListener{
 				// save user's selected answer
 				answer.addActionListener(this);
 				answer.setActionCommand(p.getProblemID() + "," + a);
+                                
+                                // Get prior attempt if applicable
+                                if (this.hasPreviousSubmission){
+                                        // Turn on the correct button
+                                        if (a.equals(previousSubmission.get(p.getProblemID()))) answer.setSelected(true);
+                                }
 				
 				contentPane.add(answer);
 				questionGroup.add(answer);
@@ -146,7 +161,7 @@ public class AssignmentCompletionGUI extends JFrame implements ActionListener{
 		// save & close button
 		JButton saveButton = new JButton("Save and Close");
 		// close the current Jframe while the main method still running in the back, other opened Jframe will remain open
-	    saveButton.addActionListener(this);
+                saveButton.addActionListener(this);
 		contentPane.add(saveButton);
 		
 		// submit & grade button
@@ -198,6 +213,62 @@ public class AssignmentCompletionGUI extends JFrame implements ActionListener{
 
 		return result;
 	}
+        
+        public boolean getPreviousSubmissionStatus(String fileName, String id){
+          boolean status = false;
+          String submissionFileName = getAssignmentName(fileName) + "Submission.csv";
+          
+          // Check if exists , then check for studentId
+          if ((new File(submissionFileName)).exists()){
+                  try {
+                                FileReader fr = new FileReader(submissionFileName);
+                                BufferedReader br = new BufferedReader(fr);
+                                // Skip first cell
+                                String line = br.readLine();
+                                // Read all studentIDs
+                                while ((line = br.readLine()) != null) {
+                                        // Get line
+                                        String[] problemLine = line.split(",");
+                                        // Check if studentID is present
+                                        if (problemLine[0].equals(id)) status = true;
+                                }
+                                br.close();
+                        } catch (IOException e) {
+                                e.printStackTrace();
+                        }
+                  }
+          return status;
+        }
+        
+        public ArrayList<String> getPreviousSubmission(String fileName, String id){
+          ArrayList<String> result = new <String>ArrayList();
+          String submissionFileName = getAssignmentName(fileName) + "Submission.csv";
+          
+          // Check if exists , then check for studentId
+          if ((new File(submissionFileName)).exists()){
+                  try {
+                                FileReader fr = new FileReader(submissionFileName);
+                                BufferedReader br = new BufferedReader(fr);
+                                // Skip first cell
+                                String line = br.readLine();
+                                // Read all studentIDs
+                                while ((line = br.readLine()) != null) {
+                                        // Get line
+                                        String[] problemLine = line.split(",");
+                                        // Check if studentID is present
+                                        if (problemLine[0].equals(id)){
+                                            for (String s: problemLine){
+                                              result.add(s);
+                                            }
+                                        }
+                                }
+                                br.close();
+                        } catch (IOException e) {
+                                e.printStackTrace();
+                        }
+                  }
+          return result;
+        }
 
 	public ArrayList<Problem> getAllProblems(String fileName) {
 		ArrayList<Problem> result = new <Problem>ArrayList();
