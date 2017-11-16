@@ -150,7 +150,10 @@ public class AssignmentCompletionGUI extends JFrame implements ActionListener{
                                 // Get prior attempt if applicable
                                 if (this.hasPreviousSubmission){
                                         // Turn on the correct button
-                                        if (a.equals(previousSubmission.get(p.getProblemID()))) answer.setSelected(true);
+                                        if (a.equals(previousSubmission.get(p.getProblemID()))) {
+                                                answer.setSelected(true);
+                                                this.actionPerformed(new ActionEvent(answer, ActionEvent.ACTION_PERFORMED, p.getProblemID() + "," + a));
+                                        }
                                 }
 				
 				contentPane.add(answer);
