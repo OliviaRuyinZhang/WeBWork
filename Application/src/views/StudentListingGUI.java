@@ -3,6 +3,7 @@ package views;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -21,6 +22,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
@@ -35,16 +37,33 @@ public class StudentListingGUI extends JFrame{
 	private List<File> assignments;
 
 
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+		public void run() {
+			try {
+				StudentListingGUI frame = new StudentListingGUI();
+				frame.setVisible(true);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			}
+		});
+	}
+	
 	public StudentListingGUI() {
 		setResizable(true); // Temporarily until we add a scroll bar.
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 900, 731);
-		setTitle("WebWork");
 		contentPane = new JPanel();
+		JScrollPane scroll = new JScrollPane(contentPane, 
+				JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		scroll.getVerticalScrollBar().setUnitIncrement(16);
 		contentPane.setBackground(Color.WHITE);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		setContentPane(contentPane);
-		contentPane.setLayout(null);
+		add(scroll);
 		contentPane.setLayout(null);
 		
 		// Welcome label.
@@ -119,7 +138,10 @@ public class StudentListingGUI extends JFrame{
 		
 		listAssignmentsPanel.setBounds(62, 145, 765, 150 + i);
 		contentPane.add(listAssignmentsPanel);
-	
+		
+		contentPane.setPreferredSize(new Dimension(900, 100  + listAssignmentsPanel.getHeight()));
+		setSize(900, 700);
+		setLocationRelativeTo(null);
 	}
 	
 	/**
