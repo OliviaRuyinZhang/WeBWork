@@ -35,23 +35,6 @@ public class StudentListingGUI extends JFrame{
 	private JScrollBar scroll;
 	private JPanel listAssignmentsPanel;
 	private List<File> assignments;
-
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-		public void run() {
-			try {
-				StudentListingGUI frame = new StudentListingGUI();
-				frame.setVisible(true);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			}
-		});
-	}
 	
 	public StudentListingGUI() {
 		setResizable(true); // Temporarily until we add a scroll bar.
