@@ -26,6 +26,8 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
+import javax.swing.JViewport;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
@@ -42,16 +44,39 @@ public class InstructorListingGUI extends JFrame{
 	private JPanel listAssignmentsPanel;
 	private List<File> assignments;
 	
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+		public void run() {
+			try {
+				InstructorListingGUI frame = new InstructorListingGUI();
+				frame.setVisible(true);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			}
+		});
+	}
+	
 	public InstructorListingGUI() {
-		setResizable(true); // Temporarily until we add a scroll bar.
+		setResizable(false); // Temporarily until we add a scroll bar.
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 900, 731);
+		//setBounds(100, 100, 900, 731);
 		setTitle("WebWork");
 		contentPane = new JPanel();
+		
+		JScrollPane scroll = new JScrollPane(contentPane, 
+				JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		//scroll.setViewport(new JViewport());
+		//add(scroll);
+		
 		contentPane.setBackground(Color.WHITE);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		setContentPane(contentPane);
-		contentPane.setLayout(null);
+		scroll.setPreferredSize(contentPane.getPreferredSize());
+		//setContentPane(scroll);
+		add(scroll);
 		contentPane.setLayout(null);
 		
 		// Welcome label.
@@ -76,6 +101,14 @@ public class InstructorListingGUI extends JFrame{
 		listAssignmentsPanel.setLayout(null);
 		
 		displayAssignments();
+		
+		setSize(900, 780);
+		contentPane.setPreferredSize(listAssignmentsPanel.getPreferredSize());
+		System.out.println(contentPane.getHeight());
+		
+		//setBounds(100, 100, 900, );
+		setLocationRelativeTo(null);
+
 	}
 	
 	/**
@@ -195,7 +228,7 @@ public class InstructorListingGUI extends JFrame{
 					
 				}
 				
-				listAssignmentsPanel.setBounds(62, 145, 765, 150 + i);
+				listAssignmentsPanel.setBounds(62, 145, 765, 150 + i);			
 	}
 	
 	/**
