@@ -71,8 +71,7 @@ public class InstructorListingGUI extends JFrame{
 		listAssignmentsPanel.setLayout(null);
 		
 		displayAssignments();
-		
-		
+				
 		setSize(900, 700);
 		setLocationRelativeTo(null);
 	}
