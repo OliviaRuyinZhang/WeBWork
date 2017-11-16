@@ -11,7 +11,8 @@ public class Grading {
                 ArrayList<String> result = new <String>ArrayList();
                 String submissionFileName = "";
                 int i = 1;
-
+                
+                // Get all assignment submission files
                 while((new File(submissionFileName = ("Assignment" + Integer.toString(i) + "Submission.csv")).exists())){
                         try {
                                 FileReader fr = new FileReader(submissionFileName);
@@ -24,7 +25,9 @@ public class Grading {
                                         String[] assignmentLine = line.split(",");
                                         // Check if studentID is present
                                         if (assignmentLine[0].equals(id)){
-                                                result.add(assignmentLine[getIndexofFinalMark(submissionFileName)]);
+                                                // Last index == length - 1
+                                                result.add(assignmentLine[assignmentLine.length - 1]);
+                                                break;
                                         }
                                 }
                                 br.close();
@@ -35,22 +38,5 @@ public class Grading {
                         i++;
                 }
                 return result;
-        }
-
-        public static int getIndexofFinalMark(String fileName){
-                String[] line = {};
-                try {
-                        FileReader fr = new FileReader(fileName);
-                        BufferedReader br = new BufferedReader(fr);
-                        // Get First line
-                        line = br.readLine().split(",");
-                        
-                        br.close();
-                        fr.close();
-                } catch (IOException e) {
-                        e.printStackTrace();
-                }
-                // Last column index = length - 1
-                return line.length - 1;
         }
 }
