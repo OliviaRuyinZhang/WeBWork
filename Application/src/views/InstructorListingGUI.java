@@ -3,17 +3,15 @@ package views;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
-import java.awt.event.WindowStateListener;
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -23,35 +21,32 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
-import controllers.Authenticator;
 import controllers.ExtractData;
 
 /**
  * Class to display a list of assignments for an instructor.
  */
 public class InstructorListingGUI extends JFrame{
-	private static final Color GREEN = null;
 	private JPanel contentPane;
-	private JScrollBar scroll;
 	private JPanel listAssignmentsPanel;
 	private List<File> assignments;
 	
 	public InstructorListingGUI() {
-		setResizable(true); // Temporarily until we add a scroll bar.
+		setResizable(false); // Temporarily until we add a scroll bar.
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 900, 731);
 		setTitle("WebWork");
 		contentPane = new JPanel();
+		JScrollPane scroll = new JScrollPane(contentPane, 
+				JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		scroll.getVerticalScrollBar().setUnitIncrement(16);
 		contentPane.setBackground(Color.WHITE);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		setContentPane(contentPane);
-		contentPane.setLayout(null);
+		add(scroll);
 		contentPane.setLayout(null);
 		
 		// Welcome label.
@@ -76,6 +71,9 @@ public class InstructorListingGUI extends JFrame{
 		listAssignmentsPanel.setLayout(null);
 		
 		displayAssignments();
+				
+		setSize(900, 700);
+		setLocationRelativeTo(null);
 	}
 	
 	/**
@@ -196,6 +194,9 @@ public class InstructorListingGUI extends JFrame{
 				}
 				
 				listAssignmentsPanel.setBounds(62, 145, 765, 150 + i);
+				
+		contentPane.setPreferredSize(new Dimension(900, 150  + listAssignmentsPanel.getHeight()));
+
 	}
 	
 	/**
