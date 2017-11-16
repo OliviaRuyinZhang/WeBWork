@@ -18,6 +18,19 @@ public class Problem {
 		this.solution = solution;
 	}
 	
+	public boolean equals(Object other) {
+		if(other instanceof Problem) {
+			if(this.problemID == ((Problem) other).getProblemID() && 
+					this.problemString.equals(((Problem) other).getProblemString()) && 
+			this.options.equals(((Problem) other).options) && this.solution.equals(((Problem) other).solution)){
+				return true;
+				
+			}
+		}
+		
+		return false;
+	}
+	
 	public int getProblemID() {
 		return problemID;
 	}
