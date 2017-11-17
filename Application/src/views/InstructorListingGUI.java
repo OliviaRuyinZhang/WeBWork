@@ -1,28 +1,26 @@
 package views;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
+
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -34,34 +32,32 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
-import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.EmptyBorder;
 
-import controllers.Authenticator;
+import controllers.ExtractData;
 
 /**
  * Class to display a list of assignments for an instructor.
  */
 public class InstructorListingGUI extends JFrame{
-	private static final Color GREEN = null;
 	private JPanel contentPane;
-	private JScrollBar scroll;
 	private JPanel listAssignmentsPanel;
 	private List<File> assignments;
 	private boolean beforeDeadline;
 
 	public InstructorListingGUI() {
-		setResizable(true); // Temporarily until we add a scroll bar.
+		setResizable(false); // Temporarily until we add a scroll bar.
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 900, 731);
 		setTitle("WebWork");
 		contentPane = new JPanel();
+		JScrollPane scroll = new JScrollPane(contentPane, 
+				JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		scroll.getVerticalScrollBar().setUnitIncrement(16);
 		contentPane.setBackground(Color.WHITE);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		setContentPane(contentPane);
-		contentPane.setLayout(null);
+		add(scroll);
 		contentPane.setLayout(null);
 		
 		// Welcome label.
@@ -86,6 +82,9 @@ public class InstructorListingGUI extends JFrame{
 		listAssignmentsPanel.setLayout(null);
 		
 		displayAssignments();
+				
+		setSize(900, 700);
+		setLocationRelativeTo(null);
 	}
 	
 	/**
@@ -105,17 +104,35 @@ public class InstructorListingGUI extends JFrame{
 				btnAddAssignment.setFocusPainted(false);
 				btnAddAssignment.setBackground(Color.decode("#B2BABB"));
 				btnAddAssignment.addActionListener(new ActionListener() {
+					
+					@Override
 					public void actionPerformed(ActionEvent arg0) {
 						//Creates an InstructorListingGUI
 						EventQueue.invokeLater(new Runnable() {
 							public void run() {
 								try {
 									AssignmentCreationGUI frame = new AssignmentCreationGUI();
+									frame.addWindowListener(new WindowAdapter() {
+										
+										@Override
+										public void windowOpened(WindowEvent e) {
+											hideListingFrame();
+										}
+										
+										@Override
+										public void windowClosed(WindowEvent e) {
+											showListingFrame();
+											resetAssignmentListing();
+											displayAssignments();
+										}					
+										
+									});
 									frame.setVisible(true);
 									frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 								} catch (Exception e) {
 									e.printStackTrace();
 								}
+								
 							}
 						});
 					}
@@ -141,7 +158,8 @@ public class InstructorListingGUI extends JFrame{
 					assignReleasedPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 					assignReleasedPanel.setLayout(null);
 					String fileName = file.getName();
-					String[] info = getAssignmentInfo(fileName);
+					
+					String[] info = ExtractData.getAssignmentInfo(fileName);
 					
 					// check due date
 					String[] dueDate = info[2].split("/");
@@ -152,6 +170,7 @@ public class InstructorListingGUI extends JFrame{
 				    beforeDeadline = (due.compareTo(today) > 0);
 				    
 					if(info[0].equals("Released") && beforeDeadline) {
+
 						assignReleasedPanel.setBounds(0, 55 + i, 765, 85);
 						assignReleasedPanel.setBackground(Color.decode("#F0F0F0"));
 						assignReleasedPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder());
@@ -184,7 +203,7 @@ public class InstructorListingGUI extends JFrame{
 					assignUnreleasedPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 					assignUnreleasedPanel.setLayout(null);
 					String fileName = file.getName();
-					String[] info = getAssignmentInfo(fileName);
+					String[] info = ExtractData.getAssignmentInfo(fileName);
 					
 					// check due date
 					String[] dueDate = info[2].split("/");
@@ -195,6 +214,7 @@ public class InstructorListingGUI extends JFrame{
 				    beforeDeadline = (due.compareTo(today) > 0);
 				    
 					if(info[0].equals("Unreleased") && beforeDeadline) {
+
 						assignUnreleasedPanel.setBounds(0, 130 + i, 765, 85);
 						assignUnreleasedPanel.setBackground(Color.decode("#F0F0F0"));
 						assignUnreleasedPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder());
@@ -223,7 +243,7 @@ public class InstructorListingGUI extends JFrame{
 				    closedAssignmentPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 					closedAssignmentPanel.setLayout(null);
 					String fileName = file.getName();
-					String[] info = getAssignmentInfo(fileName);
+					String[] info = ExtractData.getAssignmentInfo(fileName);
 					
 					// check due date
 					String[] dueDate = info[2].split("/");
@@ -248,6 +268,9 @@ public class InstructorListingGUI extends JFrame{
 				}
 			
 				listAssignmentsPanel.setBounds(62, 145, 765, 350 + i);
+				
+		contentPane.setPreferredSize(new Dimension(900, 150  + listAssignmentsPanel.getHeight()));
+
 	}
 	
 	/**
@@ -262,7 +285,7 @@ public class InstructorListingGUI extends JFrame{
 	 */
 	private void addToAssignmentPanel(boolean released, JPanel panel, File file) {
 		String fileName = file.getName();
-		String[] info = getAssignmentInfo(fileName);
+		String[] info = ExtractData.getAssignmentInfo(fileName);
 		
 		JLabel lblAssignment = new JLabel(fileName.replaceFirst("[.][^.]+$", "")); // Strips the .csv extension.
 		lblAssignment.setFont(new Font("Segoe UI Semibold", Font.PLAIN, 16));
@@ -310,7 +333,33 @@ public class InstructorListingGUI extends JFrame{
 		editAssignmentButton.setFocusPainted(false);
 		editAssignmentButton.setBackground(Color.decode("#B2BABB"));
 		editAssignmentButton.setFont(new Font("Segoe UI", Font.PLAIN, 15));
-		// Add handler for editAssignmentButton here.
+		editAssignmentButton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				AssignmentEditingGUI aeg = new AssignmentEditingGUI(file);
+				aeg.addWindowListener(new WindowAdapter() {
+					
+					@Override
+					public void windowOpened(WindowEvent e) {
+						hideListingFrame();
+					}
+					
+					@Override
+					public void windowClosed(WindowEvent e) {
+						showListingFrame();
+						resetAssignmentListing();
+						displayAssignments();
+					}					
+					
+				});
+
+				aeg.setVisible(true);
+				aeg.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+			}
+			
+		});
 		
 		// Add to the panel.
 		panel.add(editAssignmentButton);
@@ -320,7 +369,7 @@ public class InstructorListingGUI extends JFrame{
 	
 	private void addToClosedAssignmentPanel(JPanel panel, File file) {
 		String fileName = file.getName();
-		String[] info = getAssignmentInfo(fileName);
+		String[] info = ExtractData.getAssignmentInfo(fileName);
 		
 		JLabel lblAssignment = new JLabel(fileName.replaceFirst("[.][^.]+$", "")); // Strips the .csv extension.
 		lblAssignment.setFont(new Font("Segoe UI Semibold", Font.PLAIN, 16));
@@ -350,6 +399,22 @@ public class InstructorListingGUI extends JFrame{
 	}
 	
 
+	
+	/**
+	 * Sets visibility of this InstructorListingGUI
+	 * to false.
+	 */
+	public void hideListingFrame() {
+		this.setVisible(false);
+	}
+	
+	/**
+	 * Sets visibility of this InstructorListingGUI
+	 * to true.
+	 */
+	public void showListingFrame() {
+		this.setVisible(true);
+	}
 	
 	/**
 	 * Removes all components in listAssignmentsPanel.
@@ -384,36 +449,6 @@ public class InstructorListingGUI extends JFrame{
 	    }  
 	    return assignments;
 	}
-    
-    /**
-     * Returns a String array of the assignment
-     * information, located in it's respective
-     * assignment csv file.
-     * 
-     * [(Un)released/Due-date/date of creation]
-     * 
-     * @param fileName: String name of the assignment's csv file.
-     */
-    public String[] getAssignmentInfo(String fileName) {
-    	
-    	String[] info = new String[3];
-    	
-    	try {
-    		FileReader fr = new FileReader(fileName);
-    		BufferedReader br = new BufferedReader(fr);
-    		// Check first cell for unreleased
-    		String line = br.readLine();
-    		info = line.split(",");
-    		br.close();
-    		fr.close();
-    		
-    	} catch (IOException e) {
-    		e.printStackTrace();
-        }
-    	
-    	return info;
-    }
-    
     
     /**
      * Returns the mean value of the student grades for the given assignment
@@ -458,6 +493,7 @@ public class InstructorListingGUI extends JFrame{
 		mean = sumOfFianlGrade/numberOfStudents;
 		return mean;
 	}
+
 }
 
 

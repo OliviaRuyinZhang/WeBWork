@@ -130,8 +130,8 @@ public class LoginRegisterGUI extends JFrame {
 					EventQueue.invokeLater(new Runnable() {
 						public void run() {
 							try {
-								InstructorListingGUI frame = new InstructorListingGUI();
-								frame.setVisible(true);
+								InstructorListingGUI instFrame = new InstructorListingGUI();
+								instFrame.setVisible(true);
 								setVisible(false);
 								dispose(); // Destroy the JFrame object
 							} catch (Exception e) {
@@ -143,6 +143,19 @@ public class LoginRegisterGUI extends JFrame {
 				//If not an instructor
 				else if((Authenticator.authenticate(getEmail(), getPassword())) && (Authenticator.isInstructor(getEmail()) == false)){
 					JOptionPane.showMessageDialog(LoginRegisterGUI.this, "Login successful! Welcome student.");
+					//Creates an InstructorListingGUI
+					EventQueue.invokeLater(new Runnable() {
+						public void run() {
+							try {
+								StudentListingGUI studFrame = new StudentListingGUI();
+								studFrame.setVisible(true);
+								setVisible(false);
+								dispose(); // Destroy the JFrame object
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
+						}
+					});
 				}else{
 					JOptionPane.showMessageDialog(LoginRegisterGUI.this, "Invalid email address or password!");
 				}
