@@ -108,6 +108,18 @@ public class StudentListingGUI extends JFrame{
 				lblDeadline.setBackground(Color.BLACK);
 				assignReleasedPanel.add(lblDeadline);
 				
+				// added an open button
+				JButton openButton = new JButton("Open");
+				openButton.setHorizontalTextPosition(SwingConstants.CENTER);
+				openButton.setBounds(640, 26, 100, 35);
+				openButton.setBackground(new Color(51, 204, 153));
+				openButton.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+				openButton.addActionListener(new ActionListener() { 
+					  public void actionPerformed(ActionEvent e) { 
+						    new AssignmentCompletionGUI(fileName, "1002205883");
+						  } 
+						} );
+				assignReleasedPanel.add(openButton);
 	
 				
 				i += 90;
