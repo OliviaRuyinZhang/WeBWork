@@ -1,27 +1,25 @@
 package views;
 
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.awt.Color;
-import java.awt.EventQueue;
+import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+
+import java.io.FileReader;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.swing.BorderFactory;
-import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
-import javax.swing.SwingConstants;
+import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
 
 /**
@@ -38,12 +36,13 @@ public class StudentListingGUI extends JFrame{
 		setResizable(true); // Temporarily until we add a scroll bar.
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 900, 731);
-		setTitle("WebWork");
 		contentPane = new JPanel();
+		JScrollPane scroll = new JScrollPane(contentPane, 
+				JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		scroll.getVerticalScrollBar().setUnitIncrement(16);
 		contentPane.setBackground(Color.WHITE);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		setContentPane(contentPane);
-		contentPane.setLayout(null);
+		add(scroll);
 		contentPane.setLayout(null);
 		
 		// Welcome label.
@@ -53,7 +52,6 @@ public class StudentListingGUI extends JFrame{
 		lblWelcome.setSize(lblWelcome.getPreferredSize());
 		contentPane.add(lblWelcome);
 	
-		
 		// User's Name label.
 		JLabel lblName = new JLabel("Insert Name");
 		lblName.setFont(new Font("Segoe UI Light", Font.PLAIN, 52));
@@ -118,7 +116,10 @@ public class StudentListingGUI extends JFrame{
 		
 		listAssignmentsPanel.setBounds(62, 145, 765, 150 + i);
 		contentPane.add(listAssignmentsPanel);
-	
+		
+		contentPane.setPreferredSize(new Dimension(900, 100  + listAssignmentsPanel.getHeight()));
+		setSize(900, 700);
+		setLocationRelativeTo(null);
 	}
 	
 	/**
