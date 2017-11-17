@@ -27,7 +27,7 @@ public class Authenticator {
 	 * @param email: user's email address
 	 * @param password: user's password
 	 */
-	public static boolean register(boolean is_instructor, String email, String password) 
+	public static boolean register(boolean is_instructor, String email, String password, String firstName, String lastName) 
 	
 	{
 		try {
@@ -44,6 +44,10 @@ public class Authenticator {
 				sb.append(email);
 				sb.append(","); // Next column.
 				sb.append(hashVal.toString());
+				sb.append(",");
+				sb.append(firstName);
+				sb.append(",");
+				sb.append(lastName);
 				sb.append("\n"); // Next row.
 				bf.write(sb.toString());
 				bf.close();
@@ -62,6 +66,45 @@ public class Authenticator {
 		return false;
 	}
 	
+	public static boolean register(boolean is_instructor, String email, String password, String firstName, String lastName, String studentID) {
+		{
+			try {
+				
+				FileWriter fw = new FileWriter(userscsv, true);
+				if(!userExists(email)) {
+					
+					String hashVal = hashPassword(password);
+					BufferedWriter bf = new BufferedWriter(fw);
+				
+					StringBuilder sb = new StringBuilder();
+					sb.append(is_instructor);
+					sb.append(","); // Next column.
+					sb.append(email);
+					sb.append(","); // Next column.
+					sb.append(hashVal.toString());
+					sb.append(",");
+					sb.append(firstName);
+					sb.append(",");
+					sb.append(lastName);
+					sb.append(",");
+					sb.append(studentID);
+					sb.append("\n"); // Next row.
+					bf.write(sb.toString());
+					bf.close();
+					return true;
+				}
+				fw.close();
+				return false;
+			
+			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (NoSuchAlgorithmException e) {
+				e.printStackTrace();
+			}
+			
+			return false;
+		}
+		}
 	/**
 	 * Compares the email and password combination to the email and password existing in
 	 * users.csv file. Returns true if the email matches the same password in the file.

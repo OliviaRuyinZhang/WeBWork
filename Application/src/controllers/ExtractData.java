@@ -2,8 +2,10 @@ package controllers;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 
 public class ExtractData {
@@ -76,4 +78,65 @@ public class ExtractData {
     	
     	return info;
     }
+    
+    
+    public static String getFirstName(String email){ 		
+    		String firstName = "";
+    		try {
+    			
+    			FileReader fr = new FileReader("users.csv");
+    			@SuppressWarnings("resource")
+    			BufferedReader br = new BufferedReader(fr);
+    			String line = "";
+    			// Reads every line of the file.
+    			while((line = br.readLine()) != null) {
+
+    				String[] user_info = line.split(","); // [isInstructor, email, password, firstName, lastName, studentID]
+    				// If the email exists in the file.
+    				if(user_info[1].equals(email)) {
+    					firstName = user_info[3];
+    				}
+    			}
+    			
+    			br.close();
+    			fr.close();
+    		} catch (FileNotFoundException fnfe) {
+    			fnfe.printStackTrace();
+    		} catch (IOException e) {
+    			e.printStackTrace();
+    		}
+    		//System.out.println(firstName);
+		return firstName;
+    }
+    
+    
+    public static String getStudentID(String email){ 		
+		String studentID = "";
+		try {
+			
+			FileReader fr = new FileReader("users.csv");
+			@SuppressWarnings("resource")
+			BufferedReader br = new BufferedReader(fr);
+			String line = "";
+			// Reads every line of the file.
+			while((line = br.readLine()) != null) {
+
+				String[] user_info = line.split(","); // [isInstructor, email, password, firstName, lastName, studentID]
+				// If the email exists in the file.
+				if(user_info[1].equals(email)) {
+					studentID = user_info[5];
+				}
+			}
+			
+			br.close();
+			fr.close();
+		} catch (FileNotFoundException fnfe) {
+			fnfe.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		//System.out.println(firstName);
+	return studentID;
 }
+}
+

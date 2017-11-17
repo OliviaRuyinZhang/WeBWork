@@ -24,6 +24,8 @@ import javax.swing.JScrollBar;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
+import controllers.ExtractData;
+
 /**
  * Class to display a list of assignments for an instructor.
  */
@@ -34,7 +36,7 @@ public class StudentListingGUI extends JFrame{
 	private JPanel listAssignmentsPanel;
 	private List<File> assignments;
 
-	public StudentListingGUI() {
+	public StudentListingGUI(String email) {
 		setResizable(true); // Temporarily until we add a scroll bar.
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 900, 731);
@@ -55,7 +57,7 @@ public class StudentListingGUI extends JFrame{
 	
 		
 		// User's Name label.
-		JLabel lblName = new JLabel("Insert Name");
+		JLabel lblName = new JLabel(ExtractData.getFirstName(email));
 		lblName.setFont(new Font("Segoe UI Light", Font.PLAIN, 52));
 		lblName.setBounds(62, 45, 350, 70);
 		lblName.setSize(lblName.getPreferredSize());

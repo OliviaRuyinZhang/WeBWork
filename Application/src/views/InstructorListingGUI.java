@@ -32,11 +32,13 @@ import controllers.ExtractData;
  * Class to display a list of assignments for an instructor.
  */
 public class InstructorListingGUI extends JFrame{
+	private static final String firstNameText = null;
 	private JPanel contentPane;
 	private JPanel listAssignmentsPanel;
 	private List<File> assignments;
-	
-	public InstructorListingGUI() {
+	private String email;
+	public InstructorListingGUI(String email) {
+		this.email = email;
 		setResizable(false); // Temporarily until we add a scroll bar.
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setTitle("WebWork");
@@ -58,7 +60,8 @@ public class InstructorListingGUI extends JFrame{
 	
 		
 		// User's Name label.
-		JLabel lblName = new JLabel("Insert Name");
+		//System.out.print(ExtractData.getFirstName(email));
+		JLabel lblName = new JLabel(ExtractData.getFirstName(email));
 		lblName.setFont(new Font("Segoe UI Light", Font.PLAIN, 52));
 		lblName.setBounds(62, 45, 350, 70);
 		lblName.setSize(lblName.getPreferredSize());
