@@ -165,7 +165,7 @@ public class RegisterStudentInfo extends JFrame {
 		JButton registerButton = new JButton("Submit");
 		registerButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
+				registerValidation();
 			}
 		});
 		registerButton.setBounds(180, 190, 80, 25);

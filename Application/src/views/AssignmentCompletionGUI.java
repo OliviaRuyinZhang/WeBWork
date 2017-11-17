@@ -45,6 +45,7 @@ import models.Problem;
 public class AssignmentCompletionGUI extends JFrame implements ActionListener{
 	private JPanel contentPane = new JPanel();
 	private JScrollPane scroll;
+
 	public HashMap<String, String> answersInfo = new HashMap<String, String>();
 	public ArrayList<String> infoTitle = new ArrayList<String>();
 	public String fileName;
@@ -87,17 +88,22 @@ public class AssignmentCompletionGUI extends JFrame implements ActionListener{
 		this.fileName = fileName;
 		this.studentNo = studentNo;
 		
+
+
+
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 900, 731);
 		setTitle("WebWork");
 
 		Container c = getContentPane();
-		contentPane.setSize(600, 400);
+
+		contentPane.setSize(600,400);
 		contentPane.setBackground(Color.WHITE);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		contentPane.setLayout(new GridLayout(getGridLayoutCount(fileName), 1));
-		
-		// Assignment Label
+		contentPane.setLayout(new GridLayout(getGridLayoutCount(fileName),1));
+                
+                // Assignment Label
+
 		JLabel lblAssignment = new JLabel(getAssignmentName(fileName));
 		lblAssignment.setFont(new Font("Segoe UI Light", Font.PLAIN, 30));
 		lblAssignment.setSize(lblAssignment.getPreferredSize());
@@ -114,34 +120,37 @@ public class AssignmentCompletionGUI extends JFrame implements ActionListener{
 		// Add problems to gui
 		for (Problem p : problems) {
 
+
 			// Blank Label
 			JLabel lblBlank = new JLabel("");
 			lblBlank.setFont(new Font("Segoe UI Light", Font.PLAIN, 20));
 			lblBlank.setSize(lblAssignment.getPreferredSize());
 			contentPane.add(lblBlank);
 
-			// Question
+
+			// Question 
+
 			JLabel lblQuestion = new JLabel(p.getProblemString());
 			lblQuestion.setFont(new Font("Segoe UI Light", Font.PLAIN, 20));
 			lblQuestion.setSize(lblQuestion.getPreferredSize());
 			contentPane.add(lblQuestion);
 
 			ButtonGroup questionGroup = new ButtonGroup();
-			// Answers
-			for (String a : p.getOptions()) {
-				
+
+			// Answers 
+			for (String a: p.getOptions()){
 				JRadioButton answer = new JRadioButton(a);
 				answer.setFont(new Font("Segoe UI Light", Font.PLAIN, 15));
 				answer.setSize(answer.getPreferredSize());
-				
-				// save user's selected answer
 				answer.addActionListener(this);
+				// On button press, actionlistener event e = problemID,answer pressed
 				answer.setActionCommand(p.getProblemID() + "," + a);
-				
+
 				contentPane.add(answer);
 				questionGroup.add(answer);
 			}
 		}
+
 		
 		// save & close button
 		JButton saveButton = new JButton("Save and Close");
@@ -245,9 +254,12 @@ public class AssignmentCompletionGUI extends JFrame implements ActionListener{
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
 		return count;
-	}
+
+}
+
+		
+
 	
 	public void updateCsvFile() {
 		try {
