@@ -108,6 +108,8 @@ public class StudentListingGUI extends JFrame{
 				lblDeadline.setBackground(Color.BLACK);
 				assignReleasedPanel.add(lblDeadline);
 				
+	
+				
 				i += 90;
 				
 			}
