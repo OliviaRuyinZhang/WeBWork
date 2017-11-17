@@ -18,7 +18,6 @@ import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
 
@@ -28,7 +27,6 @@ import javax.swing.border.EmptyBorder;
 public class StudentListingGUI extends JFrame{
 	private static final Color GREEN = null;
 	private JPanel contentPane;
-	private JScrollBar scroll;
 	private JPanel listAssignmentsPanel;
 	private List<File> assignments;
 
