@@ -24,8 +24,6 @@ import javax.swing.JScrollBar;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
-import controllers.ExtractData;
-
 /**
  * Class to display a list of assignments for an instructor.
  */
@@ -57,7 +55,7 @@ public class StudentListingGUI extends JFrame{
 	
 		
 		// User's Name label.
-		JLabel lblName = new JLabel(ExtractData.getFirstName(email));
+		JLabel lblName = new JLabel("Insert Name");
 		lblName.setFont(new Font("Segoe UI Light", Font.PLAIN, 52));
 		lblName.setBounds(62, 45, 350, 70);
 		lblName.setSize(lblName.getPreferredSize());
