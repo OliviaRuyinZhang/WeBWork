@@ -1,5 +1,7 @@
 package views;
 
+import java.util.Date;
+
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.awt.Color;
@@ -12,15 +14,23 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
@@ -35,7 +45,8 @@ public class InstructorListingGUI extends JFrame{
 	private JPanel contentPane;
 	private JPanel listAssignmentsPanel;
 	private List<File> assignments;
-	
+	private boolean beforeDeadline;
+
 	public InstructorListingGUI() {
 		setResizable(false); // Temporarily until we add a scroll bar.
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -83,6 +94,9 @@ public class InstructorListingGUI extends JFrame{
 	public void displayAssignments() {
 		// Every existing assignment copied into an ArrayList.
 				assignments = gatherExistingAssignments();
+				
+				// today's date
+				Date today = new Date();
 				
 				JButton btnAddAssignment = new JButton("+ Add Assignment");
 				btnAddAssignment.setBounds(585, 10, 179, 35);
@@ -144,13 +158,24 @@ public class InstructorListingGUI extends JFrame{
 					assignReleasedPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 					assignReleasedPanel.setLayout(null);
 					String fileName = file.getName();
+					
 					String[] info = ExtractData.getAssignmentInfo(fileName);
-					if(info[0].equals("Released")) {
+					
+					// check due date
+					String[] dueDate = info[2].split("/");
+					//System.out.printf("%s", Arrays.toString(dueDate));
+					Calendar calendar = Calendar.getInstance();
+				    calendar.set(Integer.parseInt(dueDate[2]), Integer.parseInt(dueDate[1]), Integer.parseInt(dueDate[0])); 
+				    Date due = calendar.getTime();
+				    beforeDeadline = (due.compareTo(today) > 0);
+				    
+					if(info[0].equals("Released") && beforeDeadline) {
+
 						assignReleasedPanel.setBounds(0, 55 + i, 765, 85);
 						assignReleasedPanel.setBackground(Color.decode("#F0F0F0"));
 						assignReleasedPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 				
-						addToAssignmentPanel(true, assignReleasedPanel, file, i);
+						addToAssignmentPanel(true, assignReleasedPanel, file);
 						
 						i += 90;
 						
@@ -179,12 +204,22 @@ public class InstructorListingGUI extends JFrame{
 					assignUnreleasedPanel.setLayout(null);
 					String fileName = file.getName();
 					String[] info = ExtractData.getAssignmentInfo(fileName);
-					if(info[0].equals("Unreleased")) {
+					
+					// check due date
+					String[] dueDate = info[2].split("/");
+					//System.out.printf("%s", Arrays.toString(dueDate));
+					Calendar calendar = Calendar.getInstance();
+				    calendar.set(Integer.parseInt(dueDate[2]), Integer.parseInt(dueDate[1]), Integer.parseInt(dueDate[0])); 
+				    Date due = calendar.getTime();
+				    beforeDeadline = (due.compareTo(today) > 0);
+				    
+					if(info[0].equals("Unreleased") && beforeDeadline) {
+
 						assignUnreleasedPanel.setBounds(0, 130 + i, 765, 85);
 						assignUnreleasedPanel.setBackground(Color.decode("#F0F0F0"));
 						assignUnreleasedPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 
-						addToAssignmentPanel(false, assignUnreleasedPanel, file, i);
+						addToAssignmentPanel(false, assignUnreleasedPanel, file);
 
 						// Set y for the next assignment panel.
 						i += 90;
@@ -193,7 +228,46 @@ public class InstructorListingGUI extends JFrame{
 					
 				}
 				
-				listAssignmentsPanel.setBounds(62, 145, 765, 150 + i);
+				// Closed Assignment label.
+				JLabel lblClosed = new JLabel("Closed");
+				lblClosed.setFont(new Font("Segoe UI Light", Font.PLAIN, 35));
+				lblClosed.setBounds(0, 160+i, lblClosed.getWidth(), 
+						lblClosed.getHeight());
+				lblClosed.setSize(lblClosed.getPreferredSize());
+				listAssignmentsPanel.add(lblClosed);
+				
+				
+				for(File file: assignments) {	
+					//System.out.println(file.getName());
+				    JPanel closedAssignmentPanel  = new JPanel();
+				    closedAssignmentPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+					closedAssignmentPanel.setLayout(null);
+					String fileName = file.getName();
+					String[] info = ExtractData.getAssignmentInfo(fileName);
+					
+					// check due date
+					String[] dueDate = info[2].split("/");
+					//System.out.printf("%s", Arrays.toString(dueDate));
+					Calendar calendar = Calendar.getInstance();
+				    calendar.set(Integer.parseInt(dueDate[2]), Integer.parseInt(dueDate[1]), Integer.parseInt(dueDate[0])); 
+				    Date due = calendar.getTime();
+				    
+				    // make a JPanel for every closed assignment
+					if(due.compareTo(today) < 0) {
+						closedAssignmentPanel.setBounds(0, 215 + i, 765, 85);
+						closedAssignmentPanel.setBackground(Color.decode("#F0F0F0"));
+						closedAssignmentPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+						
+						addToClosedAssignmentPanel(closedAssignmentPanel, file);
+
+						// Set y for the next assignment panel.
+						i += 90;
+					}
+					listAssignmentsPanel.add(closedAssignmentPanel);
+					
+				}
+			
+				listAssignmentsPanel.setBounds(62, 145, 765, 350 + i);
 				
 		contentPane.setPreferredSize(new Dimension(900, 150  + listAssignmentsPanel.getHeight()));
 
@@ -209,7 +283,7 @@ public class InstructorListingGUI extends JFrame{
 	 * @param file: The assignment's file. 
 	 * @param position: The current position of the last displayed assignment panel.
 	 */
-	private void addToAssignmentPanel(boolean released, JPanel panel, File file, int position) {
+	private void addToAssignmentPanel(boolean released, JPanel panel, File file) {
 		String fileName = file.getName();
 		String[] info = ExtractData.getAssignmentInfo(fileName);
 		
@@ -293,6 +367,39 @@ public class InstructorListingGUI extends JFrame{
 		
 	}
 	
+	private void addToClosedAssignmentPanel(JPanel panel, File file) {
+		String fileName = file.getName();
+		String[] info = ExtractData.getAssignmentInfo(fileName);
+		
+		JLabel lblAssignment = new JLabel(fileName.replaceFirst("[.][^.]+$", "")); // Strips the .csv extension.
+		lblAssignment.setFont(new Font("Segoe UI Semibold", Font.PLAIN, 16));
+		lblAssignment.setBounds(50, -3, 350, 70);
+		panel.add(lblAssignment);
+		
+		JLabel lblDeadline = new JLabel("Due " + info[2]);
+		lblDeadline.setFont(new Font("Segoe UI Regular", Font.PLAIN, 13));
+		lblDeadline.setBounds(50, 22, 350, 70);
+		lblDeadline.setBackground(Color.BLACK);
+		panel.add(lblDeadline);
+		
+		JButton exportButton = new JButton("Export Marks");
+		
+		exportButton.setHorizontalTextPosition(SwingConstants.CENTER);
+		exportButton.setBounds(640, 26, 123, 35);
+		exportButton.setFocusPainted(false);
+		exportButton.setBackground(Color.decode("#EC7063"));
+		exportButton.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+		
+		// Add action listener 
+		fileSaveAs save = new fileSaveAs(exportButton, fileName);
+		exportButton.addActionListener(save);
+
+		// Add to the panel.
+		panel.add(exportButton);
+	}
+	
+
+	
 	/**
 	 * Sets visibility of this InstructorListingGUI
 	 * to false.
@@ -328,7 +435,7 @@ public class InstructorListingGUI extends JFrame{
 	private ArrayList<File> gatherExistingAssignments(){
 		
 		ArrayList<File> assignments = new ArrayList<>();
-		Pattern pattern = Pattern.compile("Assignment*\\d");
+		Pattern pattern = Pattern.compile("Assignment+(\\d)*.csv");
 	    Matcher matcher;
 	    
 	    File[] files = new File(".").listFiles(); // All files in current directory.
@@ -342,7 +449,53 @@ public class InstructorListingGUI extends JFrame{
 	    }  
 	    return assignments;
 	}
+    
+    /**
+     * Returns the mean value of the student grades for the given assignment
+     * @param fileName: String name of the assignment's csv file(i.e. Assignment1.csv, Assignment2.csv etc)
+     */
+	public double getMean(String fileName) throws IOException {
+		String file = fileName.substring(0, fileName.length() - 4) + "Submission.csv";
+		File filePath = new File(file);
+	
+		double sumOfFianlGrade = 0.0;
+		int numberOfStudents = 0;
+		double mean;
+		
+		
+		// if the answerSubmission csv file exist
+		if (filePath.exists() == true) {	
+			FileReader fr = new FileReader(file);
+			BufferedReader reader = new BufferedReader(fr);
+			String tempLine = reader.readLine();
+			try {
+				while((tempLine = reader.readLine()) != null) {
+					String[] individualAnswerInfo = tempLine.split(","); 
+					
+					int size = individualAnswerInfo[6].length();
+					boolean isNumber = true;
+					for(int i = 0; i < size ; i++) {
+						 if (!Character.isDigit(individualAnswerInfo[6].charAt(i))) {
+					           isNumber = false;
+					       }
+					}
+					if(isNumber) {
+						sumOfFianlGrade += Double.parseDouble(individualAnswerInfo[6]);
+						numberOfStudents += 1;
+					}
+				}
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			reader.close();
+		}
+		mean = sumOfFianlGrade/numberOfStudents;
+		return mean;
+	}
+
 }
+
 
 
 /*
@@ -398,4 +551,53 @@ class updateStatus implements ActionListener{
 			 e.printStackTrace();
 		}
 	}
+}
+
+class fileSaveAs implements ActionListener{
+	public JButton exportButton;
+	public String fileName;
+	public String currentDirectory;
+	public fileSaveAs(JButton exportButton, String fileName){
+		this.fileName = fileName.substring(0,fileName.length() - 4);
+		this.exportButton = exportButton;
+		getFileCurrentDirectory();
+	}
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		final JFileChooser fc = new JFileChooser();
+		// start at user/home directory
+		fc.setCurrentDirectory(new java.io.File("user.home"));
+		// show directories only
+        fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        // get the absolute path of the user's selected directory and copy submission result to the indicated path
+        if (fc.showOpenDialog(exportButton) == JFileChooser.APPROVE_OPTION) {
+        		String destinatedDirectory = fc.getSelectedFile().getAbsolutePath() + "/"+ fileName + "Submission.csv";
+        		String message = "save to " + fc.getSelectedFile().getName() + " sucessfully!";
+            try {
+            		Files.copy(Paths.get(currentDirectory), Paths.get(destinatedDirectory), StandardCopyOption.REPLACE_EXISTING);
+            		JOptionPane.showMessageDialog(null, message);
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+        }
+	
+	}
+	
+	public void getFileCurrentDirectory() {
+		
+		Pattern pattern = Pattern.compile(fileName + "Submission.csv");
+		Matcher matcher;
+		File[] files = new File(".").listFiles(); // All files in current directory.
+		for (File file : files) {
+			if (file.isFile()) {
+				matcher = pattern.matcher(file.getName());
+				if (matcher.find()) { // If file name matches the regex expression in pattern.
+					this.currentDirectory = file.getAbsolutePath();
+				}
+			}
+		}
+		
+	}
+
 }

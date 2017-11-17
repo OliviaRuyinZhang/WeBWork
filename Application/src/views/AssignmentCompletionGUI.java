@@ -47,6 +47,7 @@ import models.Problem;
 public class AssignmentCompletionGUI extends JFrame implements ActionListener{
 	private JPanel contentPane = new JPanel();
 	private JScrollPane scroll;
+
 	public HashMap<String, String> answersInfo = new HashMap<String, String>();
 	public ArrayList<String> infoTitle = new ArrayList<String>();
 	public String fileName;
@@ -98,11 +99,13 @@ public class AssignmentCompletionGUI extends JFrame implements ActionListener{
                         this.previousSubmission = getPreviousSubmission(fileName, studentNo);
                 }
 		
+
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 900, 731);
 		setTitle("WebWork");
 
 		Container c = getContentPane();
+
 		contentPane.setSize(600, 400);
 		contentPane.setBackground(Color.WHITE);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -113,6 +116,7 @@ public class AssignmentCompletionGUI extends JFrame implements ActionListener{
 		lblAssignment.setFont(new Font("Segoe UI Light", Font.PLAIN, 30));
 		lblAssignment.setSize(lblAssignment.getPreferredSize());
 		contentPane.add(lblAssignment);
+
 
 		// Shuffle problems
 		ArrayList<Problem> problems = getAllProblems(fileName);
@@ -406,6 +410,7 @@ public class AssignmentCompletionGUI extends JFrame implements ActionListener{
 				bf.close();
 				reader.close();
 			}
+
 
 		} catch (Exception e1) {
 			e1.printStackTrace();
