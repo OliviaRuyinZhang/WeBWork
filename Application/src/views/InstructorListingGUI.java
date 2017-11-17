@@ -557,6 +557,7 @@ class fileSaveAs implements ActionListener{
 	public JButton exportButton;
 	public String fileName;
 	public String currentDirectory;
+	public boolean fileFound = false;
 	public fileSaveAs(JButton exportButton, String fileName){
 		this.fileName = fileName.substring(0,fileName.length() - 4);
 		this.exportButton = exportButton;
@@ -565,12 +566,15 @@ class fileSaveAs implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		final JFileChooser fc = new JFileChooser();
-		// start at user/home directory
-		fc.setCurrentDirectory(new java.io.File("user.home"));
-		// show directories only
-        fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+		if(fileFound == true) {
+			// start at user/home directory
+			fc.setCurrentDirectory(new java.io.File("user.home"));
+			// show directories only
+	        fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+		}
+
         // get the absolute path of the user's selected directory and copy submission result to the indicated path
-        if (fc.showOpenDialog(exportButton) == JFileChooser.APPROVE_OPTION) {
+        if (fileFound == true && fc.showOpenDialog(exportButton) == JFileChooser.APPROVE_OPTION) {
         		String destinatedDirectory = fc.getSelectedFile().getAbsolutePath() + "/"+ fileName + "Submission.csv";
         		String message = "save to " + fc.getSelectedFile().getName() + " sucessfully!";
             try {
@@ -580,6 +584,8 @@ class fileSaveAs implements ActionListener{
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
+        }else {
+        		JOptionPane.showMessageDialog(null, "No Submission File");
         }
 	
 	}
@@ -593,6 +599,7 @@ class fileSaveAs implements ActionListener{
 			if (file.isFile()) {
 				matcher = pattern.matcher(file.getName());
 				if (matcher.find()) { // If file name matches the regex expression in pattern.
+					fileFound = true;
 					this.currentDirectory = file.getAbsolutePath();
 				}
 			}
