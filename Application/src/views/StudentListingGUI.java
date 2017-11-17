@@ -205,11 +205,12 @@ public class StudentListingGUI extends JFrame{
 				lblDeadline.setBackground(Color.BLACK);
 				assignClosedPanel.add(lblDeadline);
 				
+				// Get the student's submission details for this assignment
 				String studentID = ExtractData.getStudentID(email);
 				HashMap<String, String> submissionDetails = ExtractData.getAssignmentSubmissionDetails(fileName.substring(fileName.length() - 5, fileName.length() - 4), studentID);
 				
+				// If the student has a submission record, display the button for them to see the results
 				if (!submissionDetails.isEmpty()) {
-					// Button for student to view detailed results
 					JButton resultsButton = new JButton("Results");
 					resultsButton.setHorizontalTextPosition(SwingConstants.CENTER);
 					resultsButton.setBounds(640, 26, 100, 35);
@@ -230,8 +231,6 @@ public class StudentListingGUI extends JFrame{
 					});
 					assignClosedPanel.add(resultsButton);
 				}
-				
-				
 
 				// Set y for the next assignment panel.
 				i += 90;

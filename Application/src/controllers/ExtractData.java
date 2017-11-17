@@ -109,6 +109,13 @@ public class ExtractData {
 		return firstName;
     }
     
+    /**
+     * Given an assignment number and student ID, returns a hashmap containing the final mark,
+     * time spent, number of tries, and average mark for that student's submission.
+     * @param assignmentNumber The assignment number
+     * @param studentID The student's unique ID
+     * @return a HashMap of Strings mapped to Strings
+     */
     public static HashMap<String, String> getAssignmentSubmissionDetails(String assignmentNumber, String studentID) {
     	HashMap<String, String> submissionDetails = new HashMap<String, String>();
  

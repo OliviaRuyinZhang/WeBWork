@@ -62,7 +62,6 @@ public class AssignmentCompletionGUI extends JFrame implements ActionListener {
 	private ArrayList<String> previousSubmission = new <String>ArrayList();
 
 	public AssignmentCompletionGUI(String fileName, String studentNo) {
-		
 		start = Instant.now();
 		
 		this.fileName = fileName;
@@ -370,7 +369,7 @@ public class AssignmentCompletionGUI extends JFrame implements ActionListener {
 				bf.close();
 			}
 
-			// existence file
+			// if the file exists
 			else {
 				FileReader fr = new FileReader(file);
 				BufferedReader reader = new BufferedReader(fr);
@@ -422,7 +421,7 @@ public class AssignmentCompletionGUI extends JFrame implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		// get the object that currently come through actionListener
 		Object source = e.getSource();
-		// if the user select an answer
+		// if the user selects an answer
 		if (source instanceof JRadioButton) {
 			// get question number and updated answer
 			ArrayList<String> modifiedAnswer = new ArrayList<String>(Arrays.asList(e.getActionCommand().split(",")));
@@ -433,11 +432,11 @@ public class AssignmentCompletionGUI extends JFrame implements ActionListener {
 			JButton button = (JButton) source;
 			String buttonText = button.getText();
 
-			// if the user click the save and close button
+			// if the user clicks the save and close button
 			if (buttonText.equals("Save and Close")) {
 				long totalTimeTaken = 0;
 				
-				// Get prior attempt if applicable
+				// get prior attempt if applicable
 				if (this.hasPreviousSubmission) {
 					totalTimeTaken = Integer.parseInt(this.previousSubmission.get(this.previousSubmission.size() - 2));
 				}
@@ -448,19 +447,20 @@ public class AssignmentCompletionGUI extends JFrame implements ActionListener {
 				updateCsvFile();
 				setVisible(false);
 				dispose();
-			} // if the user click the submit and grade button
+			} // if the user clicks the submit and grade button
 			if (buttonText.equals("Submit and Grade")) {
 				int numOfTries = 0;
 				long totalTimeTaken = 0;
 				double averageGrade = 0;
 				
-				// Get prior attempt if applicable
+				// get prior attempt if applicable
 				if (this.hasPreviousSubmission) {
 					numOfTries = Integer.parseInt(this.previousSubmission.get(this.previousSubmission.size() - 3));
 					totalTimeTaken = Integer.parseInt(this.previousSubmission.get(this.previousSubmission.size() - 2));
 					averageGrade = Double.parseDouble(this.previousSubmission.get(this.previousSubmission.size() - 4));
 				}
 				
+				// Stop counting the elapsed time and get the duration
 				Duration timeElapsed = Duration.between(start, Instant.now());
 				
 				// increment the number of tries
@@ -469,6 +469,7 @@ public class AssignmentCompletionGUI extends JFrame implements ActionListener {
 				String file = fileName.substring(0, fileName.length() - 4) + "Submission.csv";
 				File filePath = new File(file);
 				
+				// If a submission file doesn't exist, make one
 				if (!filePath.exists()) {
 					updateCsvFile();
 				}
