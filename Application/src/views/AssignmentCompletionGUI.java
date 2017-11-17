@@ -15,6 +15,8 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -30,6 +32,7 @@ import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollBar;
@@ -47,49 +50,21 @@ import models.Problem;
 public class AssignmentCompletionGUI extends JFrame implements ActionListener {
 	private JPanel contentPane = new JPanel();
 	private JScrollPane scroll;
+	
+	private Instant start;
 
-	public HashMap<String, String> answersInfo = new HashMap<String, String>();
-	public ArrayList<String> infoTitle = new ArrayList<String>();
-	public String fileName;
-	public String studentNo;
-	// Felix's stuff thx
-	public boolean hasPreviousSubmission;
-	public ArrayList<String> previousSubmission = new <String>ArrayList();
-
-	/**
-	 * Grades the current student's submission by comparing the submission to the
-	 * solutions.
-	 * 
-	 * @return The student's grade for this submission
-	 */
-	private double gradeSubmission() {
-		ArrayList<Problem> problems = getAllProblems(fileName);
-		String file = fileName.substring(0, fileName.length() - 4) + "Submission.csv";
-		String tempLine;
-		double finalGrade = 0;
-
-		try {
-			FileReader fr = new FileReader(file);
-			BufferedReader reader = new BufferedReader(fr);
-			while ((tempLine = reader.readLine()) != null) {
-				String[] submissionElements = tempLine.split(",");
-				if (submissionElements[0].equals(studentNo)) {
-					for (int i = 0; i < problems.size(); i++) {
-						if (submissionElements[i + 1].equals(problems.get(i).getSolution())) {
-							finalGrade++;
-						}
-					}
-				}
-			}
-			finalGrade = (finalGrade / problems.size()) * 100;
-			reader.close();
-			return finalGrade;
-		} catch (Exception e) {
-			return 0;
-		}
-	}
+	private HashMap<String, String> answersInfo = new HashMap<String, String>();
+	private ArrayList<String> infoTitle = new ArrayList<String>();
+	private String fileName;
+	private String studentNo;
+	
+	private boolean hasPreviousSubmission;
+	private ArrayList<String> previousSubmission = new <String>ArrayList();
 
 	public AssignmentCompletionGUI(String fileName, String studentNo) {
+		
+		start = Instant.now();
+		
 		this.fileName = fileName;
 		this.studentNo = studentNo;
 		this.hasPreviousSubmission = getPreviousSubmissionStatus(fileName, studentNo);
@@ -186,8 +161,31 @@ public class AssignmentCompletionGUI extends JFrame implements ActionListener {
 			c.add(scroll);
 			setSize(600, 400);
 			setVisible(true);
+	}
+	
+	/**
+	 * Grades the current student's submission by comparing the submission to the
+	 * solutions.
+	 * 
+	 * @return The student's grade for this submission
+	 */
+	private double gradeSubmission() {
+		ArrayList<Problem> problems = getAllProblems(fileName);
+		double finalGrade = 0;
+		
+		for (int i = 0; i < problems.size(); i++) {
+			String answer = answersInfo.get("Question " + (i + 1) + " Answer");
+			
+			if (answer == null) {
+				return -1;
+			} else if (answer.equals(problems.get(i).getSolution())) {
+				finalGrade++;
+			}
 		}
-
+		
+		finalGrade = (finalGrade / problems.size()) * 100;
+		return finalGrade; 
+	}
 
 	public void constructAssignmentAnswersTemplate(int totalNoProblems) {
 		// add titles
@@ -205,7 +203,7 @@ public class AssignmentCompletionGUI extends JFrame implements ActionListener {
 		infoTitle.add("Number of Tries");
 		answersInfo.put("Number of Tries", "0");
 		infoTitle.add("Time (in seconds)");
-		answersInfo.put("Time (in seconds)", null);
+		answersInfo.put("Time (in seconds)", "0");
 		infoTitle.add("Final Mark");
 		answersInfo.put("Final Mark", "0");
 	}
@@ -437,25 +435,63 @@ public class AssignmentCompletionGUI extends JFrame implements ActionListener {
 
 			// if the user click the save and close button
 			if (buttonText.equals("Save and Close")) {
-				// close current display Jframe
+				long totalTimeTaken = 0;
+				
+				// Get prior attempt if applicable
+				if (this.hasPreviousSubmission) {
+					totalTimeTaken = Integer.parseInt(this.previousSubmission.get(this.previousSubmission.size() - 2));
+				}
+
+				Duration timeElapsed = Duration.between(start, Instant.now());
+				answersInfo.put("Time (in seconds)", Long.toString(totalTimeTaken + (timeElapsed.toMillis() / 1000)));
+				
 				updateCsvFile();
 				setVisible(false);
 				dispose();
 			} // if the user click the submit and grade button
 			if (buttonText.equals("Submit and Grade")) {
+				int numOfTries = 0;
+				long totalTimeTaken = 0;
+				double averageGrade = 0;
+				
+				// Get prior attempt if applicable
+				if (this.hasPreviousSubmission) {
+					numOfTries = Integer.parseInt(this.previousSubmission.get(this.previousSubmission.size() - 3));
+					totalTimeTaken = Integer.parseInt(this.previousSubmission.get(this.previousSubmission.size() - 2));
+					averageGrade = Double.parseDouble(this.previousSubmission.get(this.previousSubmission.size() - 4));
+				}
+				
+				Duration timeElapsed = Duration.between(start, Instant.now());
+				
 				// increment the number of tries
-				int numOfTries = Integer.parseInt(answersInfo.get("Number of Tries"));
 				numOfTries += 1;
+				
+				String file = fileName.substring(0, fileName.length() - 4) + "Submission.csv";
+				File filePath = new File(file);
+				
+				if (!filePath.exists()) {
+					updateCsvFile();
+				}
 
 				double currentSubmissionGrade = gradeSubmission();
+				
+				if (currentSubmissionGrade < 0) {
+					JOptionPane.showMessageDialog(AssignmentCompletionGUI.this, "You need to answer questions to submit!");
+				} else {
+					averageGrade = (averageGrade + currentSubmissionGrade) / numOfTries;
 
-				double averageGrade = Double.parseDouble(answersInfo.get("Average Mark"));
-				averageGrade = averageGrade + currentSubmissionGrade / numOfTries;
-
-				answersInfo.put("Final Mark", Double.toString(currentSubmissionGrade));
-				answersInfo.put("Number of Tries", Integer.toString(numOfTries));
-				answersInfo.put("Average Mark", Double.toString(averageGrade));
-				updateCsvFile();
+					answersInfo.put("Final Mark", Double.toString(currentSubmissionGrade));
+					answersInfo.put("Number of Tries", Integer.toString(numOfTries));
+					answersInfo.put("Average Mark", Double.toString(averageGrade));
+					answersInfo.put("Time (in seconds)", Long.toString(totalTimeTaken + (timeElapsed.toMillis() / 1000)));
+					
+					updateCsvFile();
+					
+					// Add submission summary screen here
+					
+					setVisible(false);
+					dispose();
+				}
 			}
 		}
 	}
