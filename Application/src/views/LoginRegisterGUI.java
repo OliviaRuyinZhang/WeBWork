@@ -123,6 +123,7 @@ public class LoginRegisterGUI extends JFrame {
 		btnLogin.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 		btnLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				String email = getEmail();
 				//This checks if authentication is right as well as if user is an instructor
 				if((Authenticator.authenticate(getEmail(), getPassword())) && (Authenticator.isInstructor(getEmail()))){
 					JOptionPane.showMessageDialog(LoginRegisterGUI.this, "Login successful! Welcome instructor.");
@@ -130,7 +131,9 @@ public class LoginRegisterGUI extends JFrame {
 					EventQueue.invokeLater(new Runnable() {
 						public void run() {
 							try {
-								InstructorListingGUI instFrame = new InstructorListingGUI();
+								//System.out.print(email);
+								InstructorListingGUI instFrame = new InstructorListingGUI(email);
+								
 								instFrame.setVisible(true);
 								setVisible(false);
 								dispose(); // Destroy the JFrame object
@@ -147,7 +150,7 @@ public class LoginRegisterGUI extends JFrame {
 					EventQueue.invokeLater(new Runnable() {
 						public void run() {
 							try {
-								StudentListingGUI studFrame = new StudentListingGUI();
+								StudentListingGUI studFrame = new StudentListingGUI(email);
 								studFrame.setVisible(true);
 								setVisible(false);
 								dispose(); // Destroy the JFrame object
@@ -174,11 +177,17 @@ public class LoginRegisterGUI extends JFrame {
 		btnRegister.setBackground(Color.LIGHT_GRAY);
 		btnRegister.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				boolean validRegister = Authenticator.register(getIsInstructor(), getEmail(), getPassword());
-				if(validRegister){
+				//boolean validRegister = Authenticator.register(getIsInstructor(), getEmail(), getPassword());
+				/*if(validRegister){
 					JOptionPane.showMessageDialog(LoginRegisterGUI.this, "Registration successful!");
 				}else{
 					JOptionPane.showMessageDialog(LoginRegisterGUI.this, "Something went wrong!");
+				}*/
+				if(getIsInstructor()) {
+					new RegisterInstructorInfo(getIsInstructor(), getEmail(), getPassword());
+				}
+				else {
+					new RegisterStudentInfo(getIsInstructor(), getEmail(), getPassword());
 				}
 				clearTextFields();
 			}

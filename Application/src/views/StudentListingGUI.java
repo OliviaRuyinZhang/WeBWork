@@ -1,19 +1,25 @@
 package views;
+import java.io.FileReader;
 
 import java.awt.Color;
+
 import java.awt.EventQueue;
 
 import java.awt.Dimension;
 
 import java.awt.Font;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileReader;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -31,23 +37,28 @@ import javax.swing.JScrollPane;
 
 import javax.swing.border.EmptyBorder;
 
+import controllers.ExtractData;
+
 /**
  * Class to display a list of assignments for an instructor.
  */
 public class StudentListingGUI extends JFrame{
-	private static final Color GREEN = null;
 	private JPanel contentPane;
 	private JPanel listAssignmentsPanel;
 	private List<File> assignments;
+	private boolean beforeDeadline;
 
-	public StudentListingGUI() {
+
+	public StudentListingGUI(String email) {
 		setResizable(true); // Temporarily until we add a scroll bar.
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 900, 731);
 
 		setTitle("WebWork");
-
+	
 		contentPane = new JPanel();
+		
+
 		JScrollPane scroll = new JScrollPane(contentPane, 
 				JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		scroll.getVerticalScrollBar().setUnitIncrement(16);
@@ -55,7 +66,10 @@ public class StudentListingGUI extends JFrame{
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		add(scroll);
 
+
 		contentPane.setLayout(null);
+		//setSize(900, 700);
+		//setLocationRelativeTo(null);
 		
 		// Welcome label.
 		JLabel lblWelcome = new JLabel("Welcome,");
@@ -76,7 +90,7 @@ public class StudentListingGUI extends JFrame{
 		
 
 		/*
-		 * Released Assignments Section
+		 * Opened Assignments Section
 		 */
 		
 		// Released Assignments Panel
@@ -85,38 +99,48 @@ public class StudentListingGUI extends JFrame{
 		contentPane.add(listAssignmentsPanel);
 		listAssignmentsPanel.setLayout(null);
 		
-		// Released label.
-		JLabel lblReleased = new JLabel("Open");
-		lblReleased.setFont(new Font("Segoe UI Light", Font.PLAIN, 35));
-		lblReleased.setBounds(0, 0, 350, 70);
-		lblReleased.setSize(lblReleased.getPreferredSize());
-		listAssignmentsPanel.add(lblReleased);
+		// Open label.
+		JLabel lblOpen = new JLabel("Open");
+		lblOpen.setFont(new Font("Segoe UI Light", Font.PLAIN, 35));
+		lblOpen.setBounds(0, 0, 350, 70);
+		lblOpen.setSize(lblOpen.getPreferredSize());
+		listAssignmentsPanel.add(lblOpen);
 		
 		JLabel lblAssignment;
 		JLabel lblDeadline;
+		Date today = new Date();
+
 		// Make a JPanel for every existing assignment.
 		int i = 0;
 		for(File file: assignments) {
-			JPanel assignReleasedPanel = new JPanel();
-			assignReleasedPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
-			assignReleasedPanel.setLayout(null);
+			JPanel assignOpenPanel = new JPanel();
+			assignOpenPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+			assignOpenPanel.setLayout(null);
 			String fileName = file.getName();
 			String[] info = getAssignmentInfo(fileName);
-			if(info[0].equals("Released")) {
-				assignReleasedPanel.setBounds(0, 55 + i, 765, 85);
-				assignReleasedPanel.setBackground(Color.decode("#F0F0F0"));
-				assignReleasedPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+			
+			// Check due date
+			String[] dueDate = info[2].split("/");
+			Calendar calendar = Calendar.getInstance();
+		    calendar.set(Integer.parseInt(dueDate[2]), Integer.parseInt(dueDate[1]), Integer.parseInt(dueDate[0])); 
+		    Date due = calendar.getTime();
+		    beforeDeadline = (due.compareTo(today) > 0);
+		    
+			if(info[0].equals("Released") && beforeDeadline) {
+				assignOpenPanel.setBounds(0, 55 + i, 765, 85);
+				assignOpenPanel.setBackground(Color.decode("#F0F0F0"));
+				assignOpenPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 				
 				lblAssignment = new JLabel(fileName.replaceFirst("[.][^.]+$", "")); // Strips the .csv extension.
 				lblAssignment.setFont(new Font("Segoe UI Semibold", Font.PLAIN, 16));
 				lblAssignment.setBounds(50, -3, 350, 70);
-				assignReleasedPanel.add(lblAssignment);
+				assignOpenPanel.add(lblAssignment);
 				
 				lblDeadline = new JLabel("Due " + info[2]);
 				lblDeadline.setFont(new Font("Segoe UI Regular", Font.PLAIN, 13));
 				lblDeadline.setBounds(50, 22, 350, 70);
 				lblDeadline.setBackground(Color.BLACK);
-				assignReleasedPanel.add(lblDeadline);
+				assignOpenPanel.add(lblDeadline);
 				
 				// added an open button
 				JButton openButton = new JButton("Open");
@@ -129,19 +153,66 @@ public class StudentListingGUI extends JFrame{
 						    new AssignmentCompletionGUI(fileName, "1002205883");
 						  } 
 						} );
-				assignReleasedPanel.add(openButton);
+				assignOpenPanel.add(openButton);
 	
 				
 				i += 90;
 				
 			}
-			//assignmentPanel.setLayout(null);
-			listAssignmentsPanel.add(assignReleasedPanel);
+			listAssignmentsPanel.add(assignOpenPanel);
 			
 		}
 		
-		listAssignmentsPanel.setBounds(62, 145, 765, 150 + i);
+		// Closed Assignment label.
+		JLabel lblClosed = new JLabel("Closed");
+		lblClosed.setFont(new Font("Segoe UI Light", Font.PLAIN, 35));
+		lblClosed.setBounds(0, 80+i, lblClosed.getWidth(), 
+				lblClosed.getHeight());
+		lblClosed.setSize(lblClosed.getPreferredSize());
+		listAssignmentsPanel.add(lblClosed);
+		
+		
+		for(File file: assignments) {	
+		    JPanel assignClosedPanel  = new JPanel();
+		    assignClosedPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+			assignClosedPanel.setLayout(null);
+			String fileName = file.getName();
+			String[] info = ExtractData.getAssignmentInfo(fileName);
+			
+			// Check due date
+			String[] dueDate = info[2].split("/");
+			Calendar calendar = Calendar.getInstance();
+		    calendar.set(Integer.parseInt(dueDate[2]), Integer.parseInt(dueDate[1]), Integer.parseInt(dueDate[0])); 
+		    Date due = calendar.getTime();
+		    
+		    // Make a JPanel for every closed assignment
+			if(info[0].equals("Released") && due.compareTo(today) < 0) {
+				assignClosedPanel.setBounds(0, 130 + i, 765, 85);
+				assignClosedPanel.setBackground(Color.decode("#F0F0F0"));
+				assignClosedPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+								
+				lblAssignment = new JLabel(fileName.replaceFirst("[.][^.]+$", "")); // Strips the .csv extension.
+				lblAssignment.setFont(new Font("Segoe UI Semibold", Font.PLAIN, 16));
+				lblAssignment.setBounds(50, -3, 350, 70);
+				assignClosedPanel.add(lblAssignment);
+				
+				lblDeadline = new JLabel("Due " + info[2]);
+				lblDeadline.setFont(new Font("Segoe UI Regular", Font.PLAIN, 13));
+				lblDeadline.setBounds(50, 22, 350, 70);
+				lblDeadline.setBackground(Color.BLACK);
+				assignClosedPanel.add(lblDeadline);
+
+				// Set y for the next assignment panel.
+				i += 90;
+			}
+			listAssignmentsPanel.add(assignClosedPanel);
+			
+		}
+		
+		listAssignmentsPanel.setBounds(62, 145, 765, 250 + i);
 		contentPane.add(listAssignmentsPanel);
+
+
 
 		
 		contentPane.setPreferredSize(new Dimension(900, 100  + listAssignmentsPanel.getHeight()));
@@ -159,7 +230,7 @@ public class StudentListingGUI extends JFrame{
 	public static ArrayList<File> gatherExistingAssignments(){
 		
 		ArrayList<File> assignments = new ArrayList<>();
-		Pattern pattern = Pattern.compile("Assignment*\\d");
+		Pattern pattern = Pattern.compile("Assignment+(\\d)*.csv");
 	    Matcher matcher;
 	    
 	    File[] files = new File(".").listFiles(); // All files in current directory.

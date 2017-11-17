@@ -42,12 +42,19 @@ import controllers.ExtractData;
  * Class to display a list of assignments for an instructor.
  */
 public class InstructorListingGUI extends JFrame{
+	private static final String firstNameText = null;
 	private JPanel contentPane;
 	private JPanel listAssignmentsPanel;
 	private List<File> assignments;
 	private boolean beforeDeadline;
+	
 
-	public InstructorListingGUI() {
+
+	
+	private String email;
+	public InstructorListingGUI(String email) {
+		this.email = email;
+
 		setResizable(false); // Temporarily until we add a scroll bar.
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setTitle("WebWork");
@@ -69,7 +76,8 @@ public class InstructorListingGUI extends JFrame{
 	
 		
 		// User's Name label.
-		JLabel lblName = new JLabel("Insert Name");
+		//System.out.print(ExtractData.getFirstName(email));
+		JLabel lblName = new JLabel(ExtractData.getFirstName(email));
 		lblName.setFont(new Font("Segoe UI Light", Font.PLAIN, 52));
 		lblName.setBounds(62, 45, 350, 70);
 		lblName.setSize(lblName.getPreferredSize());
@@ -93,182 +101,178 @@ public class InstructorListingGUI extends JFrame{
 	 */
 	public void displayAssignments() {
 		// Every existing assignment copied into an ArrayList.
-				assignments = gatherExistingAssignments();
-				
-				// today's date
-				Date today = new Date();
-				
-				JButton btnAddAssignment = new JButton("+ Add Assignment");
-				btnAddAssignment.setBounds(585, 10, 179, 35);
-				btnAddAssignment.setFont(new Font("Segoe UI", Font.PLAIN, 15));
-				btnAddAssignment.setFocusPainted(false);
-				btnAddAssignment.setBackground(Color.decode("#B2BABB"));
-				btnAddAssignment.addActionListener(new ActionListener() {
-					
-					@Override
-					public void actionPerformed(ActionEvent arg0) {
-						//Creates an InstructorListingGUI
-						EventQueue.invokeLater(new Runnable() {
-							public void run() {
-								try {
-									AssignmentCreationGUI frame = new AssignmentCreationGUI();
-									frame.addWindowListener(new WindowAdapter() {
-										
-										@Override
-										public void windowOpened(WindowEvent e) {
-											hideListingFrame();
-										}
-										
-										@Override
-										public void windowClosed(WindowEvent e) {
-											showListingFrame();
-											resetAssignmentListing();
-											displayAssignments();
-										}					
-										
-									});
-									frame.setVisible(true);
-									frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-								} catch (Exception e) {
-									e.printStackTrace();
+		assignments = gatherExistingAssignments();
+		
+		// today's date
+		Date today = new Date();
+		
+		JButton btnAddAssignment = new JButton("+ Add Assignment");
+		btnAddAssignment.setBounds(585, 10, 179, 35);
+		btnAddAssignment.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+		btnAddAssignment.setFocusPainted(false);
+		btnAddAssignment.setBackground(Color.decode("#B2BABB"));
+		btnAddAssignment.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				//Creates an InstructorListingGUI
+				EventQueue.invokeLater(new Runnable() {
+					public void run() {
+						try {
+							AssignmentCreationGUI frame = new AssignmentCreationGUI();
+							frame.addWindowListener(new WindowAdapter() {
+								
+								@Override
+								public void windowOpened(WindowEvent e) {
+									hideListingFrame();
 								}
 								
-							}
-						});
+								@Override
+								public void windowClosed(WindowEvent e) {
+									showListingFrame();
+									resetAssignmentListing();
+									displayAssignments();
+								}					
+								
+							});
+							frame.setVisible(true);
+							frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+						
 					}
 				});
-				listAssignmentsPanel.add(btnAddAssignment);
-				
-				
-				/*
-				 * Released Assignments Section
-				 */
+			}
+		});
+		listAssignmentsPanel.add(btnAddAssignment);
+		
+		
+		/*
+		 * Released Assignments Section
+		 */
+	
+		// Released label.
+		JLabel lblReleased = new JLabel("Released");
+		lblReleased.setFont(new Font("Segoe UI Light", Font.PLAIN, 35));
+		lblReleased.setBounds(0, 0, 350, 70);
+		lblReleased.setSize(lblReleased.getPreferredSize());
+		listAssignmentsPanel.add(lblReleased);
+		
+		// Make a JPanel for every existing assignment.
+		int i = 0;
+		for(File file: assignments) {
+			JPanel assignReleasedPanel = new JPanel();
+			assignReleasedPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+			assignReleasedPanel.setLayout(null);
+			String fileName = file.getName();
 			
-				// Released label.
-				JLabel lblReleased = new JLabel("Released");
-				lblReleased.setFont(new Font("Segoe UI Light", Font.PLAIN, 35));
-				lblReleased.setBounds(0, 0, 350, 70);
-				lblReleased.setSize(lblReleased.getPreferredSize());
-				listAssignmentsPanel.add(lblReleased);
-				
-				// Make a JPanel for every existing assignment.
-				int i = 0;
-				for(File file: assignments) {
-					JPanel assignReleasedPanel = new JPanel();
-					assignReleasedPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
-					assignReleasedPanel.setLayout(null);
-					String fileName = file.getName();
-					
-					String[] info = ExtractData.getAssignmentInfo(fileName);
-					
-					// check due date
-					String[] dueDate = info[2].split("/");
-					//System.out.printf("%s", Arrays.toString(dueDate));
-					Calendar calendar = Calendar.getInstance();
-				    calendar.set(Integer.parseInt(dueDate[2]), Integer.parseInt(dueDate[1]), Integer.parseInt(dueDate[0])); 
-				    Date due = calendar.getTime();
-				    beforeDeadline = (due.compareTo(today) > 0);
-				    
-					if(info[0].equals("Released") && beforeDeadline) {
-
-						assignReleasedPanel.setBounds(0, 55 + i, 765, 85);
-						assignReleasedPanel.setBackground(Color.decode("#F0F0F0"));
-						assignReleasedPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder());
-				
-						addToAssignmentPanel(true, assignReleasedPanel, file);
-						
-						i += 90;
-						
-					}
-					//assignmentPanel.setLayout(null);
-					listAssignmentsPanel.add(assignReleasedPanel);
-					
-				}
-				
-				/*
-				 * Unreleased Assignments Section
-				 */
-
-				// Unreleased label.
-				JLabel lblUnreleased = new JLabel("Unreleased");
-				lblUnreleased.setFont(new Font("Segoe UI Light", Font.PLAIN, 35));
-				lblUnreleased.setSize(lblUnreleased.getPreferredSize());
-				lblUnreleased.setBounds(0,  75 + i , lblUnreleased.getWidth(), 
-						lblUnreleased.getHeight());
-				
-				listAssignmentsPanel.add(lblUnreleased);
-				
-				for(File file: assignments) {
-					JPanel assignUnreleasedPanel = new JPanel();
-					assignUnreleasedPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
-					assignUnreleasedPanel.setLayout(null);
-					String fileName = file.getName();
-					String[] info = ExtractData.getAssignmentInfo(fileName);
-					
-					// check due date
-					String[] dueDate = info[2].split("/");
-					//System.out.printf("%s", Arrays.toString(dueDate));
-					Calendar calendar = Calendar.getInstance();
-				    calendar.set(Integer.parseInt(dueDate[2]), Integer.parseInt(dueDate[1]), Integer.parseInt(dueDate[0])); 
-				    Date due = calendar.getTime();
-				    beforeDeadline = (due.compareTo(today) > 0);
-				    
-					if(info[0].equals("Unreleased") && beforeDeadline) {
-
-						assignUnreleasedPanel.setBounds(0, 130 + i, 765, 85);
-						assignUnreleasedPanel.setBackground(Color.decode("#F0F0F0"));
-						assignUnreleasedPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder());
-
-						addToAssignmentPanel(false, assignUnreleasedPanel, file);
-
-						// Set y for the next assignment panel.
-						i += 90;
-					}
-					listAssignmentsPanel.add(assignUnreleasedPanel);
-					
-				}
-				
-				// Closed Assignment label.
-				JLabel lblClosed = new JLabel("Closed");
-				lblClosed.setFont(new Font("Segoe UI Light", Font.PLAIN, 35));
-				lblClosed.setBounds(0, 160+i, lblClosed.getWidth(), 
-						lblClosed.getHeight());
-				lblClosed.setSize(lblClosed.getPreferredSize());
-				listAssignmentsPanel.add(lblClosed);
-				
-				
-				for(File file: assignments) {	
-					//System.out.println(file.getName());
-				    JPanel closedAssignmentPanel  = new JPanel();
-				    closedAssignmentPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
-					closedAssignmentPanel.setLayout(null);
-					String fileName = file.getName();
-					String[] info = ExtractData.getAssignmentInfo(fileName);
-					
-					// check due date
-					String[] dueDate = info[2].split("/");
-					//System.out.printf("%s", Arrays.toString(dueDate));
-					Calendar calendar = Calendar.getInstance();
-				    calendar.set(Integer.parseInt(dueDate[2]), Integer.parseInt(dueDate[1]), Integer.parseInt(dueDate[0])); 
-				    Date due = calendar.getTime();
-				    
-				    // make a JPanel for every closed assignment
-					if(due.compareTo(today) < 0) {
-						closedAssignmentPanel.setBounds(0, 215 + i, 765, 85);
-						closedAssignmentPanel.setBackground(Color.decode("#F0F0F0"));
-						closedAssignmentPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder());
-						
-						addToClosedAssignmentPanel(closedAssignmentPanel, file);
-
-						// Set y for the next assignment panel.
-						i += 90;
-					}
-					listAssignmentsPanel.add(closedAssignmentPanel);
-					
-				}
+			String[] info = ExtractData.getAssignmentInfo(fileName);
 			
-				listAssignmentsPanel.setBounds(62, 145, 765, 350 + i);
+			// Check due date
+			String[] dueDate = info[2].split("/");
+			Calendar calendar = Calendar.getInstance();
+		    calendar.set(Integer.parseInt(dueDate[2]), Integer.parseInt(dueDate[1]), Integer.parseInt(dueDate[0])); 
+		    Date due = calendar.getTime();
+		    beforeDeadline = (due.compareTo(today) > 0);
+		    
+			if(info[0].equals("Released") && beforeDeadline) {
+
+				assignReleasedPanel.setBounds(0, 55 + i, 765, 85);
+				assignReleasedPanel.setBackground(Color.decode("#F0F0F0"));
+				assignReleasedPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+		
+				addToAssignmentPanel(true, assignReleasedPanel, file);
 				
+				i += 90;
+				
+			}
+			//assignmentPanel.setLayout(null);
+			listAssignmentsPanel.add(assignReleasedPanel);
+			
+		}
+		
+		/*
+		 * Unreleased Assignments Section
+		 */
+
+		// Unreleased label.
+		JLabel lblUnreleased = new JLabel("Unreleased");
+		lblUnreleased.setFont(new Font("Segoe UI Light", Font.PLAIN, 35));
+		lblUnreleased.setSize(lblUnreleased.getPreferredSize());
+		lblUnreleased.setBounds(0,  75 + i , lblUnreleased.getWidth(), 
+				lblUnreleased.getHeight());
+		
+		listAssignmentsPanel.add(lblUnreleased);
+		
+		for(File file: assignments) {
+			JPanel assignUnreleasedPanel = new JPanel();
+			assignUnreleasedPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+			assignUnreleasedPanel.setLayout(null);
+			String fileName = file.getName();
+			String[] info = ExtractData.getAssignmentInfo(fileName);
+			
+			// check due date
+			String[] dueDate = info[2].split("/");
+			//System.out.printf("%s", Arrays.toString(dueDate));
+			Calendar calendar = Calendar.getInstance();
+		    calendar.set(Integer.parseInt(dueDate[2]), Integer.parseInt(dueDate[1]), Integer.parseInt(dueDate[0])); 
+		    Date due = calendar.getTime();
+		    beforeDeadline = (due.compareTo(today) > 0);
+		    
+			if(info[0].equals("Unreleased") && beforeDeadline) {
+
+				assignUnreleasedPanel.setBounds(0, 130 + i, 765, 85);
+				assignUnreleasedPanel.setBackground(Color.decode("#F0F0F0"));
+				assignUnreleasedPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+
+				addToAssignmentPanel(false, assignUnreleasedPanel, file);
+
+				// Set y for the next assignment panel.
+				i += 90;
+			}
+			listAssignmentsPanel.add(assignUnreleasedPanel);
+			
+		}
+		
+		// Closed Assignment label.
+		JLabel lblClosed = new JLabel("Closed");
+		lblClosed.setFont(new Font("Segoe UI Light", Font.PLAIN, 35));
+		lblClosed.setBounds(0, 160+i, lblClosed.getWidth(), 
+				lblClosed.getHeight());
+		lblClosed.setSize(lblClosed.getPreferredSize());
+		listAssignmentsPanel.add(lblClosed);
+		
+		
+		for(File file: assignments) {	
+		    JPanel closedAssignmentPanel  = new JPanel();
+		    closedAssignmentPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+			closedAssignmentPanel.setLayout(null);
+			String fileName = file.getName();
+			String[] info = ExtractData.getAssignmentInfo(fileName);
+			
+			// Check due date
+			String[] dueDate = info[2].split("/");
+			Calendar calendar = Calendar.getInstance();
+		    calendar.set(Integer.parseInt(dueDate[2]), Integer.parseInt(dueDate[1]), Integer.parseInt(dueDate[0])); 
+		    Date due = calendar.getTime();
+		    
+		    // Make a JPanel for every closed assignment
+			if(due.compareTo(today) < 0) {
+				closedAssignmentPanel.setBounds(0, 215 + i, 765, 85);
+				closedAssignmentPanel.setBackground(Color.decode("#F0F0F0"));
+				closedAssignmentPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+				
+				addToClosedAssignmentPanel(closedAssignmentPanel, file);
+
+				// Set y for the next assignment panel.
+				i += 90;
+			}
+			listAssignmentsPanel.add(closedAssignmentPanel);
+			
+		}
+	
+		listAssignmentsPanel.setBounds(62, 145, 765, 250 + i);
 		contentPane.setPreferredSize(new Dimension(900, 150  + listAssignmentsPanel.getHeight()));
 
 	}
@@ -381,21 +385,6 @@ public class InstructorListingGUI extends JFrame{
 		lblDeadline.setBounds(50, 22, 350, 70);
 		lblDeadline.setBackground(Color.BLACK);
 		panel.add(lblDeadline);
-		
-		JButton exportButton = new JButton("Export Marks");
-		
-		exportButton.setHorizontalTextPosition(SwingConstants.CENTER);
-		exportButton.setBounds(640, 26, 123, 35);
-		exportButton.setFocusPainted(false);
-		exportButton.setBackground(Color.decode("#EC7063"));
-		exportButton.setFont(new Font("Segoe UI", Font.PLAIN, 15));
-		
-		// Add action listener 
-		fileSaveAs save = new fileSaveAs(exportButton, fileName);
-		exportButton.addActionListener(save);
-
-		// Add to the panel.
-		panel.add(exportButton);
 	}
 	
 

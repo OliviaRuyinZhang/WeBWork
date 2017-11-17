@@ -4,6 +4,7 @@ import java.awt.EventQueue;
 
 import views.LoginRegisterGUI;
 
+
 public class ApplicationDriver {
 	/**
 	 * Launch the application.
