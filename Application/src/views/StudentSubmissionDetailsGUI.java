@@ -1,12 +1,8 @@
 package views;
 
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.util.HashMap;
 
 import javax.swing.JButton;
@@ -14,12 +10,14 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import controllers.ExtractData;
-
 import java.awt.Color;
 import javax.swing.JLabel;
 import java.awt.Dimension;
 
+/**
+ * GUI class to display the final mark, average mark, number of tries, and time spent
+ * for a given student submission.
+ */
 public class StudentSubmissionDetailsGUI extends JFrame {
 
 	private JPanel contentPane;
@@ -121,8 +119,6 @@ public class StudentSubmissionDetailsGUI extends JFrame {
 			}
 		});
 		
-		contentPane.add(btnDone);
-
-		
+		contentPane.add(btnDone);		
 	}
 }
