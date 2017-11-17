@@ -33,10 +33,17 @@ public class RegisterInstructorInfo extends JFrame {
 	private JTextField firstNameField;
 	private JTextField lastNameField;
 	private JPasswordField registrationCodeField;
-	private String accessCode = "abc";
-	
+	private final String  accessCode = "abc";
+	private boolean isInstructor;
+	private String email;
+	private String password;
 
 	public RegisterInstructorInfo(boolean isInstructor, String email, String password) {
+		
+		this.isInstructor = isInstructor;
+		this.email = email;
+		this.password = password;
+		
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(300, 250);
@@ -140,39 +147,41 @@ public class RegisterInstructorInfo extends JFrame {
 		JButton registerButton = new JButton("Submit");
 		registerButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				boolean accessPermission = false;
-				boolean validRegister = false;
-				if (registrationCodeField .getText().equals(accessCode)) {
-					accessPermission = true;
-					validRegister = Authenticator.register(isInstructor, email, password, firstNameField.getText(),
-							lastNameField.getText());
-					if (validRegister) {
-						int input = JOptionPane.showOptionDialog(null, "Registration successful!", "Confirmation",
-								JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, null, null);
-						if (input == JOptionPane.OK_OPTION) {
-							dispose();
-						}
-					} else {		
-							JOptionPane.showMessageDialog(RegisterInstructorInfo.this, "Something went wrong!");						
-					}
-				}else {
-					if(!accessPermission) {
-						System.out.println(registrationCode.getText());
-						int input = JOptionPane.showOptionDialog(null, "Access Denied!", "Error",
-								JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, null, null);
-						if (input == JOptionPane.OK_OPTION) {
-							dispose();
-						}
-					}
-				}
-
-				
+				registerValidation();		
 			}
 		});
 		registerButton.setBounds(180, 160, 80, 25);
 		contentPane.add(registerButton);
 		setVisible(true);
 		
+	}
+	
+	public void registerValidation() {
+		boolean accessPermission = false;
+		boolean validRegister = false;
+		if (registrationCodeField .getText().equals(accessCode)) {
+			accessPermission = true;
+			validRegister = Authenticator.register(isInstructor, email, password, firstNameField.getText(),
+					lastNameField.getText());
+			if (validRegister) {
+				int input = JOptionPane.showOptionDialog(null, "Registration successful!", "Confirmation",
+						JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, null, null);
+				if (input == JOptionPane.OK_OPTION) {
+					dispose();
+				}
+			} else {		
+					JOptionPane.showMessageDialog(RegisterInstructorInfo.this, "Something went wrong!");						
+			}
+		}else {
+			if(!accessPermission) {
+				int input = JOptionPane.showOptionDialog(null, "Access Denied!", "Error",
+						JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, null, null);
+				if (input == JOptionPane.OK_OPTION) {
+					dispose();
+				}
+			}
+		}
+
 	}
 	
 	public void validateNameInput(JLabel label, JTextField name, String labelText)
@@ -187,13 +196,27 @@ public class RegisterInstructorInfo extends JFrame {
 	    		//studentID.setForeground(getBackground());
 			label.setText(labelText);
 			label.setForeground(Color.BLACK);
+			
 	    }
 	    else
 	    {
 	    		label.setForeground(Color.RED);
 	    		label.setText(labelText+"*");
+	    		
 	    }
 	  }
+	
+	public boolean checkNameInput(String name) {
+		String namePattern = "^[a-zA-Z]+$";
+		Pattern r = Pattern.compile(namePattern);
+		Matcher m = r.matcher(name);
+
+		if (m.matches()) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 
 }
 

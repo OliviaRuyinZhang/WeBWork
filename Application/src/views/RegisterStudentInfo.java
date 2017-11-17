@@ -39,8 +39,16 @@ public class RegisterStudentInfo extends JFrame {
 	private JTextField studentIDField;
 	private String pattern = "\\d+";
 	private JLabel studentID;
+	private boolean isInstructor;
+	private String email;
+	private String password;
 
 	public RegisterStudentInfo(boolean isInstructor, String email, String password) {
+		
+		this.isInstructor = isInstructor;
+		this.email = email;
+		this.password = password;
+		
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(300, 250);
@@ -157,56 +165,60 @@ public class RegisterStudentInfo extends JFrame {
 		JButton registerButton = new JButton("Submit");
 		registerButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				boolean typeCheck = checkNameInput(firstNameField.getText()) && checkNameInput(lastNameField.getText())
-						&& checkIDInput(studentIDField.getText());
-				boolean validRegister = false;
-				if (typeCheck) {
-					validRegister = Authenticator.register(isInstructor, email, password, firstNameField.getText(),
-							lastNameField.getText(), studentIDField.getText());
-				} else {
-					if ((checkNameInput(firstNameField.getText()) == false
-							|| checkNameInput(lastNameField.getText()) == false) && checkIDInput(studentIDField.getText()) == false) {
-						int input = JOptionPane.showOptionDialog(null, "Name has to be in letters,\n StudentID has to be integers!", "Error",
-								JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, null, null);
-						if (input == JOptionPane.OK_OPTION) {
-							clearTextFields();
-						}
-					} else {
-						if (checkIDInput(studentIDField.getText()) == false) {
-							int input = JOptionPane.showOptionDialog(null, "StudentID has to be integer numbers!",
-									"Error", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, null,
-									null);
-							if (input == JOptionPane.OK_OPTION) {
-								clearTextFields();
-							}
-						} else {
-								int input = JOptionPane.showOptionDialog(null, "Name has to be in letters!", "Error",
-										JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, null, null);
-								if (input == JOptionPane.OK_OPTION) {
-									clearTextFields();
-								}
-							}
 
-						}
-					}
-				
-				if (validRegister) {
-					int input = JOptionPane.showOptionDialog(null, "Registration successful!", "Confirmation",
-							JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, null, null);
-					if (input == JOptionPane.OK_OPTION) {
-						dispose();
-					}
-				} else {
-					if (typeCheck) {
-						JOptionPane.showMessageDialog(RegisterStudentInfo.this, "Something went wrong!");
-					}
-				}
 			}
 		});
 		registerButton.setBounds(180, 190, 80, 25);
 		contentPane.add(registerButton);
 		setVisible(true);
 
+	}
+	
+	public void registerValidation() {
+		boolean typeCheck = checkNameInput(firstNameField.getText()) && checkNameInput(lastNameField.getText())
+				&& checkIDInput(studentIDField.getText());
+		boolean validRegister = false;
+		if (typeCheck) {
+			validRegister = Authenticator.register(isInstructor, email, password, firstNameField.getText(),
+					lastNameField.getText(), studentIDField.getText());
+		} else {
+			if ((checkNameInput(firstNameField.getText()) == false
+					|| checkNameInput(lastNameField.getText()) == false) && checkIDInput(studentIDField.getText()) == false) {
+				int input = JOptionPane.showOptionDialog(null, "Name has to be in letters,\n StudentID has to be integers!", "Error",
+						JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, null, null);
+				if (input == JOptionPane.OK_OPTION) {
+					clearTextFields();
+				}
+			} else {
+				if (checkIDInput(studentIDField.getText()) == false) {
+					int input = JOptionPane.showOptionDialog(null, "StudentID has to be integer numbers!",
+							"Error", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, null,
+							null);
+					if (input == JOptionPane.OK_OPTION) {
+						clearTextFields();
+					}
+				} else {
+						int input = JOptionPane.showOptionDialog(null, "Name has to be in letters!", "Error",
+								JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, null, null);
+						if (input == JOptionPane.OK_OPTION) {
+							clearTextFields();
+						}
+					}
+
+				}
+			}
+		
+		if (validRegister) {
+			int input = JOptionPane.showOptionDialog(null, "Registration successful!", "Confirmation",
+					JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, null, null);
+			if (input == JOptionPane.OK_OPTION) {
+				dispose();
+			}
+		} else {
+			if (typeCheck) {
+				JOptionPane.showMessageDialog(RegisterStudentInfo.this, "Something went wrong!");
+			}
+		}
 	}
 
 	public void validateStudentIDInput() {
