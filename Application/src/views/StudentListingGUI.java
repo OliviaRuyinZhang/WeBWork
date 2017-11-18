@@ -51,7 +51,6 @@ public class StudentListingGUI extends JFrame{
 	private List<File> assignments;
 	private boolean beforeDeadline;
 
-
 	public StudentListingGUI(String email) {
 		setResizable(true); // Temporarily until we add a scroll bar.
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -119,7 +118,7 @@ public class StudentListingGUI extends JFrame{
 			assignOpenPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 			assignOpenPanel.setLayout(null);
 			String fileName = file.getName();
-			String[] info = getAssignmentInfo(fileName);
+			String[] info = ExtractData.getAssignmentInfo(fileName);
 			
 			// Check due date
 			String[] dueDate = info[2].split("/");
@@ -176,8 +175,7 @@ public class StudentListingGUI extends JFrame{
 		lblClosed.setBounds(0, 80+i, lblClosed.getWidth(), 
 				lblClosed.getHeight());
 		lblClosed.setSize(lblClosed.getPreferredSize());
-		listAssignmentsPanel.add(lblClosed);
-		
+		listAssignmentsPanel.add(lblClosed);		
 		
 		for(File file: assignments) {	
 		    JPanel assignClosedPanel  = new JPanel();
@@ -208,7 +206,7 @@ public class StudentListingGUI extends JFrame{
 				lblDeadline.setBounds(50, 22, 350, 70);
 				lblDeadline.setBackground(Color.BLACK);
 				assignClosedPanel.add(lblDeadline);
-				
+
 				// Get the student's submission details for this assignment
 				String studentID = ExtractData.getStudentID(email);
 				HashMap<String, String> submissionDetails = ExtractData.getAssignmentSubmissionDetails(fileName, studentID);
@@ -234,6 +232,30 @@ public class StudentListingGUI extends JFrame{
 						  } 
 					});
 					assignClosedPanel.add(resultsButton);
+					
+					JButton btnRemark = new JButton("Remark");
+					btnRemark.setHorizontalTextPosition(SwingConstants.CENTER);
+					btnRemark.setBounds(520, 26, 100, 35);
+					btnRemark.setFocusPainted(false);
+					btnRemark.setBackground(Color.decode("#EC7063"));
+					btnRemark.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+					btnRemark.addActionListener(new ActionListener() {
+
+						@Override
+						public void actionPerformed(ActionEvent arg0) {
+							
+							//Creates a RemarkRequest GUI
+							EventQueue.invokeLater(new Runnable() {
+								public void run() {
+									RemarkRequestGUI frame =  new RemarkRequestGUI(file, email);
+									frame.setVisible(true);
+									frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);									
+								}
+							});
+						}
+						
+					});
+					assignClosedPanel.add(btnRemark);
 				}
 
 				// Set y for the next assignment panel.
@@ -275,35 +297,4 @@ public class StudentListingGUI extends JFrame{
 	    }  
 	    return assignments;
 	}
-    
-    /**
-     * Returns a String array of the assignment
-     * information, located in it's respective
-     * assignment csv file.
-     * 
-     * [(Un)released/Due-date/date of creation]
-     * 
-     * @param fileName: String name of the assignment's csv file.
-     */
-    public String[] getAssignmentInfo(String fileName) {
-    	
-    	String[] info = new String[3];
-    	
-    	try {
-    		FileReader fr = new FileReader(fileName);
-    		BufferedReader br = new BufferedReader(fr);
-    		// Check first cell for unreleased
-    		String line = br.readLine();
-    		info = line.split(",");
-    		br.close();
-    		fr.close();
-    		
-    	} catch (IOException e) {
-    		e.printStackTrace();
-        }
-    	
-    	return info;
-
-    }
-	
 }
