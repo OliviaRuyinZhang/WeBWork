@@ -126,14 +126,11 @@ public class LoginRegisterGUI extends JFrame {
 				String email = getEmail();
 				//This checks if authentication is right as well as if user is an instructor
 				if((Authenticator.authenticate(getEmail(), getPassword())) && (Authenticator.isInstructor(getEmail()))){
-					JOptionPane.showMessageDialog(LoginRegisterGUI.this, "Login successful! Welcome instructor.");
 					//Creates an InstructorListingGUI
 					EventQueue.invokeLater(new Runnable() {
 						public void run() {
 							try {
-								//System.out.print(email);
-								InstructorListingGUI instFrame = new InstructorListingGUI(email);
-								
+								InstructorListingGUI instFrame = new InstructorListingGUI(email);			
 								instFrame.setVisible(true);
 								setVisible(false);
 								dispose(); // Destroy the JFrame object
@@ -145,7 +142,7 @@ public class LoginRegisterGUI extends JFrame {
 				}
 				//If not an instructor
 				else if((Authenticator.authenticate(getEmail(), getPassword())) && (Authenticator.isInstructor(getEmail()) == false)){
-					JOptionPane.showMessageDialog(LoginRegisterGUI.this, "Login successful! Welcome student.");
+					//JOptionPane.showMessageDialog(LoginRegisterGUI.this, "Login successful! Welcome student.");
 					//Creates an InstructorListingGUI
 					EventQueue.invokeLater(new Runnable() {
 						public void run() {
@@ -177,12 +174,6 @@ public class LoginRegisterGUI extends JFrame {
 		btnRegister.setBackground(Color.LIGHT_GRAY);
 		btnRegister.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				//boolean validRegister = Authenticator.register(getIsInstructor(), getEmail(), getPassword());
-				/*if(validRegister){
-					JOptionPane.showMessageDialog(LoginRegisterGUI.this, "Registration successful!");
-				}else{
-					JOptionPane.showMessageDialog(LoginRegisterGUI.this, "Something went wrong!");
-				}*/
 				if(getIsInstructor()) {
 					new RegisterInstructorInfo(getIsInstructor(), getEmail(), getPassword());
 				}

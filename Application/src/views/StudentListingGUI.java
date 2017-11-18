@@ -71,8 +71,7 @@ public class StudentListingGUI extends JFrame{
 
 
 		contentPane.setLayout(null);
-		//setSize(900, 700);
-		//setLocationRelativeTo(null);
+	
 		
 		// Welcome label.
 		JLabel lblWelcome = new JLabel("Welcome,");
@@ -152,8 +151,13 @@ public class StudentListingGUI extends JFrame{
 				openButton.setBackground(new Color(51, 204, 153));
 				openButton.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 				openButton.addActionListener(new ActionListener() { 
-					  public void actionPerformed(ActionEvent e) { 
-						    new AssignmentCompletionGUI(fileName, ExtractData.getStudentID(email));
+					  public void actionPerformed(ActionEvent e) {
+						   // get studentNumber
+						  	String studentNumber = ExtractData.getStudentID(email);
+						  	// if the studentNumber is not empty or null, open the assignment
+						  	if(!studentNumber.isEmpty() && studentNumber != null) {
+						  		 new AssignmentCompletionGUI(fileName, studentNumber);
+						  	}
 						  } 
 						} );
 				assignOpenPanel.add(openButton);
