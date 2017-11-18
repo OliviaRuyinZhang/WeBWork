@@ -64,7 +64,7 @@ public class InstructorListingGUI extends JFrame{
 		scroll.getVerticalScrollBar().setUnitIncrement(16);
 		contentPane.setBackground(Color.WHITE);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		add(scroll);
+		getContentPane().add(scroll);
 		contentPane.setLayout(null);
 		
 		// Welcome label.
@@ -273,6 +273,31 @@ public class InstructorListingGUI extends JFrame{
 		}
 	
 		listAssignmentsPanel.setBounds(62, 145, 765, 250 + i);
+		
+		JButton btnRemark = new JButton("Remark");
+		btnRemark.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+		btnRemark.setFocusPainted(false);
+		btnRemark.setBackground(Color.decode("#f1c40f"));
+		btnRemark.setBounds(467, 10, 101, 35);
+		btnRemark.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				//Creates an InstructorRemarkGUI
+				EventQueue.invokeLater(new Runnable() {
+					public void run() {
+						try {
+							InstructorRemarkGUI frame = new InstructorRemarkGUI();
+							frame.setVisible(true);
+							frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}						
+					}
+				});
+			}
+		});
+		listAssignmentsPanel.add(btnRemark);
+		
 		contentPane.setPreferredSize(new Dimension(900, 150  + listAssignmentsPanel.getHeight()));
 
 	}
