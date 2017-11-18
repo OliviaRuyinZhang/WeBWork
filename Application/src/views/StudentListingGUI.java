@@ -117,7 +117,7 @@ public class StudentListingGUI extends JFrame{
 			assignOpenPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 			assignOpenPanel.setLayout(null);
 			String fileName = file.getName();
-			String[] info = getAssignmentInfo(fileName);
+			String[] info = ExtractData.getAssignmentInfo(fileName);
 			
 			// Check due date
 			String[] dueDate = info[2].split("/");
@@ -169,8 +169,7 @@ public class StudentListingGUI extends JFrame{
 		lblClosed.setBounds(0, 80+i, lblClosed.getWidth(), 
 				lblClosed.getHeight());
 		lblClosed.setSize(lblClosed.getPreferredSize());
-		listAssignmentsPanel.add(lblClosed);
-		
+		listAssignmentsPanel.add(lblClosed);		
 		
 		for(File file: assignments) {	
 		    JPanel assignClosedPanel  = new JPanel();
@@ -201,6 +200,23 @@ public class StudentListingGUI extends JFrame{
 				lblDeadline.setBounds(50, 22, 350, 70);
 				lblDeadline.setBackground(Color.BLACK);
 				assignClosedPanel.add(lblDeadline);
+				
+				JButton btnRemark = new JButton("Remark");
+				btnRemark.setHorizontalTextPosition(SwingConstants.CENTER);
+				btnRemark.setBounds(640, 26, 100, 35);
+				btnRemark.setFocusPainted(false);
+				btnRemark.setBackground(Color.decode("#EC7063"));
+				btnRemark.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+				btnRemark.addActionListener(new ActionListener() {
+
+					@Override
+					public void actionPerformed(ActionEvent arg0) {
+						//Open remark request window.
+						System.out.println(ExtractData.getInstructorEmails());
+					}
+					
+				});
+				assignClosedPanel.add(btnRemark);
 
 				// Set y for the next assignment panel.
 				i += 90;
@@ -244,35 +260,4 @@ public class StudentListingGUI extends JFrame{
 	    }  
 	    return assignments;
 	}
-    
-    /**
-     * Returns a String array of the assignment
-     * information, located in it's respective
-     * assignment csv file.
-     * 
-     * [(Un)released/Due-date/date of creation]
-     * 
-     * @param fileName: String name of the assignment's csv file.
-     */
-    public String[] getAssignmentInfo(String fileName) {
-    	
-    	String[] info = new String[3];
-    	
-    	try {
-    		FileReader fr = new FileReader(fileName);
-    		BufferedReader br = new BufferedReader(fr);
-    		// Check first cell for unreleased
-    		String line = br.readLine();
-    		info = line.split(",");
-    		br.close();
-    		fr.close();
-    		
-    	} catch (IOException e) {
-    		e.printStackTrace();
-        }
-    	
-    	return info;
-
-    }
-	
 }
