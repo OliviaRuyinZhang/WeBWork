@@ -12,8 +12,6 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Properties;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -32,6 +30,9 @@ import java.util.*;
 import javax.mail.*;
 import javax.mail.internet.*;
 
+/*
+ * Remark Request class
+ */
 public class RemarkRequestGUI extends JFrame{
 
 	public static void main(String[] args) {
@@ -126,7 +127,7 @@ public class RemarkRequestGUI extends JFrame{
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				// Send email to instructors.
-				sendRemarkRequest(getStudentEmail());
+				sendRemarkRequest();
 				JOptionPane.showMessageDialog(RemarkRequestGUI.this, "Your remark request has been sent.");
 			}	
 		});
@@ -202,20 +203,19 @@ public class RemarkRequestGUI extends JFrame{
 	}
 	
 	/**
-	 * 
-	 * @param toEmail
+	 * Sends an email to every registered instructor
+	 * via Gmail SMTP server, TLS connection.
+	 * Idea and parts of code were taken from citation found below.
 	 */
-	public void sendRemarkRequest(String toEmail) {
+	public void sendRemarkRequest() {
 		
 		/***************************************************************** 
-		 *  - Author(s) name (Individual or corporation)
-		 *	- Title: JavaMail API – Sending email via Gmail SMTP example
-		 *	- Date: 2017-11-18
-		 *	- Code version
-		 *	- Type (e.g. computer program, source code)
-		 *	- Web address or publisher (e.g. program publisher, URL) 
+		 *  Author: mkyoung (modified by Julian Barker)
+		 *	Title: JavaMail API – Sending email via Gmail SMTP example
+		 *	Date: 2017-11-18
+		 *	Type: source code
+		 *	https://www.mkyong.com/java/javamail-api-sending-email-via-gmail-smtp-example/
 		 ****************************************************************/
-		
 		
 		final String username = "webworkremarks@gmail.com";
 		final String password = "workremarks";
