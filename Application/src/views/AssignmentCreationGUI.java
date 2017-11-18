@@ -146,9 +146,10 @@ public class AssignmentCreationGUI extends JFrame {
 		textArea.setLineWrap(true);
 		textArea.setWrapStyleWord(true);
                 
-                JScrollPane textScroll = new JScrollPane(textArea);
-                textScroll.setBounds(24, 53, 718, 60);
-		textScroll.setBorder(BorderFactory.createCompoundBorder(border,
+        JScrollPane textScroll = new JScrollPane(textArea);
+        textScroll.setBounds(24, 53, 718, 60);
+        textScroll.setBorder(null);
+		textArea.setBorder(BorderFactory.createCompoundBorder(border,
 				BorderFactory.createEmptyBorder(5, 5, 5, 5)));
                 
 		problemPanel.add(textScroll);

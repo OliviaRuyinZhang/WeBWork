@@ -211,7 +211,7 @@ public class StudentListingGUI extends JFrame{
 				
 				// Get the student's submission details for this assignment
 				String studentID = ExtractData.getStudentID(email);
-				HashMap<String, String> submissionDetails = ExtractData.getAssignmentSubmissionDetails(fileName.substring(fileName.length() - 5, fileName.length() - 4), studentID);
+				HashMap<String, String> submissionDetails = ExtractData.getAssignmentSubmissionDetails(fileName, studentID);
 				
 				// If the student has a submission record, display the button for them to see the results
 				if (!submissionDetails.isEmpty()) {
@@ -226,7 +226,7 @@ public class StudentListingGUI extends JFrame{
 							//Creates a StudentSubmissionGetails GUI
 							EventQueue.invokeLater(new Runnable() {
 								public void run() {
-									StudentSubmissionDetailsGUI frame =  new StudentSubmissionDetailsGUI(fileName.substring(fileName.length() - 5, fileName.length() - 4), submissionDetails);
+									StudentSubmissionDetailsGUI frame =  new StudentSubmissionDetailsGUI(fileName.substring(fileName.indexOf("t") + 1, fileName.indexOf(".")), submissionDetails);
 									frame.setVisible(true);
 									frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);									
 								}
