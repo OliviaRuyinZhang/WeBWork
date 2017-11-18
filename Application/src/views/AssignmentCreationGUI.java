@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import javax.swing.JRadioButton;
 import java.awt.Dimension;
+import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 
 /**
@@ -138,14 +139,19 @@ public class AssignmentCreationGUI extends JFrame {
 		lblOptions.setSize(lblOptions.getPreferredSize());
 		problemPanel.add(lblOptions);
 
+                
 		JTextArea textArea = new JTextArea();
 		textArea.setFont(new Font("Segoe UI", Font.PLAIN, 15));
-		textArea.setBorder(BorderFactory.createCompoundBorder(border,
-				BorderFactory.createEmptyBorder(5, 5, 5, 5)));
 		textArea.setBounds(24, 53, 718, 60);
 		textArea.setLineWrap(true);
 		textArea.setWrapStyleWord(true);
-		problemPanel.add(textArea);
+                
+                JScrollPane textScroll = new JScrollPane(textArea);
+                textScroll.setBounds(24, 53, 718, 60);
+		textScroll.setBorder(BorderFactory.createCompoundBorder(border,
+				BorderFactory.createEmptyBorder(5, 5, 5, 5)));
+                
+		problemPanel.add(textScroll);
 
 		txtOptionA = new JTextField(); 
 		txtOptionA.setFont(new Font("Segoe UI", Font.PLAIN, 15));
