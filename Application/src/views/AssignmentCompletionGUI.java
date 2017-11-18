@@ -198,13 +198,20 @@ public class AssignmentCompletionGUI extends JFrame implements ActionListener {
 		}
 		// add titles and set initial value
 		infoTitle.add("Average Mark");
-		answersInfo.put("Average Mark", "0");
 		infoTitle.add("Number of Tries");
-		answersInfo.put("Number of Tries", "0");
 		infoTitle.add("Time (in seconds)");
-		answersInfo.put("Time (in seconds)", "0");
 		infoTitle.add("Final Mark");
-		answersInfo.put("Final Mark", "0");
+		if(getPreviousSubmissionStatus(fileName, studentNo)){
+			for(int i = 0; i < previousSubmission.size(); i++) {
+				answersInfo.put(infoTitle.get(i), previousSubmission.get(i));
+			}
+		}else {
+			answersInfo.put("Average Mark", "0");
+			answersInfo.put("Number of Tries", "0");
+			answersInfo.put("Time (in seconds)", "0");
+			answersInfo.put("Final Mark", "0");
+		}
+		
 	}
 
 	public void storeAssignmentAnswers(int questionNo, String answer) {
@@ -330,7 +337,8 @@ public class AssignmentCompletionGUI extends JFrame implements ActionListener {
 		return count;
 
 	}
-
+	
+	// update answers only but reset everything else back to 0
 	public void updateCsvFile() {
 		try {
 			String file = fileName.substring(0, fileName.length() - 4) + "Submission.csv";
@@ -480,8 +488,9 @@ public class AssignmentCompletionGUI extends JFrame implements ActionListener {
 					JOptionPane.showMessageDialog(AssignmentCompletionGUI.this, "You need to answer questions to submit!");
 				} else {
 					averageGrade = (averageGrade + currentSubmissionGrade) / numOfTries;
-
-					answersInfo.put("Final Mark", Double.toString(currentSubmissionGrade));
+					if(currentSubmissionGrade > Double.parseDouble(answersInfo.get("Final Mark"))) {
+						answersInfo.put("Final Mark", Double.toString(currentSubmissionGrade));
+					}	
 					answersInfo.put("Number of Tries", Integer.toString(numOfTries));
 					answersInfo.put("Average Mark", Double.toString(averageGrade));
 					answersInfo.put("Time (in seconds)", Long.toString(totalTimeTaken + (timeElapsed.toMillis() / 1000)));
