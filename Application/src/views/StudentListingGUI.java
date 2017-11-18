@@ -222,7 +222,7 @@ public class StudentListingGUI extends JFrame{
 							//Creates a StudentSubmissionGetails GUI
 							EventQueue.invokeLater(new Runnable() {
 								public void run() {
-									StudentSubmissionDetailsGUI frame =  new StudentSubmissionDetailsGUI(fileName.substring(fileName.length() - 5, fileName.length() - 4), submissionDetails);
+									StudentSubmissionDetailsGUI frame =  new StudentSubmissionDetailsGUI(fileName.substring(fileName.indexOf("t") + 1, fileName.indexOf(".")), submissionDetails);
 									frame.setVisible(true);
 									frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);									
 								}
