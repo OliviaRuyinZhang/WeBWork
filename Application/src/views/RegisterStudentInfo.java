@@ -43,35 +43,48 @@ public class RegisterStudentInfo extends JFrame {
 	private String email;
 	private String password;
 
+	/**
+	 * @param isInstructor
+	 *            true if it's a instructor, false otherwise
+	 * @param email
+	 *            user's email address
+	 * @param password
+	 *            user's input password
+	 */
 	public RegisterStudentInfo(boolean isInstructor, String email, String password) {
-		
+
 		this.isInstructor = isInstructor;
 		this.email = email;
 		this.password = password;
-		
+
+		// set up the frame
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(300, 250);
+		// set up the panel
 		contentPane = new JPanel();
 		contentPane.setBackground(Color.WHITE);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		setLocationRelativeTo(null);
-		
+
 		Border border = BorderFactory.createLineBorder(Color.decode("#7A7A7A"), 2);
 
+		// set title
 		JLabel title = new JLabel("Personal Information");
 		title.setFont(new Font("Segoe UI", Font.BOLD, 14));
 		title.getPreferredSize();
 		title.setBounds(60, 30, 160, 25);
 		contentPane.add(title);
 
+		// set label as "first name"
 		JLabel firstName = new JLabel("First Name");
 		firstName.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		firstName.setBounds(10, 70, 80, 25);
 		contentPane.add(firstName);
 
+		// set the input text box for the label "first name"
 		firstNameField = new JTextField();
 		firstNameField.setBounds(100, 70, 160, 25);
 		contentPane.add(firstNameField);
@@ -79,6 +92,9 @@ public class RegisterStudentInfo extends JFrame {
 		firstNameField.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		firstNameField
 				.setBorder(BorderFactory.createCompoundBorder(border, BorderFactory.createEmptyBorder(5, 5, 5, 5)));
+
+		// the Jlabel "first name" will change color if the user input invalid content
+
 		firstNameField.getDocument().addDocumentListener(new DocumentListener() {
 			@Override
 			public void removeUpdate(DocumentEvent e) {
@@ -96,11 +112,13 @@ public class RegisterStudentInfo extends JFrame {
 
 		});
 
+		// set the second label as "last name"
 		JLabel lastName = new JLabel("Last Name");
 		lastName.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		lastName.setBounds(10, 100, 80, 25);
 		contentPane.add(lastName);
 
+		// set up the text box for label "last name"
 		lastNameField = new JTextField();
 		lastNameField.setBounds(100, 100, 160, 25);
 		contentPane.add(lastNameField);
@@ -109,6 +127,8 @@ public class RegisterStudentInfo extends JFrame {
 		lastNameField
 				.setBorder(BorderFactory.createCompoundBorder(border, BorderFactory.createEmptyBorder(5, 5, 5, 5)));
 
+		// the Jlabel "last name" will change color if the user input an invalid content
+		// i.e. the input type is number
 		lastNameField.getDocument().addDocumentListener(new DocumentListener() {
 			@Override
 			public void removeUpdate(DocumentEvent e) {
@@ -125,11 +145,14 @@ public class RegisterStudentInfo extends JFrame {
 			} // Not needed for plain-text fields
 
 		});
+
+		// set the third label as "Student ID"
 		studentID = new JLabel("StudentID");
 		studentID.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		studentID.setBounds(10, 130, 100, 25);
 		contentPane.add(studentID);
 
+		// set up the input text field for "student ID"
 		studentIDField = new JTextField();
 		studentIDField.setColumns(10);
 		studentIDField.setBounds(100, 130, 160, 25);
@@ -137,6 +160,8 @@ public class RegisterStudentInfo extends JFrame {
 				.setBorder(BorderFactory.createCompoundBorder(border, BorderFactory.createEmptyBorder(5, 5, 5, 5)));
 		contentPane.add(studentIDField);
 
+		// the Jlabel "StudentID" will change color if the user input an invalid content
+		// the color will change it back if the user input a valid content again
 		studentIDField.getDocument().addDocumentListener(new DocumentListener() {
 			@Override
 			public void removeUpdate(DocumentEvent e) {
@@ -145,7 +170,7 @@ public class RegisterStudentInfo extends JFrame {
 
 			@Override
 			public void insertUpdate(DocumentEvent e) {
-	     			validateStudentIDInput();
+				validateStudentIDInput();
 			}
 
 			@Override
@@ -154,15 +179,20 @@ public class RegisterStudentInfo extends JFrame {
 
 		});
 
+		// set up the close button
 		JButton closeButton = new JButton("Close");
+		// when the user click close, it will only close the "personal information"
+		// frame
 		closeButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dispose();
 			}
 		});
+		// add close button
 		closeButton.setBounds(10, 190, 80, 25);
 		contentPane.add(closeButton);
 
+		// set up the submit button
 		JButton registerButton = new JButton("Submit");
 		registerButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -174,77 +204,100 @@ public class RegisterStudentInfo extends JFrame {
 		setVisible(true);
 
 	}
-	
+
+	/**
+	 * validate the user's registration information and create an account and a profile for the user if the user enter 
+	 * valid first name, last name and passcode. Error message will show up on a popup window if registration failed
+	 */
 	public void registerValidation() {
+		// check whether the type of the user's input information is valid
 		boolean typeCheck = checkNameInput(firstNameField.getText()) && checkNameInput(lastNameField.getText())
 				&& checkIDInput(studentIDField.getText());
+		// the variable validRegister will be set to true when we successfully create an account for user
 		boolean validRegister = false;
+		// if the type of input information is valid, create an account for student 
 		if (typeCheck) {
+			// create an account
 			validRegister = Authenticator.register(isInstructor, email, password, firstNameField.getText(),
 					lastNameField.getText(), studentIDField.getText());
+			// if the account is successfully created, notify user
 			if (validRegister) {
 				int input = JOptionPane.showOptionDialog(null, "Registration successful!", "Confirmation",
 						JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, null, null);
+				// close the "personal information" frame for user when user click the "OK" button on the popup window
 				if (input == JOptionPane.OK_OPTION) {
 					dispose();
 				}
 			} else {
+				// error message if we could not create a account for user or the account already exist 
 				if (typeCheck) {
 					JOptionPane.showMessageDialog(RegisterStudentInfo.this, "Something went wrong!");
 				}
 			}
 		} else {
-			if ((checkNameInput(firstNameField.getText()) == false
-					|| checkNameInput(lastNameField.getText()) == false) && checkIDInput(studentIDField.getText()) == false) {
-				int input = JOptionPane.showOptionDialog(null, "Name has to be in letters,\n StudentID has to be integers!", "Error",
+			// when the input first/last name and the student id are not valid, show error message
+			if ((checkNameInput(firstNameField.getText()) == false || checkNameInput(lastNameField.getText()) == false)
+					&& checkIDInput(studentIDField.getText()) == false) {
+				int input = JOptionPane.showOptionDialog(null,
+						"Name has to be in letters,\n StudentID has to be integers!", "Error",
 						JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, null, null);
+				// clear all input text for user when the user click "OK" button on the popup error window
 				if (input == JOptionPane.OK_OPTION) {
 					clearTextFields();
 				}
 			} else {
+				// when the input student id is invalid, show error message
 				if (checkIDInput(studentIDField.getText()) == false) {
-					int input = JOptionPane.showOptionDialog(null, "StudentID has to be integer numbers!",
-							"Error", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, null,
-							null);
+					int input = JOptionPane.showOptionDialog(null, "StudentID has to be integer numbers!", "Error",
+							JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, null, null);
 					if (input == JOptionPane.OK_OPTION) {
+						// clear all input text for user when the user click "OK" button on the popup error window
 						clearTextFields();
 					}
 				} else {
-						int input = JOptionPane.showOptionDialog(null, "Name has to be in letters!", "Error",
-								JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, null, null);
-						if (input == JOptionPane.OK_OPTION) {
-							clearTextFields();
-						}
+					// when the input first/last name is invalid, show error message
+					int input = JOptionPane.showOptionDialog(null, "Name has to be in letters!", "Error",
+							JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, null, null);
+					if (input == JOptionPane.OK_OPTION) {
+						clearTextFields();
 					}
-
 				}
+
 			}
-		
+		}
 
 	}
 
+	/**
+	 * change the student id label to red with a star at the corner when the user input a invalid student id
+	 * change it back to the original when the input is valid again
+	 */
 	public void validateStudentIDInput() {
 		String text = studentIDField.getText();
-		Pattern r = Pattern.compile(pattern);
-		Matcher m = r.matcher(text);
+		boolean valid = checkIDInput(text);
 
-		if (m.matches()) {
+		if (valid) {
 			// studentID.setForeground(getBackground());
 			studentID.setText("StudentID");
 			studentID.setForeground(Color.BLACK);
 		} else {
+			// set to red 
 			studentID.setForeground(Color.RED);
 			studentID.setText("StudentID*");
 		}
 	}
 
+	/**
+	 * change the name label to red with a star at the corner when the user input a invalid name
+	 * change it back to the original when the input is valid again
+	 * @param label
+	 * @param name
+	 * @param labelText
+	 */
 	public void validateNameInput(JLabel label, JTextField name, String labelText) {
-		String namePattern = "^[a-zA-Z]+$";
 		String text = name.getText();
-		Pattern r = Pattern.compile(namePattern);
-		Matcher m = r.matcher(text);
-
-		if (m.matches()) {
+		boolean valid = checkNameInput(text);
+		if (valid) {
 			// studentID.setForeground(getBackground());
 			label.setText(labelText);
 			label.setForeground(Color.BLACK);
@@ -253,8 +306,14 @@ public class RegisterStudentInfo extends JFrame {
 			label.setText(labelText + "*");
 		}
 	}
-
+	
+	
+	/**
+	 * @param name
+	 * @return true when the string is alphabetic string, false otherwise
+	 */
 	public boolean checkNameInput(String name) {
+		// set up regex pattern
 		String namePattern = "^[a-zA-Z]+$";
 		Pattern r = Pattern.compile(namePattern);
 		Matcher m = r.matcher(name);
@@ -265,15 +324,20 @@ public class RegisterStudentInfo extends JFrame {
 			return false;
 		}
 	}
+
 	
-	public void clearTextFields(){
+	public void clearTextFields() {
 		firstNameField.setText("");
 		lastNameField.setText("");
 		studentIDField.setText("");
 	}
 
+	/**
+	 * @param studentID
+	 * @return true when the input studentID is a numeric string, false otherwise
+	 */
 	public boolean checkIDInput(String studentID) {
-
+		// set up regex pattern
 		Pattern r = Pattern.compile(pattern);
 		Matcher m = r.matcher(studentID);
 		if (m.matches()) {
