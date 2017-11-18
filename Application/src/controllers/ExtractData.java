@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -13,7 +12,6 @@ public class ExtractData {
 
 	/**
 	 * Returns ArrayList of ArrayList of Assignment Question data.
-	 * 
 	 * @param file
 	 * @return
 	 */
@@ -55,11 +53,8 @@ public class ExtractData {
 	/**
 	 * Returns a String array of the assignment information, located in it's
 	 * respective assignment csv file.
-	 * 
 	 * [(Un)released/Date of creation/Due-date]
-	 * 
-	 * @param fileName:
-	 *            String name of the assignment's csv file.
+	 * @param fileName String name of the assignment's csv file.
 	 */
 	public static String[] getAssignmentInfo(String fileName) {
 
@@ -81,14 +76,12 @@ public class ExtractData {
 		return info;
 	}
 
+	
 	/**
-	 * Searches and returns the user's first name based on the email
-	 * 
-	 * @param email:
-	 *            String name of email address
+	 * Returns an ArrayList<String> of all registered instructors.
+	 * @return ArrayList of Strings
 	 */
-
-	public static ArrayList<String> getInstructorEmails(String email) {
+	public static ArrayList<String> getInstructorEmails() {
 		ArrayList<String> instEmails = new ArrayList<String>();
 		try {
 
@@ -101,7 +94,6 @@ public class ExtractData {
 
 				String[] userInfo = line.split(","); // [isInstructor, email, password, firstName, lastName, studentID]
 				// If the registered account is an instructor.
-				System.out.println(Boolean.valueOf(userInfo[0]));
 				if(Boolean.valueOf(userInfo[0])) {
 					instEmails.add(userInfo[1]);
 				}
@@ -191,7 +183,6 @@ public class ExtractData {
     /**
      * Returns a HashMap where keys are the question ids and the values are
      * the submitted answers.
-     * 
      * @return HashMap of Strings mapped to Strings
      */
     public static HashMap<String,String> getSubmittedAnswers(String fileName, String studentId){
@@ -229,9 +220,7 @@ public class ExtractData {
 	
 	/**
 	 * Searches and returns the student's studentID based on the email
-	 * 
-	 * @param email:
-	 *            String name of email address
+	 * @param email String name of email address
 	 */
 	public static String getStudentID(String email) {
 		String studentID = "";

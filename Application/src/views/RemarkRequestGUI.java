@@ -2,7 +2,6 @@ package views;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -11,7 +10,16 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Properties;
+
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -26,29 +34,12 @@ import javax.swing.border.Border;
 
 import controllers.ExtractData;
 
-import java.util.*;
-import javax.mail.*;
-import javax.mail.internet.*;
+
 
 /*
  * Remark Request class
  */
 public class RemarkRequestGUI extends JFrame{
-
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					String email = "julian.b@live.ca";
-					File file = new File("Assignment1.csv");
-					RemarkRequestGUI frame = new RemarkRequestGUI(file, email);
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 	
 	private File file;
 	private String studentEmail;
@@ -78,7 +69,7 @@ public class RemarkRequestGUI extends JFrame{
 	    gbc.gridx = 0;
 	    gbc.gridy = 0;
 	    
-		JLabel lblRemark = new JLabel("<html>Please explain why you <br>would like a remark request:");
+		JLabel lblRemark = new JLabel("<html>Please explain the reason<br>for your remark request:");
 		lblRemark.setFont(new Font("Segoe UI Light", Font.PLAIN, 25));
 		contentPane.add(lblRemark, gbc);
 		
@@ -129,6 +120,7 @@ public class RemarkRequestGUI extends JFrame{
 				// Send email to instructors.
 				sendRemarkRequest();
 				JOptionPane.showMessageDialog(RemarkRequestGUI.this, "Your remark request has been sent.");
+				dispose();
 			}	
 		});
 		buttonPanel.add(btnSubmit,gbc);
@@ -184,7 +176,7 @@ public class RemarkRequestGUI extends JFrame{
 		ArrayList<String> questions = qData.get(1);
 		ArrayList<String> solutions = qData.get(2);
 		HashMap<String,String> submission = ExtractData.getSubmittedAnswers(fileName, studentId);
-		String message = "Reason for remark: " + getRemarkReasonString() + "\n\n"
+		String message = "Reason for remark:\n\n" + getRemarkReasonString() + "\n\n"
 				+ "============== Assignment Details ================"
 				+ "\n\n";
 		
@@ -243,11 +235,7 @@ public class RemarkRequestGUI extends JFrame{
 				message.setRecipients(Message.RecipientType.TO,
 						InternetAddress.parse(email));
 				message.setSubject(formatSubject());
-
 				message.setText(formatEmail());
-
-				System.out.println(email.toString());
-
 				Transport.send(message);
 			}
 			

@@ -51,7 +51,6 @@ public class StudentListingGUI extends JFrame{
 	private List<File> assignments;
 	private boolean beforeDeadline;
 
-
 	public StudentListingGUI(String email) {
 		setResizable(true); // Temporarily until we add a scroll bar.
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -244,8 +243,15 @@ public class StudentListingGUI extends JFrame{
 
 						@Override
 						public void actionPerformed(ActionEvent arg0) {
-							//Open remark request window.
-							//System.out.println(ExtractData.getInstructorEmails());
+							
+							//Creates a RemarkRequest GUI
+							EventQueue.invokeLater(new Runnable() {
+								public void run() {
+									RemarkRequestGUI frame =  new RemarkRequestGUI(file, email);
+									frame.setVisible(true);
+									frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);									
+								}
+							});
 						}
 						
 					});
