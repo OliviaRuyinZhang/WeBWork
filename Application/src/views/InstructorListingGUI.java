@@ -410,6 +410,16 @@ public class InstructorListingGUI extends JFrame{
 		lblDeadline.setBounds(50, 22, 350, 70);
 		lblDeadline.setBackground(Color.BLACK);
 		panel.add(lblDeadline);
+		
+		JButton exportButton = new JButton("Export Marks");
+		exportButton.setHorizontalTextPosition(SwingConstants.CENTER);
+		exportButton.setBounds(640, 26, 120, 35);
+		exportButton.setBackground(new Color(51, 204, 153));
+		exportButton.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+		fileSaveAs changeSatus = new fileSaveAs(exportButton,fileName);
+		exportButton.addActionListener(changeSatus);
+		panel.add(exportButton);
+		
 	}
 	
 
