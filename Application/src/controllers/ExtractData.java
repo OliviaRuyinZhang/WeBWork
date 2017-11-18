@@ -110,17 +110,17 @@ public class ExtractData {
     }
     
     /**
-     * Given an assignment number and student ID, returns a hashmap containing the final mark,
+     * Given an assignment file name and student ID, returns a HashMap containing the final mark,
      * time spent, number of tries, and average mark for that student's submission.
-     * @param assignmentNumber The assignment number
+     * @param fileName The assignment file name
      * @param studentID The student's unique ID
      * @return a HashMap of Strings mapped to Strings
      */
-    public static HashMap<String, String> getAssignmentSubmissionDetails(String assignmentNumber, String studentID) {
+    public static HashMap<String, String> getAssignmentSubmissionDetails(String fileName, String studentID) {
     	HashMap<String, String> submissionDetails = new HashMap<String, String>();
  
     	try {
-			FileReader fr = new FileReader("Assignment" + assignmentNumber + "Submission.csv");
+			FileReader fr = new FileReader(fileName.substring(0, fileName.indexOf(".")) + "Submission.csv");
 			@SuppressWarnings("resource")
 			BufferedReader br = new BufferedReader(fr);
 			String line = "";
