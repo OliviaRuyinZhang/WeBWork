@@ -35,7 +35,6 @@ import javax.swing.border.Border;
 import controllers.ExtractData;
 
 
-
 /*
  * Remark Request class
  */
