@@ -12,83 +12,86 @@ import java.util.HashMap;
 public class ExtractData {
 
 	/**
-     * Returns ArrayList of ArrayList of Assignment Question data.
-     * @param file
-     * @return
-     */
-    public static ArrayList<ArrayList<String>> getAssignmentQData(File file) {
-        
-        ArrayList<String> orderedQInfo1 = new ArrayList<>();
-        ArrayList<String> orderedQInfo2 = new ArrayList<>();
-        ArrayList<String> orderedQInfo3 = new ArrayList<>();
-        ArrayList<String>orderedQInfo4 = new ArrayList<>();
-        ArrayList<ArrayList<String>> data = new ArrayList<>();
-        data.add(orderedQInfo1);
-        data.add(orderedQInfo2);
-        data.add(orderedQInfo3);
-        data.add(orderedQInfo4);
-        String line;
-        String[] placeHolder = new String[4];
-        
-        try {
-            FileReader fr = new FileReader(file);
-            BufferedReader br = new BufferedReader(fr);
-            br.readLine();
-            line = br.readLine();
-            while(line != null) {
-                placeHolder = line.split(",");
-                data.get(0).add(placeHolder[0]);
-                data.get(1).add(placeHolder[1]);
-                data.get(2).add(placeHolder[2]);
-                data.get(3).add(placeHolder[3]);
-                line = br.readLine();
-            }
-            br.close();
-            fr.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-                return data;
-    }
-    
-    /**
-     * Returns a String array of the assignment
-     * information, located in it's respective
-     * assignment csv file.
-     * 
-     * [(Un)released/Date of creation/Due-date]
-     * 
-     * @param fileName: String name of the assignment's csv file.
-     */
-    public static String[] getAssignmentInfo(String fileName) {
-    	
-    	String[] info = new String[3];
-    	
-    	try {
-    		FileReader fr = new FileReader(fileName);
-    		BufferedReader br = new BufferedReader(fr);
-    		// Check first cell for unreleased
-    		String line = br.readLine();
-    		info = line.split(",");
-    		br.close();
-    		fr.close();
-    		
-    	} catch (IOException e) {
-    		e.printStackTrace();
-        }
-    	
-    	return info;
-    }
-    
-    /**
-     * Returns ArrayList of all registered Instructors email
-     * addresses.
-     * @return ArrayList of Strings
-     */
-    public static ArrayList<String> getInstructorEmails(){
-    	ArrayList<String> instEmails = new ArrayList<String>();
+	 * Returns ArrayList of ArrayList of Assignment Question data.
+	 * 
+	 * @param file
+	 * @return
+	 */
+	public static ArrayList<ArrayList<String>> getAssignmentQData(File file) {
+
+		ArrayList<String> orderedQInfo1 = new ArrayList<>();
+		ArrayList<String> orderedQInfo2 = new ArrayList<>();
+		ArrayList<String> orderedQInfo3 = new ArrayList<>();
+		ArrayList<String> orderedQInfo4 = new ArrayList<>();
+		ArrayList<ArrayList<String>> data = new ArrayList<>();
+		data.add(orderedQInfo1);
+		data.add(orderedQInfo2);
+		data.add(orderedQInfo3);
+		data.add(orderedQInfo4);
+		String line;
+		String[] placeHolder = new String[4];
+
 		try {
-			
+			FileReader fr = new FileReader(file);
+			BufferedReader br = new BufferedReader(fr);
+			br.readLine();
+			line = br.readLine();
+			while (line != null) {
+				placeHolder = line.split(",");
+				data.get(0).add(placeHolder[0]);
+				data.get(1).add(placeHolder[1]);
+				data.get(2).add(placeHolder[2]);
+				data.get(3).add(placeHolder[3]);
+				line = br.readLine();
+			}
+			br.close();
+			fr.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return data;
+	}
+
+	/**
+	 * Returns a String array of the assignment information, located in it's
+	 * respective assignment csv file.
+	 * 
+	 * [(Un)released/Date of creation/Due-date]
+	 * 
+	 * @param fileName:
+	 *            String name of the assignment's csv file.
+	 */
+	public static String[] getAssignmentInfo(String fileName) {
+
+		String[] info = new String[3];
+
+		try {
+			FileReader fr = new FileReader(fileName);
+			BufferedReader br = new BufferedReader(fr);
+			// Check first cell for unreleased
+			String line = br.readLine();
+			info = line.split(",");
+			br.close();
+			fr.close();
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return info;
+	}
+
+	/**
+	 * Searches and returns the user's first name based on the email
+	 * 
+	 * @param email:
+	 *            String name of email address
+	 */
+
+	public static ArrayList<String> getInstructorEmails(String email) {
+		ArrayList<String> instEmails = new ArrayList<String>();
+		try {
+
 			FileReader fr = new FileReader("users.csv");
 			@SuppressWarnings("resource")
 			BufferedReader br = new BufferedReader(fr);
@@ -111,7 +114,8 @@ public class ExtractData {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-	return instEmails;
+		
+		return instEmails;
     }
     
     
@@ -140,7 +144,9 @@ public class ExtractData {
     		} catch (IOException e) {
     			e.printStackTrace();
     		}
+
 		return firstName;
+
     }
     
     /**
@@ -155,29 +161,30 @@ public class ExtractData {
  
     	try {
 			FileReader fr = new FileReader(fileName.substring(0, fileName.indexOf(".")) + "Submission.csv");
+
 			@SuppressWarnings("resource")
 			BufferedReader br = new BufferedReader(fr);
 			String line = "";
 			// Reads every line of the file.
-			while((line = br.readLine()) != null) {
-				String[] user_info = line.split(","); // [studentID, question 1 answer, ... question n answer, averageMark, timeSpent, finalMark]
+			while ((line = br.readLine()) != null) {
+				String[] user_info = line.split(","); // [studentID, question 1 answer, ... question n answer,
+														// averageMark, timeSpent, finalMark]
 				// If the studentID exists in the file.
-				if(user_info[0].equals(studentID)) {
+				if (user_info[0].equals(studentID)) {
 					submissionDetails.put("Final Mark", user_info[user_info.length - 1]);
 					submissionDetails.put("Time Spent", user_info[user_info.length - 2]);
 					submissionDetails.put("Number of Tries", user_info[user_info.length - 3]);
 					submissionDetails.put("Average Mark", user_info[user_info.length - 4]);
 				}
 			}
-			
+
 			br.close();
 			fr.close();
 		} catch (FileNotFoundException fnfe) {
 			return submissionDetails; // There aren't any submissions at all for this assignment
 		} catch (IOException e) {
 			e.printStackTrace();
-		}
-    	
+		}    	
     	return submissionDetails;
     }
     
@@ -219,26 +226,31 @@ public class ExtractData {
     	
     	return answers;
     }
-    
-    
-    public static String getStudentID(String email){ 		
+	
+	/**
+	 * Searches and returns the student's studentID based on the email
+	 * 
+	 * @param email:
+	 *            String name of email address
+	 */
+	public static String getStudentID(String email) {
 		String studentID = "";
 		try {
-			
+
 			FileReader fr = new FileReader("users.csv");
 			@SuppressWarnings("resource")
 			BufferedReader br = new BufferedReader(fr);
 			String line = "";
 			// Reads every line of the file.
-			while((line = br.readLine()) != null) {
+			while ((line = br.readLine()) != null) {
 
 				String[] user_info = line.split(","); // [isInstructor, email, password, firstName, lastName, studentID]
 				// If the email exists in the file.
-				if(user_info[1].equals(email)) {
+				if (user_info[1].equals(email)) {
 					studentID = user_info[5];
 				}
 			}
-			
+
 			br.close();
 			fr.close();
 		} catch (FileNotFoundException fnfe) {
@@ -246,7 +258,7 @@ public class ExtractData {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return studentID;
-}
-}
 
+		return studentID;
+	}
+}
