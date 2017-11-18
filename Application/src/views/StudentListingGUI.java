@@ -125,7 +125,7 @@ public class StudentListingGUI extends JFrame{
 			// Check due date
 			String[] dueDate = info[2].split("/");
 			Calendar calendar = Calendar.getInstance();
-		    calendar.set(Integer.parseInt(dueDate[2]), Integer.parseInt(dueDate[1]), Integer.parseInt(dueDate[0])); 
+		    calendar.set(Integer.parseInt(dueDate[2]), Integer.parseInt(dueDate[0]) - 1, Integer.parseInt(dueDate[1])); 
 		    Date due = calendar.getTime();
 		    beforeDeadline = (due.compareTo(today) > 0);
 		    
@@ -185,7 +185,7 @@ public class StudentListingGUI extends JFrame{
 			// Check due date
 			String[] dueDate = info[2].split("/");
 			Calendar calendar = Calendar.getInstance();
-		    calendar.set(Integer.parseInt(dueDate[2]), Integer.parseInt(dueDate[1]), Integer.parseInt(dueDate[0])); 
+		    calendar.set(Integer.parseInt(dueDate[2]), Integer.parseInt(dueDate[0]) - 1, Integer.parseInt(dueDate[1])); 
 		    Date due = calendar.getTime();
 		    
 		    // Make a JPanel for every closed assignment
