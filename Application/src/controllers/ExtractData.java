@@ -80,6 +80,40 @@ public class ExtractData {
     	return info;
     }
     
+    /**
+     * Returns ArrayList of all registered Instructors email
+     * addresses.
+     * @return ArrayList of Strings
+     */
+    public static ArrayList<String> getInstructorEmails(){
+    	ArrayList<String> instEmails = new ArrayList<String>();
+		try {
+			
+			FileReader fr = new FileReader("users.csv");
+			@SuppressWarnings("resource")
+			BufferedReader br = new BufferedReader(fr);
+			String line = "";
+			// Reads every line of the file.
+			while((line = br.readLine()) != null) {
+
+				String[] userInfo = line.split(","); // [isInstructor, email, password, firstName, lastName, studentID]
+				// If the registered account is an instructor.
+				System.out.println(Boolean.valueOf(userInfo[0]));
+				if(Boolean.valueOf(userInfo[0])) {
+					instEmails.add(userInfo[1]);
+				}
+			}
+			
+			br.close();
+			fr.close();
+		} catch (FileNotFoundException fnfe) {
+			fnfe.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	return instEmails;
+    }
+    
     
     public static String getFirstName(String email){ 		
     		String firstName = "";
@@ -147,6 +181,45 @@ public class ExtractData {
     	return submissionDetails;
     }
     
+    /**
+     * Returns a HashMap where keys are the question ids and the values are
+     * the submitted answers.
+     * 
+     * @return HashMap of Strings mapped to Strings
+     */
+    public static HashMap<String,String> getSubmittedAnswers(String fileName, String studentId){
+    	HashMap<String,String> answers = new HashMap<String,String>();
+    	
+    	try {
+			FileReader fr = new FileReader(fileName.substring(0, fileName.indexOf(".")) + "Submission.csv");
+			@SuppressWarnings("resource")
+			BufferedReader br = new BufferedReader(fr);
+			String line = "";
+			// Reads every line of the file.
+			while((line = br.readLine()) != null) {
+				String[] userInfo = line.split(","); // [studentID, question 1 answer, ... question n answer, averageMark, timeSpent, finalMark]
+				// If the studentID exists in the file.
+				if(userInfo[0].equals(studentId)) {
+					int i = 1;
+					while(i < userInfo.length - 4) {
+						answers.put(String.valueOf(i), userInfo[i]);
+						i++;
+					}
+					break;
+				}
+			}
+			
+			br.close();
+			fr.close();
+		} catch (FileNotFoundException fnfe) {
+			return answers; // There aren't any submissions at all for this assignment
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+    	
+    	return answers;
+    }
+    
     
     public static String getStudentID(String email){ 		
 		String studentID = "";
@@ -173,8 +246,7 @@ public class ExtractData {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		//System.out.println(firstName);
-	return studentID;
+		return studentID;
 }
 }
 

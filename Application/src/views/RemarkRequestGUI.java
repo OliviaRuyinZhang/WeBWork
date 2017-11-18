@@ -19,6 +19,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -30,8 +31,6 @@ import controllers.ExtractData;
 import java.util.*;
 import javax.mail.*;
 import javax.mail.internet.*;
-import javax.activation.*;
-
 
 public class RemarkRequestGUI extends JFrame{
 
@@ -39,7 +38,9 @@ public class RemarkRequestGUI extends JFrame{
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					RemarkRequestGUI frame = new RemarkRequestGUI();
+					String email = "julian.b@live.ca";
+					File file = new File("Assignment1.csv");
+					RemarkRequestGUI frame = new RemarkRequestGUI(file, email);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -50,12 +51,14 @@ public class RemarkRequestGUI extends JFrame{
 	
 	private File file;
 	private String studentEmail;
+	private ArrayList<String> instructorEmails;
 	private JPanel contentPane;
 	private JTextArea txtRemarkReason;
 	
 	public RemarkRequestGUI(File file, String studentEmail) {
 		this.file = file;
 		this.studentEmail = studentEmail;
+		this.instructorEmails = ExtractData.getInstructorEmails();
 		
 		setResizable(true); // Temporarily until we add a scroll bar.
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -83,7 +86,7 @@ public class RemarkRequestGUI extends JFrame{
 		txtRemarkReason = new JTextArea();
 		txtRemarkReason.setFont(new Font("Segoe/ UI", Font.PLAIN, 15));
 		txtRemarkReason.setLineWrap(true);
-		//txtRemarkReason.setWrapStyleWord(true);
+		txtRemarkReason.setWrapStyleWord(true);
 		Border border = BorderFactory.createLineBorder(Color.BLACK);
 	    txtRemarkReason.setBorder(BorderFactory.createCompoundBorder(border,
 	            BorderFactory.createEmptyBorder(10, 10, 10, 10)));
@@ -123,7 +126,8 @@ public class RemarkRequestGUI extends JFrame{
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				// Send email to instructors.
-				sendRemarkRequest();
+				sendRemarkRequest(getStudentEmail());
+				JOptionPane.showMessageDialog(RemarkRequestGUI.this, "Your remark request has been sent.");
 			}	
 		});
 		buttonPanel.add(btnSubmit,gbc);
@@ -136,22 +140,82 @@ public class RemarkRequestGUI extends JFrame{
 		
 	}
 	
+	/**
+	 * Getter for the student's email address.
+	 * @return String student's email
+	 */
+	public String getStudentEmail() {
+		return this.studentEmail;
+	}	
+	
+	/**
+	 * Returns text in the TextArea txtRemarkReason.
+	 * @return String text
+	 */
 	private String getRemarkReasonString() {
 		return txtRemarkReason.getText().toString();
 	}
 	
-	private void formatEmail() {
+	/**
+	 * Returns the String representation of the subject header
+	 * of the email being sent.
+	 * @return String subject header
+	 */
+	private String formatSubject() {
 		String studentId = ExtractData.getStudentID(this.studentEmail);
+		String fileName = this.file.getName();
+		String subject = "Remark Request from student " +  studentId + " for " + 
+		fileName.substring(0, fileName.indexOf("."));
 		
-		ArrayList<ArrayList<String>> questions = ExtractData.getAssignmentQData(this.file);
-		HashMap<String,String> submission = ExtractData.getAssignmentSubmissionDetails(this.file.getName(), studentId);
-		StringBuilder sb = new StringBuilder();
+		return subject;
+	}
+	
+	/**
+	 * Returns a string representation of the message in the email
+	 * that will be sent.
+	 * @return String message
+	 */
+	private String formatEmail() {
+		String studentName = ExtractData.getFirstName(this.studentEmail);
+		String studentId = ExtractData.getStudentID(this.studentEmail);
+		String fileName = this.file.getName();
+		ArrayList<ArrayList<String>> qData = ExtractData.getAssignmentQData(this.file);
+		ArrayList<String> questions = qData.get(1);
+		ArrayList<String> solutions = qData.get(2);
+		HashMap<String,String> submission = ExtractData.getSubmittedAnswers(fileName, studentId);
+		String message = "Reason for remark: " + getRemarkReasonString() + "\n\n"
+				+ "============== Assignment Details ================"
+				+ "\n\n";
+		
+		
+		message += fileName.substring(0, fileName.indexOf(".")) + "\n\n"
+				+ "Student Number: " + studentId + "\n"
+						+ "Name: " + studentName + "\n\n";
+		
+		for(int i = 0; i < questions.size(); i++) {
+			message += questions.get(i) + "[Solution: " + solutions.get(i) + "] " + "----- answered: " + submission.get(String.valueOf(i + 1)) + "\n";
+			
+		}
+		
+		return message;
 		
 	}
 	
-	public void sendRemarkRequest() {
-		// Recipient's email ID needs to be mentioned.
-		final String to = "julian.b@live.ca";
+	/**
+	 * 
+	 * @param toEmail
+	 */
+	public void sendRemarkRequest(String toEmail) {
+		
+		/***************************************************************** 
+		 *  - Author(s) name (Individual or corporation)
+		 *	- Title: JavaMail API – Sending email via Gmail SMTP example
+		 *	- Date: 2017-11-18
+		 *	- Code version
+		 *	- Type (e.g. computer program, source code)
+		 *	- Web address or publisher (e.g. program publisher, URL) 
+		 ****************************************************************/
+		
 		
 		final String username = "webworkremarks@gmail.com";
 		final String password = "workremarks";
@@ -174,19 +238,19 @@ public class RemarkRequestGUI extends JFrame{
 
 			Message message = new MimeMessage(session);
 			message.setFrom(new InternetAddress(username));
-			message.setRecipients(Message.RecipientType.TO,
-				InternetAddress.parse(to));
-			message.setSubject("Remark Request for " + "" + "from " + "");
 			
-			message.setText(getRemarkReasonString() + "\n\n"
-					+ "============== Assignment Details ================"
-					+ "\n\n");
+			for(String email: this.instructorEmails) {
+				message.setRecipients(Message.RecipientType.TO,
+						InternetAddress.parse(email));
+				message.setSubject(formatSubject());
 
+				message.setText(formatEmail());
+
+				System.out.println(email.toString());
+
+				Transport.send(message);
+			}
 			
-			Transport.send(message);
-
-			System.out.println("Done");
-
 		} catch (MessagingException e) {
 			throw new RuntimeException(e);
 		}
