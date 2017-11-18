@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class ExtractData {
 
@@ -105,8 +106,45 @@ public class ExtractData {
     		} catch (IOException e) {
     			e.printStackTrace();
     		}
-    		//System.out.println(firstName);
 		return firstName;
+    }
+    
+    /**
+     * Given an assignment number and student ID, returns a hashmap containing the final mark,
+     * time spent, number of tries, and average mark for that student's submission.
+     * @param assignmentNumber The assignment number
+     * @param studentID The student's unique ID
+     * @return a HashMap of Strings mapped to Strings
+     */
+    public static HashMap<String, String> getAssignmentSubmissionDetails(String assignmentNumber, String studentID) {
+    	HashMap<String, String> submissionDetails = new HashMap<String, String>();
+ 
+    	try {
+			FileReader fr = new FileReader("Assignment" + assignmentNumber + "Submission.csv");
+			@SuppressWarnings("resource")
+			BufferedReader br = new BufferedReader(fr);
+			String line = "";
+			// Reads every line of the file.
+			while((line = br.readLine()) != null) {
+				String[] user_info = line.split(","); // [studentID, question 1 answer, ... question n answer, averageMark, timeSpent, finalMark]
+				// If the studentID exists in the file.
+				if(user_info[0].equals(studentID)) {
+					submissionDetails.put("Final Mark", user_info[user_info.length - 1]);
+					submissionDetails.put("Time Spent", user_info[user_info.length - 2]);
+					submissionDetails.put("Number of Tries", user_info[user_info.length - 3]);
+					submissionDetails.put("Average Mark", user_info[user_info.length - 4]);
+				}
+			}
+			
+			br.close();
+			fr.close();
+		} catch (FileNotFoundException fnfe) {
+			return submissionDetails; // There aren't any submissions at all for this assignment
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+    	
+    	return submissionDetails;
     }
     
     
