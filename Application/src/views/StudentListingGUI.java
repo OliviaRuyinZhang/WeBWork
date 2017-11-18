@@ -11,6 +11,8 @@ import java.awt.Font;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.FileReader;
 
 import java.io.BufferedReader;
@@ -20,6 +22,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -122,7 +125,7 @@ public class StudentListingGUI extends JFrame{
 			// Check due date
 			String[] dueDate = info[2].split("/");
 			Calendar calendar = Calendar.getInstance();
-		    calendar.set(Integer.parseInt(dueDate[2]), Integer.parseInt(dueDate[1]), Integer.parseInt(dueDate[0])); 
+		    calendar.set(Integer.parseInt(dueDate[2]), Integer.parseInt(dueDate[0]) - 1, Integer.parseInt(dueDate[1])); 
 		    Date due = calendar.getTime();
 		    beforeDeadline = (due.compareTo(today) > 0);
 		    
@@ -149,7 +152,7 @@ public class StudentListingGUI extends JFrame{
 				openButton.setBackground(new Color(51, 204, 153));
 				openButton.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 				openButton.addActionListener(new ActionListener() { 
-					  public void actionPerformed(ActionEvent e) { 
+					  public void actionPerformed(ActionEvent e) {
 						  	String studentNumber = ExtractData.getStudentID(email);
 						  	if(!studentNumber.isEmpty() && studentNumber != null) {
 						  		 new AssignmentCompletionGUI(fileName, studentNumber);
@@ -185,7 +188,7 @@ public class StudentListingGUI extends JFrame{
 			// Check due date
 			String[] dueDate = info[2].split("/");
 			Calendar calendar = Calendar.getInstance();
-		    calendar.set(Integer.parseInt(dueDate[2]), Integer.parseInt(dueDate[1]), Integer.parseInt(dueDate[0])); 
+		    calendar.set(Integer.parseInt(dueDate[2]), Integer.parseInt(dueDate[0]) - 1, Integer.parseInt(dueDate[1])); 
 		    Date due = calendar.getTime();
 		    
 		    // Make a JPanel for every closed assignment
@@ -204,6 +207,33 @@ public class StudentListingGUI extends JFrame{
 				lblDeadline.setBounds(50, 22, 350, 70);
 				lblDeadline.setBackground(Color.BLACK);
 				assignClosedPanel.add(lblDeadline);
+				
+				// Get the student's submission details for this assignment
+				String studentID = ExtractData.getStudentID(email);
+				HashMap<String, String> submissionDetails = ExtractData.getAssignmentSubmissionDetails(fileName.substring(fileName.length() - 5, fileName.length() - 4), studentID);
+				
+				// If the student has a submission record, display the button for them to see the results
+				if (!submissionDetails.isEmpty()) {
+					JButton resultsButton = new JButton("Results");
+					resultsButton.setHorizontalTextPosition(SwingConstants.CENTER);
+					resultsButton.setBounds(640, 26, 100, 35);
+					resultsButton.setBackground(new Color(51, 204, 153));
+					resultsButton.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+					resultsButton.addActionListener(new ActionListener() { 
+						  public void actionPerformed(ActionEvent e) { 
+							  
+							//Creates a StudentSubmissionGetails GUI
+							EventQueue.invokeLater(new Runnable() {
+								public void run() {
+									StudentSubmissionDetailsGUI frame =  new StudentSubmissionDetailsGUI(fileName.substring(fileName.length() - 5, fileName.length() - 4), submissionDetails);
+									frame.setVisible(true);
+									frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);									
+								}
+							});
+						  } 
+					});
+					assignClosedPanel.add(resultsButton);
+				}
 
 				// Set y for the next assignment panel.
 				i += 90;
@@ -214,9 +244,6 @@ public class StudentListingGUI extends JFrame{
 		
 		listAssignmentsPanel.setBounds(62, 145, 765, 250 + i);
 		contentPane.add(listAssignmentsPanel);
-
-
-
 		
 		contentPane.setPreferredSize(new Dimension(900, 100  + listAssignmentsPanel.getHeight()));
 		setSize(900, 700);
