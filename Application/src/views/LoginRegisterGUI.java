@@ -126,7 +126,7 @@ public class LoginRegisterGUI extends JFrame {
 				String email = getEmail();
 				//This checks if authentication is right as well as if user is an instructor
 				if((Authenticator.authenticate(getEmail(), getPassword())) && (Authenticator.isInstructor(getEmail()))){
-					JOptionPane.showMessageDialog(LoginRegisterGUI.this, "Login successful! Welcome instructor.");
+					//JOptionPane.showMessageDialog(LoginRegisterGUI.this, "Login successful! Welcome instructor.");
 					//Creates an InstructorListingGUI
 					EventQueue.invokeLater(new Runnable() {
 						public void run() {
@@ -145,7 +145,7 @@ public class LoginRegisterGUI extends JFrame {
 				}
 				//If not an instructor
 				else if((Authenticator.authenticate(getEmail(), getPassword())) && (Authenticator.isInstructor(getEmail()) == false)){
-					JOptionPane.showMessageDialog(LoginRegisterGUI.this, "Login successful! Welcome student.");
+					//JOptionPane.showMessageDialog(LoginRegisterGUI.this, "Login successful! Welcome student.");
 					//Creates an InstructorListingGUI
 					EventQueue.invokeLater(new Runnable() {
 						public void run() {

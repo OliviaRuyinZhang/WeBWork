@@ -145,7 +145,7 @@ public class RegisterStudentInfo extends JFrame {
 
 			@Override
 			public void insertUpdate(DocumentEvent e) {
-				validateStudentIDInput();
+	     			validateStudentIDInput();
 			}
 
 			@Override
@@ -182,6 +182,17 @@ public class RegisterStudentInfo extends JFrame {
 		if (typeCheck) {
 			validRegister = Authenticator.register(isInstructor, email, password, firstNameField.getText(),
 					lastNameField.getText(), studentIDField.getText());
+			if (validRegister) {
+				int input = JOptionPane.showOptionDialog(null, "Registration successful!", "Confirmation",
+						JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, null, null);
+				if (input == JOptionPane.OK_OPTION) {
+					dispose();
+				}
+			} else {
+				if (typeCheck) {
+					JOptionPane.showMessageDialog(RegisterStudentInfo.this, "Something went wrong!");
+				}
+			}
 		} else {
 			if ((checkNameInput(firstNameField.getText()) == false
 					|| checkNameInput(lastNameField.getText()) == false) && checkIDInput(studentIDField.getText()) == false) {
@@ -209,17 +220,7 @@ public class RegisterStudentInfo extends JFrame {
 				}
 			}
 		
-		if (validRegister) {
-			int input = JOptionPane.showOptionDialog(null, "Registration successful!", "Confirmation",
-					JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, null, null);
-			if (input == JOptionPane.OK_OPTION) {
-				dispose();
-			}
-		} else {
-			if (typeCheck) {
-				JOptionPane.showMessageDialog(RegisterStudentInfo.this, "Something went wrong!");
-			}
-		}
+
 	}
 
 	public void validateStudentIDInput() {

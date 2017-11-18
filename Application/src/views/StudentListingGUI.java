@@ -79,7 +79,7 @@ public class StudentListingGUI extends JFrame{
 		contentPane.add(lblWelcome);
 	
 		// User's Name label.
-		JLabel lblName = new JLabel("Insert Name");
+		JLabel lblName = new JLabel(ExtractData.getFirstName(email));
 		lblName.setFont(new Font("Segoe UI Light", Font.PLAIN, 52));
 		lblName.setBounds(62, 45, 350, 70);
 		lblName.setSize(lblName.getPreferredSize());
@@ -150,7 +150,10 @@ public class StudentListingGUI extends JFrame{
 				openButton.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 				openButton.addActionListener(new ActionListener() { 
 					  public void actionPerformed(ActionEvent e) { 
-						    new AssignmentCompletionGUI(fileName, "1002205883");
+						  	String studentNumber = ExtractData.getStudentID(email);
+						  	if(!studentNumber.isEmpty() && studentNumber != null) {
+						  		 new AssignmentCompletionGUI(fileName, studentNumber);
+						  	}				   
 						  } 
 						} );
 				assignOpenPanel.add(openButton);

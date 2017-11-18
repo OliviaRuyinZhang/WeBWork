@@ -158,27 +158,39 @@ public class RegisterInstructorInfo extends JFrame {
 	}
 	
 	public void registerValidation() {
+		boolean typeCheck = checkNameInput(firstNameField.getText()) && checkNameInput(lastNameField.getText());
 		boolean accessPermission = false;
 		boolean validRegister = false;
 		if (registrationCodeField .getText().equals(accessCode)) {
 			accessPermission = true;
-			validRegister = Authenticator.register(isInstructor, email, password, firstNameField.getText(),
-					lastNameField.getText());
+			if(typeCheck) {
+				validRegister = Authenticator.register(isInstructor, email, password, firstNameField.getText(),
+						lastNameField.getText());
+			}	
 			if (validRegister) {
 				int input = JOptionPane.showOptionDialog(null, "Registration successful!", "Confirmation",
 						JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, null, null);
 				if (input == JOptionPane.OK_OPTION) {
 					dispose();
-				}
-			} else {		
-					JOptionPane.showMessageDialog(RegisterInstructorInfo.this, "Something went wrong!");						
+				}		
+			} else {	
+					if(!typeCheck) {
+						int input = JOptionPane.showOptionDialog(null, "name has to be in letters!", "Error",
+								JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, null, null);
+						if (input == JOptionPane.OK_OPTION) {
+							clearTextFields();
+						}	
+					}
+					else {
+						JOptionPane.showMessageDialog(RegisterInstructorInfo.this, "Something went wrong!");	
+					}								
 			}
 		}else {
 			if(!accessPermission) {
 				int input = JOptionPane.showOptionDialog(null, "Access Denied!", "Error",
-						JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, null, null);
+					JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, null, null);
 				if (input == JOptionPane.OK_OPTION) {
-					dispose();
+					clearTextFields();
 				}
 			}
 		}
@@ -206,6 +218,12 @@ public class RegisterInstructorInfo extends JFrame {
 	    		
 	    }
 	  }
+	
+	public void clearTextFields(){
+		firstNameField.setText("");
+		lastNameField.setText("");
+		registrationCodeField.setText("");
+	}
 	
 	public boolean checkNameInput(String name) {
 		String namePattern = "^[a-zA-Z]+$";
