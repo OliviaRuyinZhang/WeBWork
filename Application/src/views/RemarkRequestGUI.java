@@ -25,6 +25,8 @@ import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 
+import controllers.ExtractData;
+
 import java.util.*;
 import javax.mail.*;
 import javax.mail.internet.*;
@@ -46,9 +48,15 @@ public class RemarkRequestGUI extends JFrame{
 		});
 	}
 	
+	private File file;
+	private String studentEmail;
 	private JPanel contentPane;
+	private JTextArea txtRemarkReason;
 	
-	public RemarkRequestGUI() {
+	public RemarkRequestGUI(File file, String studentEmail) {
+		this.file = file;
+		this.studentEmail = studentEmail;
+		
 		setResizable(true); // Temporarily until we add a scroll bar.
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(400,500);
@@ -72,7 +80,7 @@ public class RemarkRequestGUI extends JFrame{
 		
 		gbc.gridy++;
 				
-		JTextArea txtRemarkReason = new JTextArea();
+		txtRemarkReason = new JTextArea();
 		txtRemarkReason.setFont(new Font("Segoe/ UI", Font.PLAIN, 15));
 		txtRemarkReason.setLineWrap(true);
 		//txtRemarkReason.setWrapStyleWord(true);
@@ -115,6 +123,7 @@ public class RemarkRequestGUI extends JFrame{
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				// Send email to instructors.
+				sendRemarkRequest();
 			}	
 		});
 		buttonPanel.add(btnSubmit,gbc);
@@ -127,33 +136,60 @@ public class RemarkRequestGUI extends JFrame{
 		
 	}
 	
-	/**
-	 * Return an ArrayList of assignment files from the user's
-	 * default project directory. 
-	 * 
-	 * @return ArrayList of files.
-	 */
-	public static ArrayList<File> gatherExistingAssignments(){
+	private String getRemarkReasonString() {
+		return txtRemarkReason.getText().toString();
+	}
+	
+	private void formatEmail() {
+		String studentId = ExtractData.getStudentID(this.studentEmail);
 		
-		ArrayList<File> assignments = new ArrayList<>();
-		Pattern pattern = Pattern.compile("Assignment+(\\d)*.csv");
-	    Matcher matcher;
-	    
-	    File[] files = new File(".").listFiles(); // All files in current directory.
-	    for(File file: files) {
-	    	if(file.isFile()) {
-	    		matcher = pattern.matcher(file.getName());
-	    		if(matcher.find()) { // If file name matches the regex expression in pattern.
-	    			assignments.add(file);
-	    		}
-	    	}
-	    }  
-	    return assignments;
+		ArrayList<ArrayList<String>> questions = ExtractData.getAssignmentQData(this.file);
+		HashMap<String,String> submission = ExtractData.getAssignmentSubmissionDetails(this.file.getName(), studentId);
+		StringBuilder sb = new StringBuilder();
+		
 	}
 	
 	public void sendRemarkRequest() {
-		String from = "webworkremarks@gmail.com";
-		String host = "localhost";
+		// Recipient's email ID needs to be mentioned.
+		final String to = "julian.b@live.ca";
+		
+		final String username = "webworkremarks@gmail.com";
+		final String password = "workremarks";
+
+		
+		Properties props = new Properties();
+		props.put("mail.smtp.auth", "true");
+		props.put("mail.smtp.starttls.enable", "true");
+		props.put("mail.smtp.host", "smtp.gmail.com");
+		props.put("mail.smtp.port", "587");
+
+		Session session = Session.getInstance(props,
+		  new javax.mail.Authenticator() {
+			protected PasswordAuthentication getPasswordAuthentication() {
+				return new PasswordAuthentication(username, password);
+			}
+		  });
+
+		try {
+
+			Message message = new MimeMessage(session);
+			message.setFrom(new InternetAddress(username));
+			message.setRecipients(Message.RecipientType.TO,
+				InternetAddress.parse(to));
+			message.setSubject("Remark Request for " + "" + "from " + "");
+			
+			message.setText(getRemarkReasonString() + "\n\n"
+					+ "============== Assignment Details ================"
+					+ "\n\n");
+
+			
+			Transport.send(message);
+
+			System.out.println("Done");
+
+		} catch (MessagingException e) {
+			throw new RuntimeException(e);
+		}
 		
 	}
 	
