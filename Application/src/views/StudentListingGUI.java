@@ -11,6 +11,8 @@ import java.awt.Font;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.FileReader;
 
 import java.io.BufferedReader;
@@ -20,6 +22,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -79,7 +82,7 @@ public class StudentListingGUI extends JFrame{
 		contentPane.add(lblWelcome);
 	
 		// User's Name label.
-		JLabel lblName = new JLabel("Insert Name");
+		JLabel lblName = new JLabel(ExtractData.getFirstName(email));
 		lblName.setFont(new Font("Segoe UI Light", Font.PLAIN, 52));
 		lblName.setBounds(62, 45, 350, 70);
 		lblName.setSize(lblName.getPreferredSize());
@@ -122,7 +125,7 @@ public class StudentListingGUI extends JFrame{
 			// Check due date
 			String[] dueDate = info[2].split("/");
 			Calendar calendar = Calendar.getInstance();
-		    calendar.set(Integer.parseInt(dueDate[2]), Integer.parseInt(dueDate[1]), Integer.parseInt(dueDate[0])); 
+		    calendar.set(Integer.parseInt(dueDate[2]), Integer.parseInt(dueDate[0]) - 1, Integer.parseInt(dueDate[1])); 
 		    Date due = calendar.getTime();
 		    beforeDeadline = (due.compareTo(today) > 0);
 		    
@@ -150,7 +153,7 @@ public class StudentListingGUI extends JFrame{
 				openButton.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 				openButton.addActionListener(new ActionListener() { 
 					  public void actionPerformed(ActionEvent e) { 
-						    new AssignmentCompletionGUI(fileName, "1002205883");
+						    new AssignmentCompletionGUI(fileName, ExtractData.getStudentID(email));
 						  } 
 						} );
 				assignOpenPanel.add(openButton);
@@ -181,7 +184,7 @@ public class StudentListingGUI extends JFrame{
 			// Check due date
 			String[] dueDate = info[2].split("/");
 			Calendar calendar = Calendar.getInstance();
-		    calendar.set(Integer.parseInt(dueDate[2]), Integer.parseInt(dueDate[1]), Integer.parseInt(dueDate[0])); 
+		    calendar.set(Integer.parseInt(dueDate[2]), Integer.parseInt(dueDate[0]) - 1, Integer.parseInt(dueDate[1])); 
 		    Date due = calendar.getTime();
 		    
 		    // Make a JPanel for every closed assignment
@@ -200,23 +203,50 @@ public class StudentListingGUI extends JFrame{
 				lblDeadline.setBounds(50, 22, 350, 70);
 				lblDeadline.setBackground(Color.BLACK);
 				assignClosedPanel.add(lblDeadline);
-				
-				JButton btnRemark = new JButton("Remark");
-				btnRemark.setHorizontalTextPosition(SwingConstants.CENTER);
-				btnRemark.setBounds(640, 26, 100, 35);
-				btnRemark.setFocusPainted(false);
-				btnRemark.setBackground(Color.decode("#EC7063"));
-				btnRemark.setFont(new Font("Segoe UI", Font.PLAIN, 15));
-				btnRemark.addActionListener(new ActionListener() {
 
-					@Override
-					public void actionPerformed(ActionEvent arg0) {
-						//Open remark request window.
-						System.out.println(ExtractData.getInstructorEmails());
-					}
+				// Get the student's submission details for this assignment
+				String studentID = ExtractData.getStudentID(email);
+				HashMap<String, String> submissionDetails = ExtractData.getAssignmentSubmissionDetails(fileName.substring(fileName.length() - 5, fileName.length() - 4), studentID);
+				
+				// If the student has a submission record, display the button for them to see the results
+				if (!submissionDetails.isEmpty()) {
+					JButton resultsButton = new JButton("Results");
+					resultsButton.setHorizontalTextPosition(SwingConstants.CENTER);
+					resultsButton.setBounds(640, 26, 100, 35);
+					resultsButton.setBackground(new Color(51, 204, 153));
+					resultsButton.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+					resultsButton.addActionListener(new ActionListener() { 
+						  public void actionPerformed(ActionEvent e) { 
+							  
+							//Creates a StudentSubmissionGetails GUI
+							EventQueue.invokeLater(new Runnable() {
+								public void run() {
+									StudentSubmissionDetailsGUI frame =  new StudentSubmissionDetailsGUI(fileName.substring(fileName.length() - 5, fileName.length() - 4), submissionDetails);
+									frame.setVisible(true);
+									frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);									
+								}
+							});
+						  } 
+					});
+					assignClosedPanel.add(resultsButton);
 					
-				});
-				assignClosedPanel.add(btnRemark);
+					JButton btnRemark = new JButton("Remark");
+					btnRemark.setHorizontalTextPosition(SwingConstants.CENTER);
+					btnRemark.setBounds(520, 26, 100, 35);
+					btnRemark.setFocusPainted(false);
+					btnRemark.setBackground(Color.decode("#EC7063"));
+					btnRemark.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+					btnRemark.addActionListener(new ActionListener() {
+
+						@Override
+						public void actionPerformed(ActionEvent arg0) {
+							//Open remark request window.
+							//System.out.println(ExtractData.getInstructorEmails());
+						}
+						
+					});
+					assignClosedPanel.add(btnRemark);
+				}
 
 				// Set y for the next assignment panel.
 				i += 90;
@@ -227,9 +257,6 @@ public class StudentListingGUI extends JFrame{
 		
 		listAssignmentsPanel.setBounds(62, 145, 765, 250 + i);
 		contentPane.add(listAssignmentsPanel);
-
-
-
 		
 		contentPane.setPreferredSize(new Dimension(900, 100  + listAssignmentsPanel.getHeight()));
 		setSize(900, 700);
