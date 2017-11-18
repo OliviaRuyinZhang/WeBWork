@@ -52,6 +52,7 @@ public class RegisterInstructorInfo extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
+		setLocationRelativeTo(null);
 		
 		Border border = BorderFactory.createLineBorder(Color.decode("#7A7A7A"), 2);
 
