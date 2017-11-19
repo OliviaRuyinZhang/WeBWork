@@ -527,7 +527,7 @@ public class InstructorListingGUI extends JFrame{
 				while((tempLine = reader.readLine()) != null) {
 					String[] individualAnswerInfo = tempLine.split(","); 
 					
-					int size = individualAnswerInfo[6].length();
+					int size = individualAnswerInfo].length();
 					boolean isNumber = true;
 					for(int i = 0; i < size ; i++) {
 						 if (!Character.isDigit(individualAnswerInfo[6].charAt(i))) {
