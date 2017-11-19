@@ -108,7 +108,6 @@ public class GradingTest {
         
         // StudentID 1 has 1% on A2, 1% on A3
         result = Grading.getStudentGrades("1");
-        System.out.println(result.get(2));
         assertEquals("1%", result.get(2));
         assertEquals("1%", result.get(3));
         
