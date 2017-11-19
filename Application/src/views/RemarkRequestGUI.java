@@ -68,7 +68,7 @@ public class RemarkRequestGUI extends JFrame{
 	    gbc.gridx = 0;
 	    gbc.gridy = 0;
 	    
-		JLabel lblRemark = new JLabel("<html>Please explain the reason<br>for your remark request:");
+		JLabel lblRemark = new JLabel("<html>Please explain the reason<br>for your remark request:</html>");
 		lblRemark.setFont(new Font("Segoe UI Light", Font.PLAIN, 25));
 		contentPane.add(lblRemark, gbc);
 		
