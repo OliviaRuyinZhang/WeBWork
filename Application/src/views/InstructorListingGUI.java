@@ -416,6 +416,21 @@ public class InstructorListingGUI extends JFrame{
 	private void addToClosedAssignmentPanel(JPanel panel, File file) {
 		String fileName = file.getName();
 		String[] info = ExtractData.getAssignmentInfo(fileName);
+		double assignmentAvg = 0;
+		
+		//this gets the average mark of the given assignment
+		try {
+			assignmentAvg = getMean(fileName);
+			
+			// Label to display the average mark of the assignment.
+			JLabel lblAverage = new JLabel ("Avg: " + assignmentAvg + "%");
+			lblAverage.setFont(new Font("Segoe UI Regular", Font.BOLD, 14));
+			lblAverage.setBounds(150, 22, 350, 70);
+			lblAverage.setBackground(Color.BLACK);
+			panel.add(lblAverage);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		
 		JLabel lblAssignment = new JLabel(fileName.replaceFirst("[.][^.]+$", "")); // Strips the .csv extension.
 		lblAssignment.setFont(new Font("Segoe UI Semibold", Font.PLAIN, 16));
@@ -436,7 +451,6 @@ public class InstructorListingGUI extends JFrame{
 		fileSaveAs changeSatus = new fileSaveAs(exportButton,fileName);
 		exportButton.addActionListener(changeSatus);
 		panel.add(exportButton);
-		
 	}
 	
 
@@ -501,11 +515,11 @@ public class InstructorListingGUI extends JFrame{
 	
 		double sumOfFianlGrade = 0.0;
 		int numberOfStudents = 0;
-		double mean;
+		double mean = 0d;
 		
 		
 		// if the answerSubmission csv file exist
-		if (filePath.exists() == true) {	
+		if (filePath.exists()) {	
 			FileReader fr = new FileReader(file);
 			BufferedReader reader = new BufferedReader(fr);
 			String tempLine = reader.readLine();
@@ -526,12 +540,12 @@ public class InstructorListingGUI extends JFrame{
 					}
 				}
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			mean = sumOfFianlGrade/numberOfStudents;
+
 			reader.close();
 		}
-		mean = sumOfFianlGrade/numberOfStudents;
 		return mean;
 	}
 
