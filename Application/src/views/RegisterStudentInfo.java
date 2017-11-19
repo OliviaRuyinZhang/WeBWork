@@ -1,7 +1,5 @@
 package views;
 
-import java.awt.EventQueue;
-
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -10,27 +8,18 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import com.sun.xml.internal.ws.util.StringUtils;
-
 import controllers.Authenticator;
-import models.Problem;
-
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.awt.Color;
-import java.awt.Component;
-
 import javax.swing.JTextField;
-import javax.swing.JPasswordField;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 
 public class RegisterStudentInfo extends JFrame {
 	private JPanel contentPane;

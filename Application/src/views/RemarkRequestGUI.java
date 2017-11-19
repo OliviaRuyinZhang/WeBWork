@@ -51,7 +51,7 @@ public class RemarkRequestGUI extends JFrame{
 		this.studentEmail = studentEmail;
 		this.instructorEmails = ExtractData.getInstructorEmails();
 		
-		setResizable(true); // Temporarily until we add a scroll bar.
+		setResizable(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(400,500);
 		setLocationRelativeTo(null);
