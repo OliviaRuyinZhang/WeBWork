@@ -4,11 +4,11 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Grading {
-        public static ArrayList<String> getStudentGrades(String id){
-                ArrayList<String> result = new <String>ArrayList();
+        public static HashMap<Integer, String> getStudentGrades(String id){
+        	HashMap<Integer, String> assignNumToGrade = new HashMap<>();
                 String submissionFileName = "";
                 int i = 1;
                 
@@ -26,7 +26,7 @@ public class Grading {
                                         // Check if studentID is present
                                         if (assignmentLine[0].equals(id)){
                                                 // Last index == length - 1
-                                                result.add(assignmentLine[assignmentLine.length - 1]);
+                                        		assignNumToGrade.put(i, assignmentLine[assignmentLine.length - 1] + "%");
                                                 break;
                                         }
                                 }
@@ -37,6 +37,6 @@ public class Grading {
                         }
                         i++;
                 }
-                return result;
+                return assignNumToGrade;
         }
 }
