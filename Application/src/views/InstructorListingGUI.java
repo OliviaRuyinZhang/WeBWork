@@ -47,15 +47,12 @@ public class InstructorListingGUI extends JFrame{
 	private JPanel listAssignmentsPanel;
 	private List<File> assignments;
 	private boolean beforeDeadline;
-	
-
-
-	
 	private String email;
+	
 	public InstructorListingGUI(String email) {
 		this.email = email;
 
-		setResizable(false); // Temporarily until we add a scroll bar.
+		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setTitle("WebWork");
 		contentPane = new JPanel();
@@ -76,8 +73,7 @@ public class InstructorListingGUI extends JFrame{
 	
 		
 		// User's Name label.
-		//System.out.print(ExtractData.getFirstName(email));
-		JLabel lblName = new JLabel(ExtractData.getFirstName(email));
+		JLabel lblName = new JLabel(ExtractData.getFirstName(this.email));
 		lblName.setFont(new Font("Segoe UI Light", Font.PLAIN, 52));
 		lblName.setBounds(62, 45, 350, 70);
 		lblName.setSize(lblName.getPreferredSize());
@@ -274,11 +270,32 @@ public class InstructorListingGUI extends JFrame{
 	
 		listAssignmentsPanel.setBounds(62, 145, 765, 250 + i);
 		
+		JButton btnSearchStudent = new JButton("Search Student");
+		btnSearchStudent.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+		btnSearchStudent.setFocusPainted(false);
+		btnSearchStudent.setBackground(Color.decode("#5D8AA8"));
+		btnSearchStudent.setBounds(440, 10, 135, 35);
+		btnSearchStudent.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				try {
+					DisplayMarksGUI frame = new DisplayMarksGUI();
+					frame.setVisible(true);
+					frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			
+		});
+		listAssignmentsPanel.add(btnSearchStudent);
+		
 		JButton btnRemark = new JButton("Remark");
 		btnRemark.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 		btnRemark.setFocusPainted(false);
 		btnRemark.setBackground(Color.decode("#f1c40f"));
-		btnRemark.setBounds(467, 10, 101, 35);
+		btnRemark.setBounds(329, 10, 101, 35);
 		btnRemark.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
