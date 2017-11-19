@@ -527,15 +527,17 @@ public class InstructorListingGUI extends JFrame{
 				while((tempLine = reader.readLine()) != null) {
 					String[] individualAnswerInfo = tempLine.split(","); 
 					
-					int size = individualAnswerInfo[6].length();
+					System.out.println(individualAnswerInfo.length);
+					int size = individualAnswerInfo[individualAnswerInfo.length-1].length();
+					
 					boolean isNumber = true;
 					for(int i = 0; i < size ; i++) {
-						 if (!Character.isDigit(individualAnswerInfo[6].charAt(i))) {
+						 if (!Character.isDigit(individualAnswerInfo[individualAnswerInfo.length-1].charAt(i))) {
 					           isNumber = false;
 					       }
 					}
 					if(isNumber) {
-						sumOfFianlGrade += Double.parseDouble(individualAnswerInfo[6]);
+						sumOfFianlGrade += Double.parseDouble(individualAnswerInfo[individualAnswerInfo.length-1]);
 						numberOfStudents += 1;
 					}
 				}
