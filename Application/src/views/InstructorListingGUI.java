@@ -399,6 +399,15 @@ public class InstructorListingGUI extends JFrame{
 	private void addToClosedAssignmentPanel(JPanel panel, File file) {
 		String fileName = file.getName();
 		String[] info = ExtractData.getAssignmentInfo(fileName);
+		double assignmentAvg = 0;
+		
+		//this gets the average mark of the given assignment
+		try {
+			assignmentAvg = getMean(fileName);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		JLabel lblAssignment = new JLabel(fileName.replaceFirst("[.][^.]+$", "")); // Strips the .csv extension.
 		lblAssignment.setFont(new Font("Segoe UI Semibold", Font.PLAIN, 16));
@@ -420,6 +429,12 @@ public class InstructorListingGUI extends JFrame{
 		exportButton.addActionListener(changeSatus);
 		panel.add(exportButton);
 		
+		//label to display the average mark of the assignment
+		JLabel lblAverage = new JLabel ("Avg: " + assignmentAvg);
+		lblAverage.setFont(new Font("Segoe UI Regular", Font.BOLD, 14));
+		lblAverage.setBounds(150, 22, 350, 70);
+		lblAverage.setBackground(Color.BLACK);
+		panel.add(lblAverage);
 	}
 	
 
