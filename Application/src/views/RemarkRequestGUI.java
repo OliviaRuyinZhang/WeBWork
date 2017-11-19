@@ -203,7 +203,7 @@ public class RemarkRequestGUI extends JFrame{
 		
 		/***************************************************************** 
 		 *  Author: mkyoung (modified by Julian Barker)
-		 *	Title: JavaMail API – Sending email via Gmail SMTP example
+		 *	Title: JavaMail API ï¿½ Sending email via Gmail SMTP example
 		 *	Date: 2017-11-18
 		 *	Type: source code
 		 *	https://www.mkyong.com/java/javamail-api-sending-email-via-gmail-smtp-example/

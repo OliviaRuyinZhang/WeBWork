@@ -609,7 +609,10 @@ class fileSaveAs implements ActionListener{
 				e1.printStackTrace();
 			}
         }else {
-        		JOptionPane.showMessageDialog(null, "No Submission File");
+        		if(fileFound == false) {
+        			JOptionPane.showMessageDialog(null, "No Submission File");
+        		}
+        		
         }
 	
 	}
