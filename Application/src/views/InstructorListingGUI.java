@@ -526,8 +526,6 @@ public class InstructorListingGUI extends JFrame{
 			try {
 				while((tempLine = reader.readLine()) != null) {
 					String[] individualAnswerInfo = tempLine.split(","); 
-					
-					System.out.println(individualAnswerInfo.length);
 					int size = individualAnswerInfo[individualAnswerInfo.length-1].length();
 					
 					boolean isNumber = true;
