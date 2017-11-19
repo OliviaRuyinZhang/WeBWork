@@ -7,6 +7,13 @@ import java.io.IOException;
 import java.util.HashMap;
 
 public class Grading {
+	
+	/**
+	 * Returns a HashMap of the students grades per assignment number, given
+	 * the student's id.
+	 * @param id Student number
+	 * @return HashMap<Integer, String>
+	 */
         public static HashMap<Integer, String> getStudentGrades(String id){
         	HashMap<Integer, String> assignNumToGrade = new HashMap<>();
                 String submissionFileName = "";
