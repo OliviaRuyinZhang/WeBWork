@@ -47,15 +47,12 @@ public class InstructorListingGUI extends JFrame{
 	private JPanel listAssignmentsPanel;
 	private List<File> assignments;
 	private boolean beforeDeadline;
-	
-
-
-	
 	private String email;
+	
 	public InstructorListingGUI(String email) {
 		this.email = email;
 
-		setResizable(false); // Temporarily until we add a scroll bar.
+		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setTitle("WebWork");
 		contentPane = new JPanel();
@@ -76,8 +73,7 @@ public class InstructorListingGUI extends JFrame{
 	
 		
 		// User's Name label.
-		//System.out.print(ExtractData.getFirstName(email));
-		JLabel lblName = new JLabel(ExtractData.getFirstName(email));
+		JLabel lblName = new JLabel(ExtractData.getFirstName(this.email));
 		lblName.setFont(new Font("Segoe UI Light", Font.PLAIN, 52));
 		lblName.setBounds(62, 45, 350, 70);
 		lblName.setSize(lblName.getPreferredSize());
@@ -274,11 +270,32 @@ public class InstructorListingGUI extends JFrame{
 	
 		listAssignmentsPanel.setBounds(62, 145, 765, 250 + i);
 		
+		JButton btnSearchStudent = new JButton("Search Student");
+		btnSearchStudent.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+		btnSearchStudent.setFocusPainted(false);
+		btnSearchStudent.setBackground(Color.decode("#5D8AA8"));
+		btnSearchStudent.setBounds(440, 10, 135, 35);
+		btnSearchStudent.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				try {
+					DisplayMarksGUI frame = new DisplayMarksGUI();
+					frame.setVisible(true);
+					frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			
+		});
+		listAssignmentsPanel.add(btnSearchStudent);
+		
 		JButton btnRemark = new JButton("Remark");
 		btnRemark.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 		btnRemark.setFocusPainted(false);
 		btnRemark.setBackground(Color.decode("#f1c40f"));
-		btnRemark.setBounds(467, 10, 101, 35);
+		btnRemark.setBounds(329, 10, 101, 35);
 		btnRemark.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -399,6 +416,21 @@ public class InstructorListingGUI extends JFrame{
 	private void addToClosedAssignmentPanel(JPanel panel, File file) {
 		String fileName = file.getName();
 		String[] info = ExtractData.getAssignmentInfo(fileName);
+		double assignmentAvg = 0;
+		
+		//this gets the average mark of the given assignment
+		try {
+			assignmentAvg = getMean(fileName);
+			
+			// Label to display the average mark of the assignment.
+			JLabel lblAverage = new JLabel ("Avg: " + assignmentAvg + "%");
+			lblAverage.setFont(new Font("Segoe UI Regular", Font.BOLD, 14));
+			lblAverage.setBounds(150, 22, 350, 70);
+			lblAverage.setBackground(Color.BLACK);
+			panel.add(lblAverage);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		
 		JLabel lblAssignment = new JLabel(fileName.replaceFirst("[.][^.]+$", "")); // Strips the .csv extension.
 		lblAssignment.setFont(new Font("Segoe UI Semibold", Font.PLAIN, 16));
@@ -419,7 +451,6 @@ public class InstructorListingGUI extends JFrame{
 		fileSaveAs changeSatus = new fileSaveAs(exportButton,fileName);
 		exportButton.addActionListener(changeSatus);
 		panel.add(exportButton);
-		
 	}
 	
 
@@ -484,11 +515,11 @@ public class InstructorListingGUI extends JFrame{
 	
 		double sumOfFianlGrade = 0.0;
 		int numberOfStudents = 0;
-		double mean;
+		double mean = 0d;
 		
 		
 		// if the answerSubmission csv file exist
-		if (filePath.exists() == true) {	
+		if (filePath.exists()) {	
 			FileReader fr = new FileReader(file);
 			BufferedReader reader = new BufferedReader(fr);
 			String tempLine = reader.readLine();
@@ -509,12 +540,12 @@ public class InstructorListingGUI extends JFrame{
 					}
 				}
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			mean = sumOfFianlGrade/numberOfStudents;
+
 			reader.close();
 		}
-		mean = sumOfFianlGrade/numberOfStudents;
 		return mean;
 	}
 

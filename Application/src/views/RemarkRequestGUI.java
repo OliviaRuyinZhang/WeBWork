@@ -35,7 +35,6 @@ import javax.swing.border.Border;
 import controllers.ExtractData;
 
 
-
 /*
  * Remark Request class
  */
@@ -52,7 +51,7 @@ public class RemarkRequestGUI extends JFrame{
 		this.studentEmail = studentEmail;
 		this.instructorEmails = ExtractData.getInstructorEmails();
 		
-		setResizable(true); // Temporarily until we add a scroll bar.
+		setResizable(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(400,500);
 		setLocationRelativeTo(null);
@@ -69,7 +68,7 @@ public class RemarkRequestGUI extends JFrame{
 	    gbc.gridx = 0;
 	    gbc.gridy = 0;
 	    
-		JLabel lblRemark = new JLabel("<html>Please explain the reason<br>for your remark request:");
+		JLabel lblRemark = new JLabel("<html>Please explain the reason<br>for your remark request:</html>");
 		lblRemark.setFont(new Font("Segoe UI Light", Font.PLAIN, 25));
 		contentPane.add(lblRemark, gbc);
 		
