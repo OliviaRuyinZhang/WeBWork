@@ -55,7 +55,7 @@ public class InstructorListingGUI extends JFrame{
 	public InstructorListingGUI(String email) {
 		this.email = email;
 
-		setResizable(false); // Temporarily until we add a scroll bar.
+		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setTitle("WebWork");
 		contentPane = new JPanel();
