@@ -34,7 +34,7 @@ public class Grading {
                             // Check if studentID is present
                             if (assignmentLine[0].equals(id)){
                                     // Last index == length - 1
-                                    assignNumToGrade.put(i, assignmentLine[assignmentLine.length - 1] + "%");
+                                    assignNumToGrade.put(i, assignmentLine[assignmentLine.length - 1].replace(" ", "") + "%");
                                     break;
                             }
                     }
