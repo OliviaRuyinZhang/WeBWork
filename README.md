@@ -75,6 +75,9 @@ For this sprint, we implemented:
 ### Instructor Student Search
 ![Student Search](https://github.com/CSCC01F17/L02_11/blob/master/Documents/Deliverable_5/Sprint_5/Application_Screenshots/Student_Search.png)
 
+### Code Review
+We individually conducted code review and got together to discuss our findings. [Here](https://drive.google.com/file/d/1z9PObnjwZjBa-xFHlrXZTirhLWe--yDO/view?usp=sharing) is a video of our debriefing.
+
 ### User Instructions
 ##### Setup
 - Due to usage of an external library, JavaMail, if the program is being run through an IDE, the user must reconfigure their java build path to access the library. The API is found as 5 jar files in the "lib" folder in the project and you must add them to your build path.
@@ -143,8 +146,7 @@ For this sprint, we implemented:
 
 ##### Remarks
 - Click the "Remark" button beside the assignment you wish to get remarked
-- Explain why you want a remark in the message box and then click "Submit" to requiest a remark
+- Explain why you want a remark in the message box and then click "Submit" to request a remark
 - The remark will be sent to instructors directly by email and you will be notified if your grade has been changed
-
 
 ###### Note: GitHub may have problems displaying some of our documents. For this reason, it is recommended you download the document instead of using GitHub's preview to view it.
