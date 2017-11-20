@@ -3,12 +3,22 @@ package views;
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
+
+import controllers.ExtractData;
+
 import java.awt.Color;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -25,6 +35,9 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Properties;
 import java.awt.Dimension;
 import javax.swing.JTextField;
 
@@ -114,6 +127,8 @@ public class InstructorRemarkGUI extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				if (adjustMark(studentIDField.getText(), assignmentField.getText(), finalMarkField.getText())) {
+					String assignment = "Assignment" + assignmentField.getText();
+					sendRemarkResult(studentIDField.getText(), assignment,  finalMarkField.getText());
 					JOptionPane.showMessageDialog(InstructorRemarkGUI.this, "Grade adjusted successfully!");
 					setVisible(false);
 					dispose();
@@ -208,5 +223,85 @@ public class InstructorRemarkGUI extends JFrame {
 		} catch (IOException e) {
 			return false;
 		}
+	}
+	
+	/**
+	 * Returns the String representation of the subject header
+	 * of the email being sent.
+	 * @return String subject header
+	 */
+	private String formatSubject(String studentEmail, String Assignment) {
+		String studentId = ExtractData.getStudentID(studentEmail);
+		//String fileName = this.file.getName();
+		String subject = "Grade Adjusted for " +  studentId + " for " + Assignment;
+		//fileName.substring(0, fileName.indexOf("."));
+		
+		return subject;
+	}
+	
+	/**
+	 * Returns a string representation of the message in the email
+	 * that will be sent.
+	 * @return String message
+	 */
+	private String formatEmail(String studentID, String Assignment, String finalGrade) {
+		String studentName = ExtractData.getFirstName(ExtractData.getStudentEmail(studentID));
+		String message = "Remark Result:\n\n";
+		message += Assignment + "\n";
+		message += "Student Name: " + studentName + "\n";
+		message += "Student ID: " + studentID + '\n';
+		message += "Final Grade: " +  finalGrade;
+		
+		return message;
+		
+	}
+	
+	/**
+	 * Sends an email to student regarding the remark result
+	 * via Gmail SMTP server, TLS connection.
+	 * Idea and parts of code were taken from citation found below.
+	 */
+	public void sendRemarkResult(String studentID, String Assignment, String finalGrade) {
+		
+		/***************************************************************** 
+		 *  Author: mkyoung (modified by Julian Barker and Ruyin Zhang)
+		 *	Title: JavaMail API � Sending email via Gmail SMTP example
+		 *	Date: 2017-11-18
+		 *	Type: source code
+		 *	https://www.mkyong.com/java/javamail-api-sending-email-via-gmail-smtp-example/
+		 ****************************************************************/
+		
+		final String username = "webworkremarks@gmail.com";
+		final String password = "workremarks";
+
+		
+		Properties props = new Properties();
+		props.put("mail.smtp.auth", "true");
+		props.put("mail.smtp.starttls.enable", "true");
+		props.put("mail.smtp.host", "smtp.gmail.com");
+		props.put("mail.smtp.port", "587");
+
+		Session session = Session.getInstance(props,
+		  new javax.mail.Authenticator() {
+			protected PasswordAuthentication getPasswordAuthentication() {
+				return new PasswordAuthentication(username, password);
+			}
+		  });
+
+		try {
+
+			Message message = new MimeMessage(session);
+			message.setFrom(new InternetAddress(username));
+			String studentEmail = ExtractData.getStudentEmail(studentID);
+
+			message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(studentEmail));
+			message.setSubject(formatSubject(studentEmail, Assignment));
+			message.setText(formatEmail(studentID, Assignment, finalGrade));
+			Transport.send(message);
+			
+		} catch (MessagingException e) {
+			throw new RuntimeException(e);
+		}
+		
 	}
 }

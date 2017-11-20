@@ -526,8 +526,9 @@ public class InstructorListingGUI extends JFrame{
 			try {
 				while((tempLine = reader.readLine()) != null) {
 					String[] individualAnswerInfo = tempLine.split(","); 
+
 					int size = individualAnswerInfo[individualAnswerInfo.length-1].length();
-					
+
 					boolean isNumber = true;
 					for(int i = 0; i < size ; i++) {
 						 if (!Character.isDigit(individualAnswerInfo[individualAnswerInfo.length-1].charAt(i))) {
@@ -640,7 +641,10 @@ class fileSaveAs implements ActionListener{
 				e1.printStackTrace();
 			}
         }else {
-        		JOptionPane.showMessageDialog(null, "No Submission File");
+        		if(fileFound == false) {
+        			JOptionPane.showMessageDialog(null, "No Submission File");
+        		}
+        		
         }
 	
 	}

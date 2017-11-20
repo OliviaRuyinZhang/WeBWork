@@ -110,7 +110,37 @@ public class ExtractData {
 		return instEmails;
     }
     
-    
+	/**
+	 * Returns the student's email given studentID
+	 * @return String
+	 */
+    public static String getStudentEmail(String studentID) {
+    		String email = "";
+		try {
+			FileReader fr = new FileReader("users.csv");
+			@SuppressWarnings("resource")
+			BufferedReader br = new BufferedReader(fr);
+			String line = "";
+			// Reads every line of the file.
+			while ((line = br.readLine()) != null) {
+				
+				String[] user_info = line.split(","); // [isInstructor, email, password, firstName, lastName, studentID]
+				// If the email exists in the file.
+				if(user_info[0].equalsIgnoreCase("false")) {
+					if (user_info[5].equals(studentID)) {
+						email = user_info[1];
+					}
+				}
+			}
+			br.close();
+			fr.close();
+		} catch (FileNotFoundException fnfe) {
+			fnfe.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return email;
+    }
     public static String getFirstName(String email){ 		
     		String firstName = "";
     		try {
@@ -233,7 +263,7 @@ public class ExtractData {
 			String line = "";
 			// Reads every line of the file.
 			while ((line = br.readLine()) != null) {
-
+				
 				String[] user_info = line.split(","); // [isInstructor, email, password, firstName, lastName, studentID]
 				// If the email exists in the file.
 				if (user_info[1].equals(email)) {
