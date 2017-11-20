@@ -2,14 +2,19 @@ package controllers;
 
 import static org.junit.Assert.*;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 /*
@@ -23,11 +28,80 @@ public class ExtractDataTest {
 	FileReader submissionFile;
 	
 	
+	@BeforeClass
+	public static void setup() {
+		TestFileHandler.setUp();
+		try {
+			
+			// Create dummy files.
+			FileWriter usersFile = new FileWriter("users.csv");
+			BufferedWriter usersbw = new BufferedWriter(usersFile);
+			usersbw.write("TRUE,julianbarker@gmail.com,"
+					+ "9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08,Julian,Barker\r\n" + 
+					"");
+			usersbw.write("FALSE,abhay6547@gmail.com,9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08,Abhay,Vaidya,1002428037\r\n" + 
+					"");
+			usersbw.write("TRUE,zhangruyin@gmail.com,9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08,Olivia,Zhang\r\n" + 
+					"");
+			usersbw.write("FALSE	felixchen1998@gmail.com,9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08,Felix,Chen,1002428039\r\n" + 
+					"");
+			usersbw.write("FALSE,tikuto112233@gmail.com,9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08,Tito,Ku,1002428040");
+			
+			usersbw.close();
+			usersFile.close();
+			
+			FileWriter assignmentFile = new FileWriter("Assignment1.csv");
+			BufferedWriter assignmentbw = new BufferedWriter(assignmentFile);
+			assignmentbw.write("Released,18/11/2017,6/3/2018\r\n" + 
+					"");
+			assignmentbw.write("1,question1,answer,happy|answer|excited|sad\r\n" + 
+					"");
+			assignmentbw.write("2,question2,answer,guitar|bass|answer|drums\r\n" + 
+					"");
+			assignmentbw.write("3,question3,answer,answer|dog|cat|bird\r\n" + 
+					"");
+			assignmentbw.write("4,question4,answer,java|c|python|answer\r\n" + 
+					"");
+			assignmentbw.close();
+			assignmentFile.close();
+			
+			FileWriter submissionFile = new FileWriter("Assignment1Submission.csv");
+			BufferedWriter submissionbw = new BufferedWriter(submissionFile);
+			submissionbw.write("StudentID,Question 1 Answer,Question 2 Answer,Question 3 Answer,Question 4 Answer,Average Mark,Number of Tries,Time (in seconds),Final Mark\r\n" + 
+					"");
+			submissionbw.write("1002428037,answer,guitar,answer,python,50,1,20,50\r\n" + 
+					"");
+			submissionbw.write("1002428039,answer,answer,answer,c,75,1,20,75\r\n" + 
+					"");
+			submissionbw.write("1002428040,sad,bass,cat,answer,25,1,20,25\r\n" + 
+					"");
+			submissionbw.close();
+			submissionFile.close();
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		
+	}
+	
+	@AfterClass
+	public static void teardown() {
+		File usersFile = new File("users.csv");
+		usersFile.delete();
+		File assignmentFile = new File("Assignment1.csv");
+		assignmentFile.delete();
+		File submissionFile = new File("Assignment1Submission.csv");
+		submissionFile.delete();	
+		TestFileHandler.tearDown();
+	}
+	
 	/*
 	 * users.csv Section.
 	 */
 	
 	private void initializeUsersFile() {
+
 		try {
 			usersFile = new FileReader("users.csv");
 		} catch (FileNotFoundException e) {
