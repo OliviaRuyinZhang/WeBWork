@@ -33,18 +33,21 @@ The first version of our personas and user stories (version 0) can be found [her
 ![Assignment Creation](https://github.com/CSCC01F17/L02_11/blob/master/Documents/Deliverable_4/Application_Screenshots/New_Assignment.png)
 
 ## Deliverable 5: Product Validation
-### November 6, 2017
-- This week we implemented assignment completion interafce on student panel and Assignment editing interface on instructor panel.
-#### November 13, 2017
-- This week we implemented the remark interface on both instructors and students panel. 
-- We made the application handle the remark request by sending remark request to instructors directly and when the remark is done there will be an email send to student automatically as well. 
-- We added a closed assignment session to lists all the closed assignments for students.
-- We implemented a feedback interface for student after they have done the assignment
-- We implemenetd unit test to validate our product quality.
+### Sprint 4: November 6, 2017
+For this sprint, we implemented: 
+- an assignment completion user interface for students, who can now complete assignments.
+- an assignment editing user interface, so that instructors have the option to edit their existing assignments.
+#### Sprint 5: November 13, 2017
+For this print, we implemented:
+- a remark user interface on both instructors and students assignment listing classes. 
+- handler to handle a submitted remark request by sending them directly to every registered instructor's emails. Upon completion of a remark, an email is sent to the student to notify them that changes have been made to their grade.
+- a closed assignment section to lists all the closed assignments for students.
+- user interface for students to view ther marks, time spent, average marks between every attempt and number of tries upon completion of an assignment.
+- unit tests to verify our product quality.
+- validation of our product by matching the client's requirements.
 ### User Instructions
 **_Set up_**
-- Build Path
-![Build Path Instruction]()
+- Due to usage of an external library, JavaMail, if the program is being run an IDE, the user must reconfigure their java build path to access the library. The API is found in the "lib" folder in the project and you can add them to your external library.
 - Go to `ApplicationDriver.java` under the `controllers` package
 - Run `ApplicationDriver.java` and you will see a login/register interface
 
