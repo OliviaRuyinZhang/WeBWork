@@ -1,91 +1,61 @@
 package controllers;
-import controllers.Authenticator;
+
 import static org.junit.Assert.*;
+
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-
+import controllers.Authenticator;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-
 public class AuthenticatorTest {
-	public static File f;
-	public static FileWriter fw;
-	public static StringBuilder sb;
-	public static BufferedWriter bf;
+
+	FileReader usersFile;
 	
-
-
 	@BeforeClass
-	public static void setUp() throws IOException {
+	public static void setup() {
 		TestFileHandler.setUp();
-		
-		f = new File("users.csv");
-		fw = new FileWriter(f.getName());
-		bf = new BufferedWriter(fw);
-		sb = new StringBuilder();
-		sb.append("TRUE,julian.barker@mail.utoronto.ca,a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3,Julian	Barker");
-		sb.append("\n");
-		sb.append("FALSE,ruyin.zhang@mail.utoronto.ca,a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3,Olivia	Zhang,1002205883");
-		sb.append("\n");
-		sb.append("TRUE,tito.ku@mail.utoronto.ca,a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3,Tito Ku");
-		bf.write(sb.toString());
-		bf.close();
-	}	
-
-
-	/**
-	 * Test whether the user is a instructor or not by given the user's email
-	 * return true when the user is an instructor
-	 */
-	@Test
-	public void testisInstructor() {
-		String email = "julian.barker@mail.utoronto.ca";
-		assertTrue(Authenticator.isInstructor(email));
-	}
-	
-	/**
-	 * Test whether the user is a instructor or not by given the user's email
-	 * return false when the user is an instructor
-	 */
-	@Test
-	public void testIsNotInstructor() {
-		String email = "ruyin.zhang@mail.utoronto.ca";
-		
-		assertFalse(Authenticator.isInstructor(email));
-	}
-	
-	/**
-	 * Test whether the user enters a correct user name and password to login
-	 * return true when the user provides correct user name and password
-	 */
-	@Test
-	public void testAuthenticate() {
-		String email = "ruyin.zhang@mail.utoronto.ca";
-		String password = "123";
-		assertTrue(Authenticator.authenticate(email, password));
-	}
-	
-	/**
-	 * Test whether the user enters a correct user name and password to login
-	 * return false when the user provides incorrect user name and password
-	 */
-	@Test
-	public void testFailAuthenticate() {
-		String email = "ruyin.zhang@mail.utoronto.ca";
-		String password = "1233";
-		assertFalse(Authenticator.authenticate(email, password));
+		try {
+			FileWriter usersFile = new FileWriter("users.csv");
+			BufferedWriter usersbw = new BufferedWriter(usersFile);
+			usersbw.write("TRUE,instruct@mail.utoronto.ca,a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3,Tito,Ku\r\n");
+			usersbw.write("FALSE,stu@mail.utoronto.ca,a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3,Julian,Baker,1001521775\r\n");
+			usersbw.close();
+			usersFile.close();
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	@AfterClass
-	public static void tearDown() {
-		f.delete();		
+	public static void teardown() {
+		File usersFile = new File ("users.csv");
+		usersFile.delete();
 		TestFileHandler.tearDown();
 	}
 	
+	@Test
+	public void testisInstructor() {
+		String email = "instruct@mail.utoronto.ca";
+		assertTrue(Authenticator.isInstructor(email));
+	}
 	
+	@Test
+	public void testisNotInstructor() {
+		String  email = "stu@mail.utoronoto.ca";
+		assertFalse(Authenticator.isInstructor(email));
+	}
+
+	@Test
+	public void testAuthenticate() {
+		String email = "instruct@mail.utoronto.ca";
+		String pass = "123";
+		assertTrue(Authenticator.authenticate(email, pass));
+	}
 }
