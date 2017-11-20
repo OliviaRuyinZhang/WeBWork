@@ -6,15 +6,17 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
+
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 
 public class AuthenticatorTest {
-	static File f;
-	static FileWriter fw;
-	static StringBuilder sb;
-	static BufferedWriter bf;
+	public static File f;
+	public static FileWriter fw;
+	public static StringBuilder sb;
+	public static BufferedWriter bf;
 	
 
 
@@ -79,8 +81,8 @@ public class AuthenticatorTest {
 		assertFalse(Authenticator.authenticate(email, password));
 	}
 	
-	@Test
-	public void tearDown() {
+	@AfterClass
+	public static void tearDown() {
 		f.delete();		
 		TestFileHandler.tearDown();
 	}
