@@ -265,8 +265,8 @@ public class ExtractData {
 			while ((line = br.readLine()) != null) {
 				
 				String[] user_info = line.split(","); // [isInstructor, email, password, firstName, lastName, studentID]
-				// If the email exists in the file.
-				if (user_info[1].equals(email)) {
+				// If the email exists in the file and user is not an instructor
+				if (user_info[1].equals(email) && user_info[0].equalsIgnoreCase("FALSE")) {
 					studentID = user_info[5];
 				}
 			}

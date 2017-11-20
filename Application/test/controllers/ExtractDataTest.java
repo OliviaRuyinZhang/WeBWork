@@ -177,10 +177,9 @@ public class ExtractDataTest {
 	
 	// Tests ExtractData.getStudentID if the email exists
 	// and belongs to an instructor.
-	//[BUG DETECTED]
 	@Test
 	public void testGetStudentID4() {
-		//assertEquals("", ExtractData.getStudentID("julianbarker@gmail.com"));
+		assertEquals("", ExtractData.getStudentID("julianbarker@gmail.com"));
 	}
 		
 	// Tests ExtractData.getStudentID if the email does exist
