@@ -33,7 +33,7 @@ The first version of our personas and user stories (version 0) can be found [her
 ![Assignment Creation](https://github.com/CSCC01F17/L02_11/blob/master/Documents/Deliverable_4/Application_Screenshots/New_Assignment.png)
 
 ## Deliverable 5: Product Validation
-### Sprint 4: November 6, 2017
+#### Sprint 4: November 6, 2017
 For this sprint, we implemented: 
 - an assignment completion user interface for students, who can now complete assignments.
 - an assignment editing user interface, so that instructors have the option to edit their existing assignments.
