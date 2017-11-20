@@ -38,6 +38,14 @@ The first version of our personas and user stories (version 0) can be found [her
 For this sprint, we implemented: 
 - An assignment completion user interface for students, who can now complete assignments.
 - An assignment editing user interface, so that instructors have the option to edit their existing assignments.
+
+### Assignment Editing
+![Assignment Editing](https://github.com/CSCC01F17/L02_11/blob/master/Documents/Deliverable_5/Sprint_4/Application_Screenshots/Assignment_Editing.png)
+
+### Assignment Completion
+![Assignment Editing](https://github.com/CSCC01F17/L02_11/blob/master/Documents/Deliverable_5/Sprint_4/Application_Screenshots/Assignment_Completion.png)
+
+
 ### Sprint 5
 ##### November 13, 2017
 For this sprint, we implemented:
@@ -47,6 +55,26 @@ For this sprint, we implemented:
 - A user interface for students to view ther marks, time spent, average marks, and number of tries upon completion of an assignment.
 - Unit tests to verify our product quality.
 - Acceptance tests to validate our product by reviewing the client's requirements and what we have delivered.
+
+### Student's Assignment Details
+![Assignment Details](https://github.com/CSCC01F17/L02_11/blob/master/Documents/Deliverable_5/Sprint_5/Application_Screenshots/Assignment_Details.png)
+
+### Exporting Grades
+![Export Grades](https://github.com/CSCC01F17/L02_11/blob/master/Documents/Deliverable_5/Sprint_5/Application_Screenshots/Instructor_Export.png)
+
+### Student Remark
+![Remark Buttons](https://github.com/CSCC01F17/L02_11/blob/master/Documents/Deliverable_5/Sprint_5/Application_Screenshots/Student_Remark.png)
+
+![Remark Explanation](https://github.com/CSCC01F17/L02_11/blob/master/Documents/Deliverable_5/Sprint_5/Application_Screenshots/Remark_Explanation.png)
+
+### Instructor Remark
+![Instructor Remark](https://github.com/CSCC01F17/L02_11/blob/master/Documents/Deliverable_5/Sprint_5/Application_Screenshots/Instructor_Remark.png)
+
+![Instructor Remark Email](https://github.com/CSCC01F17/L02_11/blob/master/Documents/Deliverable_5/Sprint_5/Application_Screenshots/Instructor_Remark_Email.png)
+
+### Instructor Student Search
+![Student Search](https://github.com/CSCC01F17/L02_11/blob/master/Documents/Deliverable_5/Sprint_5/Application_Screenshots/Student_Search.png)
+
 ### User Instructions
 ##### Setup
 - Due to usage of an external library, JavaMail, if the program is being run through an IDE, the user must reconfigure their java build path to access the library. The API is found as 5 jar files in the "lib" folder in the project and you must add them to your build path.
