@@ -79,6 +79,8 @@ public class AssignmentCreator {
 			if (line.charAt(0) == 'U'){
 				status = false;
 			}
+			fr.close();
+			br.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
