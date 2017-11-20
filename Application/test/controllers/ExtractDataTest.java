@@ -42,7 +42,7 @@ public class ExtractDataTest {
 					"");
 			usersbw.write("TRUE,zhangruyin@gmail.com,9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08,Olivia,Zhang\r\n" + 
 					"");
-			usersbw.write("FALSE	felixchen1998@gmail.com,9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08,Felix,Chen,1002428039\r\n" + 
+			usersbw.write("FALSE,felixchen1998@gmail.com,9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08,Felix,Chen,1002428039\r\n" + 
 					"");
 			usersbw.write("FALSE,tikuto112233@gmail.com,9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08,Tito,Ku,1002428040");
 			
