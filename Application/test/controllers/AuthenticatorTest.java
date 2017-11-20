@@ -51,11 +51,4 @@ public class AuthenticatorTest {
 		String  email = "stu@mail.utoronoto.ca";
 		assertFalse(Authenticator.isInstructor(email));
 	}
-
-//	@Test
-//	public void testAuthenticate() {
-//		String email = "instruct@mail.utoronto.ca";
-//		String pass = "123";
-//		assertTrue(Authenticator.authenticate(email, pass));
-//	}
 }
