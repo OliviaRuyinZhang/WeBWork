@@ -74,7 +74,7 @@ public class StudentListingGUI extends ListingGUI{
 		this.listAssignmentsPanel.add(lblOpen);
 		
 		int yPos = INITIAL_SECTION_Y;
-		yPos += addSection(true, openedAssigns, yPos);
+		yPos = addSection(true, openedAssigns, yPos);
 		
 		// Closed Assignment label.
 		JLabel lblClosed = new JLabel("Closed");

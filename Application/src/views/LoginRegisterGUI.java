@@ -9,7 +9,6 @@ import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
 import controllers.Authenticator;
-import models.Problem;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -17,8 +16,7 @@ import javax.swing.JOptionPane;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.Date;
+
 import java.awt.Color;
 import javax.swing.JTextField;
 import javax.swing.JPasswordField;
@@ -67,7 +65,7 @@ public class LoginRegisterGUI extends JFrame {
 	public LoginRegisterGUI() {
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 900, 731);
+		setSize(900,731);
 		contentPane = new JPanel();
 		contentPane.setBackground(Color.WHITE);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -115,9 +113,6 @@ public class LoginRegisterGUI extends JFrame {
 		contentPane.add(passwordField);
 		
 		JButton btnLogin = new JButton("Login");
-		if (System.getProperty("os.name").toLowerCase().indexOf("win") >= 0) {
-			btnLogin.setBorderPainted(false);
-		}
 		btnLogin.setFocusPainted(false);
 		btnLogin.setBackground(Color.LIGHT_GRAY);
 		btnLogin.setFont(new Font("Segoe UI", Font.PLAIN, 15));
@@ -166,9 +161,6 @@ public class LoginRegisterGUI extends JFrame {
 		contentPane.add(btnLogin);
 		
 		JButton btnRegister = new JButton("Register");
-		if (System.getProperty("os.name").toLowerCase().indexOf("win") >= 0) {
-			btnRegister.setBorderPainted(false);
-		}
 		btnRegister.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 		btnRegister.setFocusPainted(false);
 		btnRegister.setBackground(Color.LIGHT_GRAY);
@@ -191,5 +183,7 @@ public class LoginRegisterGUI extends JFrame {
 		chckbxInstructor.setBackground(Color.WHITE);
 		chckbxInstructor.setBounds(395, 425, 130, 23);
 		contentPane.add(chckbxInstructor);
+		
+		setLocationRelativeTo(null);
 	}
 }

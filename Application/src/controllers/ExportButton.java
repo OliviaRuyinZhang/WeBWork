@@ -30,7 +30,7 @@ public class ExportButton extends JButton {
 		this.fileName = fileName;
 		setText("Export Marks");
 		setHorizontalTextPosition(SwingConstants.CENTER);
-		setBounds(640, 26, 120, 35);
+		setBounds(620, 26, 120, 35);
 		setBackground(new Color(51, 204, 153));
 		setFont(new Font("Segoe UI", Font.PLAIN, 15));
 		addActionListener(new ActionListener() {
@@ -40,7 +40,7 @@ public class ExportButton extends JButton {
 				final JFileChooser fc = new JFileChooser();
 				String fileFound = getFileCurrentDirectory();
 				if(fileFound != null) {
-					// start at user/home directory
+					// Start at user/home directory
 					fc.setCurrentDirectory(new java.io.File("user.home"));
 			        fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 				} else {
@@ -52,7 +52,7 @@ public class ExportButton extends JButton {
 		        if (fc.showOpenDialog(ExportButton.this) == JFileChooser.APPROVE_OPTION) {
 		        		String destinatedDirectory = fc.getSelectedFile().getAbsolutePath() + "/" +
 		        					fileName.subSequence(0, fileName.indexOf(".")) + "Submission.csv";
-		        		String message = "save to " + fc.getSelectedFile().getName() + " sucessfully!";
+		        		String message = "The document was sucessfully saved in " + fc.getSelectedFile().getName() + ".";
 		        		try {
 		        			Files.copy(Paths.get(fileFound), Paths.get(destinatedDirectory), StandardCopyOption.REPLACE_EXISTING);
 		        			JOptionPane.showMessageDialog(null, message);

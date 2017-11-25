@@ -128,7 +128,7 @@ public class InstructorListingGUI extends ListingGUI{
 		listAssignmentsPanel.add(lblReleased);
 		
 		int yPos = INITIAL_SECTION_Y;
-		yPos += addSection(true, true, releasedFiles, yPos);
+		yPos = addSection(true, true, releasedFiles, yPos);
 		
 		/*
 		 * Unreleased Assignments Section
@@ -142,6 +142,7 @@ public class InstructorListingGUI extends ListingGUI{
 				lblUnreleased.getHeight());
 		
 		listAssignmentsPanel.add(lblUnreleased);
+		
 		yPos += INITIAL_SECTION_Y;
 		yPos = addSection(true, false, unreleasedFiles, yPos);
 		
@@ -372,18 +373,9 @@ public class InstructorListingGUI extends ListingGUI{
 				while((tempLine = buf.readLine()) != null) {
 					String[] individualAnswerInfo = tempLine.split(","); 
 
-					int size = individualAnswerInfo[individualAnswerInfo.length-1].length();
-
-					boolean isNumber = true;
-					for(int i = 0; i < size ; i++) {
-						 if (!Character.isDigit(individualAnswerInfo[individualAnswerInfo.length-1].charAt(i))) {
-					           isNumber = false;
-					       }
-					}
-					if(isNumber) {
-						sumOfFinalGrade += Double.parseDouble(individualAnswerInfo[individualAnswerInfo.length-1]);
-						numberOfStudents += 1;
-					}
+					sumOfFinalGrade += Double.parseDouble(individualAnswerInfo[individualAnswerInfo.length-1]);
+					numberOfStudents += 1;
+					
 				}
 				buf.close();
 				fr.close();
@@ -391,7 +383,6 @@ public class InstructorListingGUI extends ListingGUI{
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-
 			mean = sumOfFinalGrade/numberOfStudents;
 		}
 		return mean;
