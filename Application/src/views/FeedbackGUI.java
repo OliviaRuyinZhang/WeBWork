@@ -32,14 +32,14 @@ import javax.swing.border.Border;
 /*
  * Feedback Sending class
  */
-public class feedbackGUI extends JFrame{
+public class FeedbackGUI extends JFrame{
 	
 	private JPanel contentPane;
 	private JTextArea txtfeedback;
 	private JTextArea txtSubjectTitle;
 	private Date date;
 	
-	public feedbackGUI() {
+	public FeedbackGUI() {
 		
 		setResizable(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -128,7 +128,7 @@ public class feedbackGUI extends JFrame{
 				// Send email to instructors.
 				date = new Date();
 				saveFeedback();
-				JOptionPane.showMessageDialog(feedbackGUI.this, "Thanks for your feedback!");
+				JOptionPane.showMessageDialog(FeedbackGUI.this, "Thanks for your feedback!");
 				dispose();
 			}	
 		});

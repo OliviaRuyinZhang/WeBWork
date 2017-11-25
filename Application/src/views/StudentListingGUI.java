@@ -116,7 +116,7 @@ public class StudentListingGUI extends ListingGUI{
 				//Creates a feedback GUI
 				EventQueue.invokeLater(new Runnable() {
 					public void run() {
-						feedbackGUI frame =  new feedbackGUI();
+						FeedbackGUI frame =  new FeedbackGUI();
 						frame.setVisible(true);
 						frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);									
 					}
