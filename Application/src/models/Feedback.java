@@ -1,8 +1,5 @@
 package models;
 
-import java.util.Calendar;
-import java.util.Date;
-
 /*
  * Feedback object
  */
@@ -10,9 +7,9 @@ public class Feedback {
 
 	String subject;
 	String message;
-	Calendar date;
+	String date;
 	
-	public Feedback(String subject, Calendar date) {
+	public Feedback(String subject, String date) {
 		this.subject = subject;
 		this.message = "";
 		// Gets current day.
@@ -31,7 +28,7 @@ public class Feedback {
 		return this.message;
 	}
 	
-	public Date getDate() {
-		return this.date.getTime();
+	public String getDate() {
+		return this.date;
 	}
 }

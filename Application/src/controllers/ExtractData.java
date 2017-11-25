@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import models.Feedback;
 
 public class ExtractData {
 
@@ -76,7 +77,6 @@ public class ExtractData {
 		return info;
 	}
 
-	
 	/**
 	 * Returns an ArrayList<String> of all registered instructors.
 	 * @return ArrayList of Strings
@@ -98,7 +98,7 @@ public class ExtractData {
 					instEmails.add(userInfo[1]);
 				}
 			}
-			
+
 			br.close();
 			fr.close();
 		} catch (FileNotFoundException fnfe) {
@@ -106,16 +106,16 @@ public class ExtractData {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		return instEmails;
-    }
-    
+	}
+
 	/**
 	 * Returns the student's email given studentID
 	 * @return String
 	 */
-    public static String getStudentEmail(String studentID) {
-    		String email = "";
+	public static String getStudentEmail(String studentID) {
+		String email = "";
 		try {
 			FileReader fr = new FileReader("users.csv");
 			@SuppressWarnings("resource")
@@ -123,7 +123,7 @@ public class ExtractData {
 			String line = "";
 			// Reads every line of the file.
 			while ((line = br.readLine()) != null) {
-				
+
 				String[] user_info = line.split(","); // [isInstructor, email, password, firstName, lastName, studentID]
 				// If the email exists in the file.
 				if(user_info[0].equalsIgnoreCase("false")) {
@@ -140,49 +140,49 @@ public class ExtractData {
 			e.printStackTrace();
 		}
 		return email;
-    }
-    public static String getFirstName(String email){ 		
-    		String firstName = "";
-    		try {
-    			
-    			FileReader fr = new FileReader("users.csv");
-    			@SuppressWarnings("resource")
-    			BufferedReader br = new BufferedReader(fr);
-    			String line = "";
-    			// Reads every line of the file.
-    			while((line = br.readLine()) != null) {
+	}
+	
+	public static String getFirstName(String email){ 		
+		String firstName = "";
+		try {
 
-    				String[] user_info = line.split(","); // [isInstructor, email, password, firstName, lastName, studentID]
-    				// If the email exists in the file.
-    				if(user_info[1].equals(email)) {
-    					firstName = user_info[3];
-    				}
-    			}
-    			
-    			br.close();
-    			fr.close();
-    		} catch (FileNotFoundException fnfe) {
-    			fnfe.printStackTrace();
-    		} catch (IOException e) {
-    			e.printStackTrace();
-    		}
+			FileReader fr = new FileReader("users.csv");
+			@SuppressWarnings("resource")
+			BufferedReader br = new BufferedReader(fr);
+			String line = "";
+			// Reads every line of the file.
+			while((line = br.readLine()) != null) {
+
+				String[] user_info = line.split(","); // [isInstructor, email, password, firstName, lastName, studentID]
+				// If the email exists in the file.
+				if(user_info[1].equals(email)) {
+					firstName = user_info[3];
+				}
+			}
+
+			br.close();
+			fr.close();
+		} catch (FileNotFoundException fnfe) {
+			fnfe.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
 		return firstName;
+	}
 
-    }
-    
-    /**
-     * Given an assignment file name and student ID, returns a HashMap containing the final mark,
-     * time spent, number of tries, and average mark for that student's submission.
-     * @param fileName The assignment file name
-     * @param studentID The student's unique ID
-     * @return a HashMap of Strings mapped to Strings
-     */
-    public static HashMap<String, String> getAssignmentSubmissionDetails(String fileName, String studentID) {
-    	
-    	HashMap<String, String> submissionDetails = new HashMap<String, String>();
- 
-    	try {
+	/**
+	 * Given an assignment file name and student ID, returns a HashMap containing the final mark,
+	 * time spent, number of tries, and average mark for that student's submission.
+	 * @param fileName The assignment file name
+	 * @param studentID The student's unique ID
+	 * @return a HashMap of Strings mapped to Strings
+	 */
+	public static HashMap<String, String> getAssignmentSubmissionDetails(String fileName, String studentID) {
+
+		HashMap<String, String> submissionDetails = new HashMap<String, String>();
+
+		try {
 			FileReader fr = new FileReader(fileName.substring(0, fileName.indexOf(".")) + "Submission.csv");
 
 			@SuppressWarnings("resource")
@@ -191,7 +191,7 @@ public class ExtractData {
 			// Reads every line of the file.
 			while ((line = br.readLine()) != null) {
 				String[] user_info = line.split(","); // [studentID, question 1 answer, ... question n answer,
-														// averageMark, timeSpent, finalMark]
+				// averageMark, timeSpent, finalMark]
 				// If the studentID exists in the file.
 				if (user_info[0].equals(studentID)) {
 					submissionDetails.put("Final Mark", user_info[user_info.length - 1]);
@@ -208,18 +208,18 @@ public class ExtractData {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}    	
-    	return submissionDetails;
-    }
-    
-    /**
-     * Returns a HashMap where keys are the question ids and the values are
-     * the submitted answers.
-     * @return HashMap of Strings mapped to Strings
-     */
-    public static HashMap<String,String> getSubmittedAnswers(String fileName, String studentId){
-    	HashMap<String,String> answers = new HashMap<String,String>();
-    	
-    	try {
+		return submissionDetails;
+	}
+
+	/**
+	 * Returns a HashMap where keys are the question ids and the values are
+	 * the submitted answers.
+	 * @return HashMap of Strings mapped to Strings
+	 */
+	public static HashMap<String,String> getSubmittedAnswers(String fileName, String studentId){
+		HashMap<String,String> answers = new HashMap<String,String>();
+
+		try {
 			FileReader fr = new FileReader(fileName.substring(0, fileName.indexOf(".")) + "Submission.csv");
 			@SuppressWarnings("resource")
 			BufferedReader br = new BufferedReader(fr);
@@ -237,7 +237,7 @@ public class ExtractData {
 					break;
 				}
 			}
-			
+
 			br.close();
 			fr.close();
 		} catch (FileNotFoundException fnfe) {
@@ -245,10 +245,10 @@ public class ExtractData {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-    	
-    	return answers;
-    }
-	
+
+		return answers;
+	}
+
 	/**
 	 * Searches and returns the student's studentID based on the email
 	 * @param email String name of email address
@@ -263,7 +263,7 @@ public class ExtractData {
 			String line = "";
 			// Reads every line of the file.
 			while ((line = br.readLine()) != null) {
-				
+
 				String[] user_info = line.split(","); // [isInstructor, email, password, firstName, lastName, studentID]
 				// If the email exists in the file and user is not an instructor
 				if (user_info[1].equals(email) && user_info[0].equalsIgnoreCase("FALSE")) {
@@ -281,4 +281,31 @@ public class ExtractData {
 
 		return studentID;
 	}
+        
+        /**
+	 * Returns an ArrayList of Feedback objects from studentFeedback.csv
+         * file.
+         * 
+         * @return ArrayList of Feedback objects from studentFeedback.csv
+	 */
+        public static ArrayList<Feedback> getFeedback(){
+        
+        ArrayList<Feedback> f = new <Feedback>ArrayList();
+        String line = null;
+        
+        try {
+            FileReader fr = new FileReader("studentFeedback.csv");
+            BufferedReader br = new BufferedReader(fr);
+            while ((line = br.readLine()) != null) {
+                // Seperate date, feedback
+                String[] lineSplit = line.split(",");
+                f.add(new Feedback(lineSplit[1], lineSplit[0]));
+            }
+            br.close();
+            fr.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return f;
+    }
 }
