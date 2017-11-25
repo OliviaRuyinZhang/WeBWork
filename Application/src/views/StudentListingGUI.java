@@ -95,7 +95,7 @@ public class StudentListingGUI extends ListingGUI{
 		yPos = addSection(false, closedAssigns, yPos);
 
 		// Rescaled feedback icon to fit the button size 
-		ImageIcon feedbackIcon = new ImageIcon("resources/feedback_image.png");	        
+		ImageIcon feedbackIcon = new ImageIcon("resources/give_feedback_image.png");	        
 		Image img = feedbackIcon.getImage() ;  
 	    Image newimg = img.getScaledInstance(172, 47, java.awt.Image.SCALE_SMOOTH ) ;  
 	    feedbackIcon= new ImageIcon( newimg );
