@@ -49,9 +49,10 @@ public class RegisterStudentInfo extends JFrame {
 		// set up the frame
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setSize(300, 250);
+		setSize(300, 280);
 		// set up the panel
 		contentPane = new JPanel();
+		
 		contentPane.setBackground(Color.WHITE);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -62,20 +63,20 @@ public class RegisterStudentInfo extends JFrame {
 
 		// set title
 		JLabel title = new JLabel("Personal Information");
-		title.setFont(new Font("Segoe UI", Font.BOLD, 14));
+		title.setFont(new Font("Segoe UI", Font.BOLD, 15));
 		title.getPreferredSize();
-		title.setBounds(60, 30, 160, 25);
+		title.setBounds((300/2) - 100, 30, 200, 25);
 		contentPane.add(title);
 
 		// set label as "first name"
 		JLabel firstName = new JLabel("First Name");
 		firstName.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		firstName.setBounds(10, 70, 80, 25);
+		firstName.setBounds(10, 70, 90, 30);
 		contentPane.add(firstName);
 
 		// set the input text box for the label "first name"
 		firstNameField = new JTextField();
-		firstNameField.setBounds(100, 70, 160, 25);
+		firstNameField.setBounds(100, 70, 170, 30);
 		contentPane.add(firstNameField);
 		firstNameField.setColumns(10);
 		firstNameField.setFont(new Font("Segoe UI", Font.PLAIN, 14));
@@ -104,12 +105,12 @@ public class RegisterStudentInfo extends JFrame {
 		// set the second label as "last name"
 		JLabel lastName = new JLabel("Last Name");
 		lastName.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		lastName.setBounds(10, 100, 80, 25);
+		lastName.setBounds(10, 110, 90, 30);
 		contentPane.add(lastName);
 
 		// set up the text box for label "last name"
 		lastNameField = new JTextField();
-		lastNameField.setBounds(100, 100, 160, 25);
+		lastNameField.setBounds(100, 110, 170, 30);
 		contentPane.add(lastNameField);
 		lastNameField.setColumns(10);
 		lastNameField.setFont(new Font("Segoe UI", Font.PLAIN, 14));
@@ -138,13 +139,13 @@ public class RegisterStudentInfo extends JFrame {
 		// set the third label as "Student ID"
 		studentID = new JLabel("StudentID");
 		studentID.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		studentID.setBounds(10, 130, 100, 25);
+		studentID.setBounds(10, 150, 110, 30);
 		contentPane.add(studentID);
 
 		// set up the input text field for "student ID"
 		studentIDField = new JTextField();
 		studentIDField.setColumns(10);
-		studentIDField.setBounds(100, 130, 160, 25);
+		studentIDField.setBounds(100, 150, 170, 30);
 		studentIDField
 				.setBorder(BorderFactory.createCompoundBorder(border, BorderFactory.createEmptyBorder(5, 5, 5, 5)));
 		contentPane.add(studentIDField);
@@ -170,6 +171,8 @@ public class RegisterStudentInfo extends JFrame {
 
 		// set up the close button
 		JButton closeButton = new JButton("Close");
+		closeButton.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+		closeButton.setBackground(Color.LIGHT_GRAY);
 		// when the user click close, it will only close the "personal information"
 		// frame
 		closeButton.addActionListener(new ActionListener() {
@@ -178,7 +181,7 @@ public class RegisterStudentInfo extends JFrame {
 			}
 		});
 		// add close button
-		closeButton.setBounds(10, 190, 80, 25);
+		closeButton.setBounds(10, 205, 100, 25);
 		contentPane.add(closeButton);
 
 		// set up the submit button
@@ -188,12 +191,14 @@ public class RegisterStudentInfo extends JFrame {
 				registerValidation();
 			}
 		});
-		registerButton.setBounds(180, 190, 80, 25);
+		registerButton.setBounds(180, 205, 100, 25);
+		registerButton.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+		registerButton.setBackground(Color.LIGHT_GRAY);
 		contentPane.add(registerButton);
 		setVisible(true);
 
 	}
-
+	
 	/**
 	 * validate the user's registration information and create an account and a profile for the user if the user enter 
 	 * valid first name, last name and passcode. Error message will show up on a popup window if registration failed

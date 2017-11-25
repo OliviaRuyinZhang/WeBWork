@@ -280,6 +280,7 @@ public class AssignmentCompletionGUI extends JFrame implements ActionListener {
 					}
 				}
 				br.close();
+				fr.close();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -375,6 +376,7 @@ public class AssignmentCompletionGUI extends JFrame implements ActionListener {
 				BufferedWriter bf = new BufferedWriter(fw);
 				bf.write(sb.toString());
 				bf.close();
+				fw.close();
 			}
 
 			// if the file exists
