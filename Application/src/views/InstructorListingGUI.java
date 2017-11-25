@@ -34,25 +34,13 @@ import controllers.StatusButton;
 public class InstructorListingGUI extends ListingGUI{
 	
 	private Date today;
-	private Timer timer;
 	private ArrayList<File> assignments;
 	private ArrayList<File> releasedFiles;
 	private ArrayList<File> unreleasedFiles;
 	private ArrayList<File> closedFiles;
-	private static final int INITIAL_SECTION_Y = 55;
-	private static final int ASSIGN_PANEL_GAP = 90;
 	
 	public InstructorListingGUI(String email) {
 		super(email);
-		
-		timer = new Timer(100, new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				resetAssignmentListing();
-				displayAssignments();	
-			}
-		});
 		timer.start();
 	}
 	
@@ -62,7 +50,6 @@ public class InstructorListingGUI extends ListingGUI{
 	 */
 	protected void displayAssignments() {
 		today = new Date();
-		// Every existing assignment copied into an ArrayList.
 		assignments = gatherExistingAssignments();
 		releasedFiles = new ArrayList<File>();
 		unreleasedFiles = new ArrayList<File>();

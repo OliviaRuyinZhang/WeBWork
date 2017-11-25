@@ -2,6 +2,8 @@ package views;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
@@ -11,15 +13,19 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.Timer;
 import javax.swing.border.EmptyBorder;
 
 import controllers.ExtractData;
 
 public abstract class ListingGUI extends JFrame {
 
+	protected static final int INITIAL_SECTION_Y = 55;
+	protected static final int ASSIGN_PANEL_GAP = 90;
 	protected JPanel contentPane;
 	protected JPanel listAssignmentsPanel;
 	protected String email;
+	protected Timer timer;
 	
 	public ListingGUI(String email) {
 		this.email = email;
@@ -34,7 +40,6 @@ public abstract class ListingGUI extends JFrame {
 		this.contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(scroll);
 		this.contentPane.setLayout(null);
-		this.contentPane.setDoubleBuffered(true);
 		
 		// Welcome label.
 		JLabel lblWelcome = new JLabel("Welcome,");
@@ -56,11 +61,19 @@ public abstract class ListingGUI extends JFrame {
 		this.listAssignmentsPanel.setBackground(Color.WHITE);
 		this.contentPane.add(this.listAssignmentsPanel);
 		this.listAssignmentsPanel.setLayout(null);
+		
+		timer = new Timer(100, new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				resetAssignmentListing();
+				displayAssignments();
+			}
+			
+		});
 						
 		setSize(900, 700);
 		setLocationRelativeTo(null);
-		
-		displayAssignments();
 	}
 	
 	/**

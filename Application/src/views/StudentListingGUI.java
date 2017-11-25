@@ -29,28 +29,19 @@ import controllers.ExtractData;
  */
 public class StudentListingGUI extends ListingGUI{
 
+	private Date today;
 	private ArrayList<File> assignments;
 	private ArrayList<File> openedAssigns;
 	private ArrayList<File> closedAssigns;
-	private Date today;
-	private Timer timer;
 	
 	public StudentListingGUI(String email) {
 		super(email);
-		timer = new Timer(100, new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				displayAssignments();	
-			}
-		});
 		timer.start();
 	}
 
 	@Override
 	public void displayAssignments() {
 		today = new Date();
-
 		assignments = gatherExistingAssignments();
 		openedAssigns = new ArrayList<File>();
 		closedAssigns = new ArrayList<File>();
@@ -58,12 +49,6 @@ public class StudentListingGUI extends ListingGUI{
 		/*
 		 * Opened Assignments Section
 		 */
-		
-		// Assignments Panel
-		listAssignmentsPanel = new JPanel();
-		listAssignmentsPanel.setBackground(Color.WHITE);
-		contentPane.add(listAssignmentsPanel);
-		listAssignmentsPanel.setLayout(null);
 		
 		Calendar calendar = Calendar.getInstance();
 		Date due;
@@ -88,9 +73,9 @@ public class StudentListingGUI extends ListingGUI{
 		lblOpen.setFont(new Font("Segoe UI Light", Font.PLAIN, 35));
 		lblOpen.setBounds(0, 0, lblOpen.getWidth(), lblOpen.getHeight());
 		lblOpen.setSize(lblOpen.getPreferredSize());
-		listAssignmentsPanel.add(lblOpen);
+		this.listAssignmentsPanel.add(lblOpen);
 		
-		int yPos = 55;
+		int yPos = INITIAL_SECTION_Y;
 		yPos += addSection(true, openedAssigns, yPos);
 		
 		// Closed Assignment label.
@@ -99,20 +84,16 @@ public class StudentListingGUI extends ListingGUI{
 		lblClosed.setBounds(0, yPos, lblClosed.getWidth(), 
 				lblClosed.getHeight());
 		lblClosed.setSize(lblClosed.getPreferredSize());
-		listAssignmentsPanel.add(lblClosed);	
+		this.listAssignmentsPanel.add(lblClosed);	
 		
-		yPos += 55;
+		yPos += INITIAL_SECTION_Y;
 		yPos = addSection(false, closedAssigns, yPos);
 
-		listAssignmentsPanel.setBounds(62, 145, 765, yPos);
-		contentPane.add(listAssignmentsPanel);
+		this.listAssignmentsPanel.setBounds(62, 145, 765, yPos);
+		contentPane.add(this.listAssignmentsPanel);
 	
-		contentPane.setPreferredSize(new Dimension(900, 100  + listAssignmentsPanel.getHeight()));
-		setSize(900, 700);
-		setLocationRelativeTo(null);
+		contentPane.setPreferredSize(new Dimension(900, 100  + this.listAssignmentsPanel.getHeight()));
 	}
-	
-	public String getEmail() { return this.email;}
 	
 	/**
 	 * Return the y-position that indicates where
@@ -138,8 +119,8 @@ public class StudentListingGUI extends ListingGUI{
 			} else {
 				addToClosedAssignmentPanel(assignmentPanel, file);
 			}
-			yPos += 90;
-			listAssignmentsPanel.add(assignmentPanel); // Adds to the main assignments panel.
+			yPos += ASSIGN_PANEL_GAP;
+			this.listAssignmentsPanel.add(assignmentPanel); // Adds to the main assignments panel.
 		}
 		return yPos;
 	}
