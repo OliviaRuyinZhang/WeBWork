@@ -108,7 +108,6 @@ public class AssignmentCompletionGUI extends JFrame implements ActionListener {
 			contentPane.add(lblBlank);
 
 			// Question
-
 			JLabel lblQuestion = new JLabel(p.getProblemString());
 			lblQuestion.setFont(new Font("Segoe UI Light", Font.PLAIN, 20));
 			lblQuestion.setSize(lblQuestion.getPreferredSize());
@@ -147,19 +146,26 @@ public class AssignmentCompletionGUI extends JFrame implements ActionListener {
 			// close the current Jframe while the main method still running in the back,
 			// other opened Jframe will remain open
 			saveButton.addActionListener(this);
+			saveButton.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+			saveButton.setFocusPainted(false);
+			saveButton.setBackground(Color.decode("#B2BABB"));
 			contentPane.add(saveButton);
 
 			// submit & grade button
 			JButton submitButton = new JButton("Submit and Grade");
 			// increment the number of tries
 			submitButton.addActionListener(this);
+			submitButton.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+			submitButton.setFocusPainted(false);
+			submitButton.setBackground(new Color(51, 204, 153));
 			contentPane.add(submitButton);
 
 			scroll = new JScrollPane(contentPane);
 			scroll.getVerticalScrollBar().setUnitIncrement(16);
 			c.add(scroll);
-			setSize(600, 400);
+			setSize(600, 700);
 			setVisible(true);
+			setLocationRelativeTo(null);
 	}
 	
 	/**
@@ -220,14 +226,9 @@ public class AssignmentCompletionGUI extends JFrame implements ActionListener {
 	}
 
 	public String getAssignmentName(String fileName) {
-		String result = "";
 		int upTo = fileName.indexOf(".csv");
 
-		for (int i = 0; i < upTo; i++) {
-			result += fileName.charAt(i);
-		}
-
-		return result;
+		return fileName.substring(0, upTo-1) + " " + fileName.substring(upTo-1, upTo);
 	}
 
 	public boolean getPreviousSubmissionStatus(String fileName, String id) {
