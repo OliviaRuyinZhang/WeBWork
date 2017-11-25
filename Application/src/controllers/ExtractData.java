@@ -141,7 +141,7 @@ public class ExtractData {
 		}
 		return email;
 	}
-	
+
 	public static String getFirstName(String email){ 		
 		String firstName = "";
 		try {
@@ -281,31 +281,31 @@ public class ExtractData {
 
 		return studentID;
 	}
-        
-        /**
+
+	/**
 	 * Returns an ArrayList of Feedback objects from studentFeedback.csv
-         * file.
-         * 
-         * @return ArrayList of Feedback objects from studentFeedback.csv
+	 * file.
+	 * 
+	 * @return ArrayList of Feedback objects from studentFeedback.csv
 	 */
-        public static ArrayList<Feedback> getFeedback(){
-        
-        ArrayList<Feedback> f = new <Feedback>ArrayList();
-        String line = null;
-        
-        try {
-            FileReader fr = new FileReader("studentFeedback.csv");
-            BufferedReader br = new BufferedReader(fr);
-            while ((line = br.readLine()) != null) {
-                // Seperate date, feedback
-                String[] lineSplit = line.split(",");
-                f.add(new Feedback(lineSplit[1], lineSplit[0]));
-            }
-            br.close();
-            fr.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return f;
-    }
+	public static ArrayList<Feedback> getFeedback(){
+
+		ArrayList<Feedback> f = new ArrayList<>();
+		String line = null;
+
+		try {
+			FileReader fr = new FileReader("studentFeedback.csv");
+			BufferedReader br = new BufferedReader(fr);
+			while ((line = br.readLine()) != null) {
+				String[] lineSplit = line.split(",");
+				// Add the subject, message, and date
+				f.add(new Feedback(lineSplit[0], lineSplit[1], lineSplit[2]));
+			}
+			br.close();
+			fr.close();
+		} catch (IOException e) {
+			return null;
+		}
+		return f;
+	}
 }
