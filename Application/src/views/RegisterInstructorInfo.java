@@ -31,6 +31,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.awt.Color;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.JPasswordField;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -88,7 +89,7 @@ public class RegisterInstructorInfo extends JFrame {
 		JLabel title = new JLabel("Personal Information");
 		title.setFont(new Font("Segoe UI", Font.BOLD, 15));
 		title.getPreferredSize();
-		title.setBounds(60, 30, 200, 25);
+		title.setBounds(70, 30, 200, 25);
 		contentPane.add(title);
 		
 		// set label as "first name"
@@ -181,6 +182,8 @@ public class RegisterInstructorInfo extends JFrame {
 		contentPane.add(registrationCodeField);
 		
 		JButton closeButton = new JButton("Close");
+		closeButton.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+		closeButton.setBackground(Color.LIGHT_GRAY);
 		closeButton.addActionListener(new ActionListener() { 
 			  public void actionPerformed(ActionEvent e) { 
 			    dispose();
@@ -211,6 +214,8 @@ public class RegisterInstructorInfo extends JFrame {
 			}
 		});
 		registerButton.setBounds(180, 205, 100, 25);
+		registerButton.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+		registerButton.setBackground(Color.LIGHT_GRAY);
 		contentPane.add(registerButton);
 		setVisible(true);
 		
