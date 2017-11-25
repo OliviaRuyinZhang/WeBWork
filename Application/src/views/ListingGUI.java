@@ -1,7 +1,10 @@
 package views;
 
 import java.awt.Color;
+import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.Image;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -9,6 +12,8 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -47,7 +52,6 @@ public abstract class ListingGUI extends JFrame {
 		lblWelcome.setBounds(62, 20, 80, 50);
 		lblWelcome.setSize(lblWelcome.getPreferredSize());
 		this.contentPane.add(lblWelcome);
-	
 		
 		// User's Name label.
 		JLabel lblName = new JLabel(ExtractData.getFirstName(this.email));
@@ -55,6 +59,41 @@ public abstract class ListingGUI extends JFrame {
 		lblName.setBounds(62, 45, 350, 70);
 		lblName.setSize(lblName.getPreferredSize());
 		this.contentPane.add(lblName);
+		
+		// If the user is an instructor
+		if (ExtractData.getStudentID(email).equals("")) {
+			// Rescaled feedback icon to fit the button size 
+			ImageIcon feedbackIcon = new ImageIcon("resources/view_feedback_image.png");	        
+			Image img = feedbackIcon.getImage() ;  
+		    Image newimg = img.getScaledInstance(172, 47, java.awt.Image.SCALE_SMOOTH ) ;  
+		    feedbackIcon= new ImageIcon( newimg );
+		    // clear the default button boarder and content
+		    JButton btnViewFeedback = new JButton();
+		    btnViewFeedback.setBorderPainted(false);
+		    btnViewFeedback.setFocusPainted(false);
+		    btnViewFeedback.setBorder(null);
+		    btnViewFeedback.setMargin(new Insets(0, 0, 0, 0));
+		    btnViewFeedback.setContentAreaFilled(false);
+		    // set the feedback icon as button
+		    btnViewFeedback.setIcon(feedbackIcon);
+		    btnViewFeedback.setBounds(650, 60, 179, 35);
+		    btnViewFeedback.addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent arg0) {
+					// Creates the GUI to view feedback
+					EventQueue.invokeLater(new Runnable() {
+						public void run() {
+							InstructorFeedbackGUI frame = new InstructorFeedbackGUI();
+							frame.setVisible(true);
+							frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);									
+						}
+					});
+				}
+				
+			});
+			this.contentPane.add(btnViewFeedback);
+		}
 		
 		// Released Assignments Panel
 		this.listAssignmentsPanel = new JPanel();
