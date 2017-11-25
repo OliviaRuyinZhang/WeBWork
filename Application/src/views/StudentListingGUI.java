@@ -4,21 +4,28 @@ import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import java.io.File;
+
+import java.awt.Image;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 
+
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
+
+
 
 import controllers.ExtractData;
 
@@ -87,6 +94,39 @@ public class StudentListingGUI extends ListingGUI{
 		yPos += INITIAL_SECTION_Y;
 		yPos = addSection(false, closedAssigns, yPos);
 
+		// Rescaled feedback icon to fit the button size 
+		ImageIcon feedbackIcon = new ImageIcon("resources/feedback_image.png");	        
+		Image img = feedbackIcon.getImage() ;  
+	    Image newimg = img.getScaledInstance(172, 47, java.awt.Image.SCALE_SMOOTH ) ;  
+	    feedbackIcon= new ImageIcon( newimg );
+	    // clear the default button boarder and content
+	    JButton feedbackButton = new JButton();
+	    feedbackButton.setBorderPainted(false);
+	    feedbackButton.setBorder(null);
+	    feedbackButton.setMargin(new Insets(0, 0, 0, 0));
+	    feedbackButton.setContentAreaFilled(false);
+	    // set the feedback icon as button
+	    feedbackButton.setIcon(feedbackIcon);
+	    feedbackButton.setBounds(600, yPos, 172, 47);
+	    feedbackButton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				
+				//Creates a feedback GUI
+				EventQueue.invokeLater(new Runnable() {
+					public void run() {
+						feedbackGUI frame =  new feedbackGUI();
+						frame.setVisible(true);
+						frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);									
+					}
+				});
+			}
+			
+		});
+	    
+	    this.listAssignmentsPanel.add(feedbackButton);
+	    yPos += INITIAL_SECTION_Y;
 		this.listAssignmentsPanel.setBounds(62, 145, 765, yPos);
 		contentPane.add(this.listAssignmentsPanel);
 	
