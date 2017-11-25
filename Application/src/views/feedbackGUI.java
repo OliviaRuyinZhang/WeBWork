@@ -146,14 +146,14 @@ public class feedbackGUI extends JFrame{
 	 * @return String subjectLine
 	 */
 	private String getSubjectLine() {
-		return txtSubjectTitle.getText().toString();
+		return txtSubjectTitle.getText().toString().replaceAll(",", "");
 	}
 	
 	/**
 	 * @return String feedback content
 	 */
 	private String getContent() {
-		return txtfeedback.getText().toString();
+		return txtfeedback.getText().toString().replaceAll(",", "");
 	}
 	
 	/**
