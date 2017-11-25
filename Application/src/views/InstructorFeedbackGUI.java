@@ -67,12 +67,14 @@ public class InstructorFeedbackGUI extends JFrame {
 				JLabel lblSubject = new JLabel(feedback.getSubject()); // Strips the .csv extension.
 				lblSubject.setBounds(50, 22, 190, 36);
 				lblSubject.setFont(new Font("Segoe UI Semibold", Font.PLAIN, 16));
+				lblSubject.setSize(lblName.getPreferredSize());
 				feedbackPanel.add(lblSubject);
 
 				JLabel lblDate = new JLabel(feedback.getDate());
 				lblDate.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 				lblDate.setBounds(50, 58, 103, 23);
 				lblDate.setBackground(Color.BLACK);
+				lblDate.setSize(lblName.getPreferredSize());
 				feedbackPanel.add(lblDate);
 
 				JLabel lblMessage = new JLabel();
