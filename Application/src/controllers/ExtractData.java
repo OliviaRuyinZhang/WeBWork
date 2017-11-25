@@ -284,22 +284,25 @@ public class ExtractData {
 
 		return studentID;
 	}
-        public static ArrayList<Feedback> getAssignmentFeedback(String fileName){
+        
+        /**
+	 * Returns an ArrayList of Feedback objects from studentFeedback.csv
+         * file.
+         * 
+         * @return ArrayList of Feedback objects from studentFeedback.csv
+	 */
+        public static ArrayList<Feedback> getFeedback(){
         
         ArrayList<Feedback> f = new <Feedback>ArrayList();
         String line = null;
         
         try {
-            FileReader fr = new FileReader(fileName);
+            FileReader fr = new FileReader("studentFeedback.csv");
             BufferedReader br = new BufferedReader(fr);
             while ((line = br.readLine()) != null) {
-                    // Seperate date, feedback
-                    String[] lineSplit = line.split(",");
-                    // Seperate dd, mm, yyyy
-                    String[] dateSplit = lineSplit[0].split("/");
-                    Calendar date = new GregorianCalendar(Integer.parseInt(dateSplit[2]), 
-                            Integer.parseInt(dateSplit[1]), Integer.parseInt(dateSplit[0]));
-                    f.add(new Feedback(lineSplit[1], date));
+                // Seperate date, feedback
+                String[] lineSplit = line.split(",");
+                f.add(new Feedback(lineSplit[1], lineSplit[0]));
             }
             br.close();
             fr.close();
