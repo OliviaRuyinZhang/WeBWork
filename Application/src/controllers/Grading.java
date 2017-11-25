@@ -19,8 +19,7 @@ public class Grading {
      */
     public static HashMap<Integer, String> getStudentGrades(String id){
             HashMap<Integer, String> assignNumToGrade = new HashMap<>();
-            int i = 1;
-            
+          
             for (File f: getExistingAssignments()){
                 try {
                     FileReader fr = new FileReader(f.getName());
@@ -33,8 +32,10 @@ public class Grading {
                             String[] assignmentLine = line.split(",");
                             // Check if studentID is present
                             if (assignmentLine[0].equals(id)){
-                                    // Last index == length - 1
-                                    assignNumToGrade.put(i, assignmentLine[assignmentLine.length - 1].replace(" ", "") + "%");
+                                    // get assignmnet number
+                            		String fileName = f.getName();
+                            		int assignmentNum = Integer.parseInt(fileName.replaceAll("[^0-9]", ""));
+                                    assignNumToGrade.put(assignmentNum, assignmentLine[assignmentLine.length - 1].replace(" ", "") + "%");
                                     break;
                             }
                     }
@@ -43,7 +44,7 @@ public class Grading {
                 } catch (IOException e) {
                         e.printStackTrace();
                 }
-                i++;
+               
             }
             return assignNumToGrade;
         }
@@ -51,7 +52,7 @@ public class Grading {
         private static ArrayList<File> getExistingAssignments(){
 		
             ArrayList<File> assignments = new ArrayList<>();
-            Pattern pattern= Pattern.compile("Assignment+(\\d)*+Submission.csv");
+            Pattern pattern= Pattern.compile("Assignment(\\d)+Submission.csv");
             
             Matcher matcher;
 	    
