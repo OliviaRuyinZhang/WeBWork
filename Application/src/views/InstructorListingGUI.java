@@ -54,7 +54,6 @@ public class InstructorListingGUI extends ListingGUI{
 		unreleasedFiles = new ArrayList<File>();
 		closedFiles = new ArrayList<File>();
 		
-				
 		JButton btnAddAssignment = new JButton("+ Add Assignment");
 		btnAddAssignment.setBounds(585, 10, 179, 35);
 		btnAddAssignment.setFont(new Font("Segoe UI", Font.PLAIN, 15));

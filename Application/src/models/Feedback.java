@@ -1,7 +1,7 @@
 package models;
 
-/*
- * Feedback object
+/**
+ * Class to store information regarding a single feedback.
  */
 public class Feedback {
 
@@ -9,19 +9,14 @@ public class Feedback {
 	String message;
 	String date;
 	
-	public Feedback(String subject, String date) {
+	public Feedback(String subject, String message, String date) {
 		this.subject = subject;
-		this.message = "";
-		// Gets current day.
+		this.message = message;
 		this.date = date; 
 	}
 	
 	public String getSubject() {
 		return this.subject;
-	}
-	
-	public void setMessage(String msg) {
-		this.message = msg;
 	}
 	
 	public String getMessage() {

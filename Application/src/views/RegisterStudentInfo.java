@@ -65,7 +65,7 @@ public class RegisterStudentInfo extends JFrame {
 		JLabel title = new JLabel("Personal Information");
 		title.setFont(new Font("Segoe UI", Font.BOLD, 15));
 		title.getPreferredSize();
-		title.setBounds(60, 30, 200, 25);
+		title.setBounds((300/2) - 100, 30, 200, 25);
 		contentPane.add(title);
 
 		// set label as "first name"
@@ -171,6 +171,8 @@ public class RegisterStudentInfo extends JFrame {
 
 		// set up the close button
 		JButton closeButton = new JButton("Close");
+		closeButton.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+		closeButton.setBackground(Color.LIGHT_GRAY);
 		// when the user click close, it will only close the "personal information"
 		// frame
 		closeButton.addActionListener(new ActionListener() {
@@ -190,6 +192,8 @@ public class RegisterStudentInfo extends JFrame {
 			}
 		});
 		registerButton.setBounds(180, 205, 100, 25);
+		registerButton.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+		registerButton.setBackground(Color.LIGHT_GRAY);
 		contentPane.add(registerButton);
 		setVisible(true);
 
