@@ -65,7 +65,7 @@ public class RegisterStudentInfo extends JFrame {
 		JLabel title = new JLabel("Personal Information");
 		title.setFont(new Font("Segoe UI", Font.BOLD, 15));
 		title.getPreferredSize();
-		title.setBounds(60, 30, 200, 25);
+		title.setBounds((300/2) - 100, 30, 200, 25);
 		contentPane.add(title);
 
 		// set label as "first name"
