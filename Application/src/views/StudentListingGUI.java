@@ -34,19 +34,6 @@ public class StudentListingGUI extends ListingGUI{
 	private ArrayList<File> closedAssigns;
 	private Date today;
 	private Timer timer;
-
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					StudentListingGUI frame = new StudentListingGUI("student");
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 	
 	public StudentListingGUI(String email) {
 		super(email);
