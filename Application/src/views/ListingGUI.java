@@ -15,13 +15,13 @@ import javax.swing.border.EmptyBorder;
 
 import controllers.ExtractData;
 
-public abstract class Listing extends JFrame {
+public abstract class ListingGUI extends JFrame {
 
 	protected JPanel contentPane;
 	protected JPanel listAssignmentsPanel;
-	private String email;
+	protected String email;
 	
-	public Listing(String email) {
+	public ListingGUI(String email) {
 		this.email = email;
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -34,6 +34,7 @@ public abstract class Listing extends JFrame {
 		this.contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(scroll);
 		this.contentPane.setLayout(null);
+		this.contentPane.setDoubleBuffered(true);
 		
 		// Welcome label.
 		JLabel lblWelcome = new JLabel("Welcome,");
@@ -84,8 +85,13 @@ public abstract class Listing extends JFrame {
 	    	}
 	    }  
 	    return assignments;
-	}
+	}	
 	
+	public void resetAssignmentListing(){
+		listAssignmentsPanel.removeAll();
+		listAssignmentsPanel.revalidate();
+		listAssignmentsPanel.repaint();
+	}
 	
 	protected abstract void displayAssignments();
 }

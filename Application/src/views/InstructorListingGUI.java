@@ -16,14 +16,10 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 
-import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.Timer;
@@ -35,7 +31,7 @@ import controllers.StatusButton;
 /**
  * Class to display a list of assignments for an instructor.
  */
-public class InstructorListingGUI extends Listing{
+public class InstructorListingGUI extends ListingGUI{
 	
 	private Date today;
 	private Timer timer;
@@ -88,13 +84,11 @@ public class InstructorListingGUI extends Listing{
 						try {
 							AssignmentCreationGUI frame = new AssignmentCreationGUI();
 							frame.addWindowListener(new WindowAdapter() {
-								
 								@Override
 								public void windowOpened(WindowEvent e) {
 									hideListingFrame();
 									timer.stop();
 								}
-								
 								@Override
 								public void windowClosed(WindowEvent e) {
 									showListingFrame();
@@ -102,7 +96,6 @@ public class InstructorListingGUI extends Listing{
 									displayAssignments();
 									timer.start();
 								}					
-								
 							});
 							frame.setVisible(true);
 							frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -115,8 +108,6 @@ public class InstructorListingGUI extends Listing{
 			}
 		});
 		this.listAssignmentsPanel.add(btnAddAssignment);
-		
-		// Check due date
 		
 		Calendar calendar = Calendar.getInstance();
 		Date due;
@@ -239,7 +230,11 @@ public class InstructorListingGUI extends Listing{
 	 * Return the y-position that indicates where
 	 * the next section will start adding assignment.
 	 * @param boolean beforeDeadline
-	 * @return Integer y-position
+	 * @param boolean isReleased 
+	 * @param ArrayList<File> assignmentSection section that will be added to the
+	 * 				content panel.
+	 * @param int currYPos where to start added to.
+	 * @return int y-position
 	 */
 	private int addSection(boolean beforeDeadline, boolean isReleased, ArrayList<File> assignmentSection, int currYPos) {
 		int yPos = currYPos;
@@ -257,7 +252,6 @@ public class InstructorListingGUI extends Listing{
 			} else {
 				addToClosedAssignmentPanel(assignmentPanel, file);
 			}
-			// ELSE ADD TO CLOSED ASSIGNMENTPANEL
 			yPos += ASSIGN_PANEL_GAP;
 			listAssignmentsPanel.add(assignmentPanel); // Adds to the main assignments panel.
 		}
@@ -367,15 +361,6 @@ public class InstructorListingGUI extends Listing{
 
 	private void showListingFrame() {
 		this.setVisible(true);
-	}
-	
-	/**
-	 * Removes all components in listAssignmentsPanel.
-	 */
-	private void resetAssignmentListing() {
-		listAssignmentsPanel.removeAll();
-		listAssignmentsPanel.revalidate();
-		listAssignmentsPanel.repaint();
 	}
     
     /**
