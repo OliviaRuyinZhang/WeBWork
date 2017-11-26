@@ -4,8 +4,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.awt.Color;
 import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -13,7 +11,6 @@ import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.time.Duration;
 import java.time.Instant;
@@ -21,13 +18,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -35,12 +26,10 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
-import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
-import javax.swing.SwingConstants;
-import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
-import java.util.Scanner;
+
+import controllers.ExtractData;
 
 import models.Problem;
 
@@ -500,7 +489,14 @@ public class AssignmentCompletionGUI extends JFrame implements ActionListener {
 					
 					updateCsvFile();
 					
-					// Add submission summary screen here
+					//after submit and grade button is pressed, opens a summary panel for student to view right/wrong
+					try {
+						StudentSubmissionSummaryGUI frame = new StudentSubmissionSummaryGUI(new File(fileName), ExtractData.getStudentEmail(studentNo));
+						frame.setVisible(true);
+						frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+					} catch (Exception fe){
+						fe.printStackTrace();
+					}
 					
 					setVisible(false);
 					dispose();
