@@ -1,8 +1,11 @@
 package views;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -11,6 +14,7 @@ import java.util.ArrayList;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -36,6 +40,7 @@ public class StudentSubmissionSummaryGUI extends JFrame {
 		setSize(600,600);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		contentPane = new JPanel();
+		
 		//scroll bar
 		JScrollPane scroll = new JScrollPane(contentPane,
 				JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
@@ -45,6 +50,26 @@ public class StudentSubmissionSummaryGUI extends JFrame {
 		scroll.setBounds(0, 0, 600, 600);
 		getContentPane().add(scroll);
 		contentPane.setLayout(null);
+		
+		//done button
+		JButton btnDone = new JButton("Done");
+		btnDone.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+		btnDone.setFocusPainted(false);
+		btnDone.setBackground(Color.decode("#F0F0F0"));
+		btnDone.setBounds(480, 50, 80, 20);
+		btnDone.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				try {
+					StudentListingGUI frame = new StudentListingGUI(email);
+					frame.setVisible(true);
+					frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+					hideSummary();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+		contentPane.add(btnDone);
 		
 		//summary label
 		JLabel lblSummary = new JLabel("Summary");
@@ -62,7 +87,7 @@ public class StudentSubmissionSummaryGUI extends JFrame {
 		ArrayList<Problem> problems = getProblems(file.getName());
 		ArrayList<Boolean> summary = checkRightWrong(problems);
 		int ycoord = 0;
-		JPanel problemPanel;
+		JPanel problemPanel = new JPanel();
 		//create a panel for each question
 		for (int i = 0; i < problems.size(); i++) {
 			problemPanel = new JPanel();
@@ -84,6 +109,15 @@ public class StudentSubmissionSummaryGUI extends JFrame {
 			}
 			contentPane.add(problemPanel);
 		}
+		
+		contentPane.setPreferredSize(new Dimension(600, 600 + problemPanel.getHeight()));
+	}
+	
+	/**
+	 * Hides the summary panel
+	 */
+	private void hideSummary() {
+		this.setVisible(false);
 	}
 	
 	/**
@@ -114,6 +148,7 @@ public class StudentSubmissionSummaryGUI extends JFrame {
 			br.close();
 			fr.close();
 			for (int i = 0; i < p.size(); i++) {
+				//if solution matches students answer
 				if(p.get(i).getSolution().equals(info[i+1])){
 					summary.add(true);
 				} else {
@@ -133,6 +168,7 @@ public class StudentSubmissionSummaryGUI extends JFrame {
 	 */
 	private void addToProblemPanel(JPanel panel, Problem p) {
 		
+		//show the question
 		JTextArea txtProblem = new JTextArea(p.getProblemString());
 		txtProblem.setFont(new Font("Segoe UI Light", Font.PLAIN, 16));
 		txtProblem.setEditable(false);
@@ -140,6 +176,7 @@ public class StudentSubmissionSummaryGUI extends JFrame {
 		txtProblem.setWrapStyleWord(true);
 		txtProblem.setSize(txtProblem.getPreferredSize());
 		
+		//scroll
 		JScrollPane scroll = new JScrollPane(txtProblem, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
 				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		scroll.setBounds(15, 14, 480, 60);
@@ -162,7 +199,7 @@ public class StudentSubmissionSummaryGUI extends JFrame {
 			while ((line = br.readLine()) != null) {
 				// Get line
 				String[] problemLine = line.split(",");
-				// Get question answers into an arraylist
+				// Get question answers into an array list
 				ArrayList<String> options = new <Problem>ArrayList();
 				for (String s : problemLine[3].split("\\|")) {
 					options.add(s);
@@ -175,18 +212,5 @@ public class StudentSubmissionSummaryGUI extends JFrame {
 			e.printStackTrace();
 		}
 		return result;
-	}
-	
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					StudentSubmissionSummaryGUI frame = new StudentSubmissionSummaryGUI(new File("Assignment1.csv"), "stu");
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
 	}
 }

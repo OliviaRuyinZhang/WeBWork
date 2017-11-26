@@ -40,6 +40,9 @@ import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
+
+import controllers.ExtractData;
+
 import java.util.Scanner;
 
 import models.Problem;
@@ -499,12 +502,32 @@ public class AssignmentCompletionGUI extends JFrame implements ActionListener {
 					
 					updateCsvFile();
 					
-					// Add submission summary screen here
+					//after submit and grade button is pressed, opens a summary panel for student to view right/wrong
+					try {
+						StudentSubmissionSummaryGUI frame = new StudentSubmissionSummaryGUI(new File(fileName), ExtractData.getStudentEmail(studentNo));
+						frame.setVisible(true);
+						frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+					} catch (Exception fe){
+						fe.printStackTrace();
+					}
 					
 					setVisible(false);
 					dispose();
 				}
 			}
 		}
+	}
+	
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					AssignmentCompletionGUI frame = new AssignmentCompletionGUI("Assignment1.csv", "123");
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
 	}
 }
