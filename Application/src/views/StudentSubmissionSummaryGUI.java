@@ -3,6 +3,7 @@ package views;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
@@ -11,14 +12,12 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
 import javax.swing.border.EmptyBorder;
 
 import controllers.ExtractData;
@@ -36,7 +35,7 @@ public class StudentSubmissionSummaryGUI extends JFrame {
 		
 		//main content pane
 		setResizable(false);
-		setSize(600,600);
+		setSize(800,600);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		contentPane = new JPanel();
 		
@@ -46,46 +45,34 @@ public class StudentSubmissionSummaryGUI extends JFrame {
 		scroll.getVerticalScrollBar().setUnitIncrement(16);
 		contentPane.setBackground(Color.WHITE);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		scroll.setBounds(0, 0, 600, 600);
 		getContentPane().add(scroll);
 		contentPane.setLayout(null);
 		
-		//done button
-		JButton btnDone = new JButton("Done");
-		btnDone.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-		btnDone.setFocusPainted(false);
-		btnDone.setBackground(Color.decode("#F0F0F0"));
-		btnDone.setBounds(480, 50, 80, 20);
-		btnDone.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				try {
-					StudentListingGUI frame = new StudentListingGUI(email);
-					frame.setVisible(true);
-					frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-					hideSummary();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-		contentPane.add(btnDone);
-		
 		//summary label
-		JLabel lblSummary = new JLabel("Summary");
+		JLabel lblSummary = new JLabel("Submission Summary");
 		lblSummary.setFont(new Font("Segoe UI Light", Font.PLAIN, 52));
-		lblSummary.setBounds(20, 18, 350, 70);
+		lblSummary.setBounds(62, 45, 350, 70);
 		lblSummary.setSize(lblSummary.getPreferredSize());
 		contentPane.add(lblSummary);
 		
 		//setting the check mark label
-		Icon checkMark = new ImageIcon("resources/check_mark.png");
-		JLabel lblCheck;
+		ImageIcon checkMark = new ImageIcon("resources/check_mark.png");
+		Image img = checkMark.getImage() ;  
+	    Image newimg = img.getScaledInstance(30, 30, java.awt.Image.SCALE_SMOOTH ) ;  
+	    checkMark= new ImageIcon(newimg);
+	    
+		JLabel lblCheck;	
+		
 		//setting the x mark label
-		Icon xMark = new ImageIcon("resources/cross_mark.png");
+		ImageIcon xMark = new ImageIcon("resources/cross_mark.png");
+		img = xMark.getImage() ;  
+	    newimg = img.getScaledInstance(30, 30, java.awt.Image.SCALE_SMOOTH ) ;  
+	    xMark= new ImageIcon(newimg);
 		JLabel lblX;
+		
 		ArrayList<Problem> problems = getProblems(file.getName());
 		ArrayList<Boolean> summary = checkRightWrong(problems);
-		int ycoord = 0;
+		int ycoord = 50;
 		JPanel problemPanel = new JPanel();
 		//create a panel for each question
 		for (int i = 0; i < problems.size(); i++) {
@@ -93,30 +80,43 @@ public class StudentSubmissionSummaryGUI extends JFrame {
 			problemPanel.setLayout(null);
 			problemPanel.setBackground(Color.decode("#F0F0F0"));
 			problemPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder());
-			problemPanel.setBounds(12, ycoord + PANEL_GAP, 555, 85);
+			problemPanel.setBounds(62, ycoord + PANEL_GAP, 648, 85);
 			ycoord += PANEL_GAP;
 			addToProblemPanel(problemPanel, problems.get(i));
 			//if student got it right, check mark is shown
 			if (summary.get(i)) {
 				lblCheck = new JLabel(checkMark);
-				lblCheck.setBounds(500, 20, 50, 50);
+				lblCheck.setBounds(580, 20, 50, 50);
 				problemPanel.add(lblCheck);
 			} else { //if student got it wrong, x mark is shown
 				lblX = new JLabel(xMark);
-				lblX.setBounds(500, 20, 50, 50);
+				lblX.setBounds(580, 20, 50, 50);
 				problemPanel.add(lblX);
 			}
 			contentPane.add(problemPanel);
 		}
 		
-		contentPane.setPreferredSize(new Dimension(600, 600 + problemPanel.getHeight()));
-	}
-	
-	/**
-	 * Hides the summary panel
-	 */
-	private void hideSummary() {
-		this.setVisible(false);
+		//done button
+		JButton btnDone = new JButton("Done");
+		
+		btnDone.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+		btnDone.setFocusPainted(false);
+		btnDone.setBackground(Color.LIGHT_GRAY);
+		btnDone.setBounds(592, ycoord + (PANEL_GAP+10), 115, 32);
+		btnDone.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				try {
+					setVisible(false);
+					dispose();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+		contentPane.add(btnDone);
+		
+		setLocationRelativeTo(null);
+		contentPane.setPreferredSize(new Dimension(600, ycoord));
 	}
 	
 	/**
@@ -166,20 +166,12 @@ public class StudentSubmissionSummaryGUI extends JFrame {
 	 * @param Problem p the problem object
 	 */
 	private void addToProblemPanel(JPanel panel, Problem p) {
-		
-		//show the question
-		JTextArea txtProblem = new JTextArea(p.getProblemString());
-		txtProblem.setFont(new Font("Segoe UI Light", Font.PLAIN, 16));
-		txtProblem.setEditable(false);
-		txtProblem.setLineWrap(true);
-		txtProblem.setWrapStyleWord(true);
-		txtProblem.setSize(txtProblem.getPreferredSize());
-		
-		//scroll
-		JScrollPane scroll = new JScrollPane(txtProblem, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
-				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		scroll.setBounds(15, 14, 480, 60);
-		panel.add(scroll);
+		JLabel lblProblem = new JLabel();
+		lblProblem.setText("<html>"+ p.getProblemString() +"</html>");
+		lblProblem.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+		lblProblem.setBounds(20, 5, 530, 70);
+		lblProblem.setBackground(Color.BLACK);
+		panel.add(lblProblem);
 	}
 	
 	/**
