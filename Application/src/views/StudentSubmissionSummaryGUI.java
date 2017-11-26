@@ -23,6 +23,9 @@ import javax.swing.border.EmptyBorder;
 import controllers.ExtractData;
 import models.Problem;
 
+/**
+ * Class to display what questions the student got right and wrong in their submission.
+ */
 public class StudentSubmissionSummaryGUI extends JFrame {
 	protected static final int PANEL_GAP = 100; //the constant gap in between all questions
 	private JPanel contentPane;
@@ -33,13 +36,13 @@ public class StudentSubmissionSummaryGUI extends JFrame {
 		this.email = email;
 		this.file = file;		
 		
-		//main content pane
+		// Main content pane
 		setResizable(false);
 		setSize(800,600);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		contentPane = new JPanel();
 		
-		//scroll bar
+		// Scroll bar
 		JScrollPane scroll = new JScrollPane(contentPane,
 				JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		scroll.getVerticalScrollBar().setUnitIncrement(16);
@@ -48,22 +51,21 @@ public class StudentSubmissionSummaryGUI extends JFrame {
 		getContentPane().add(scroll);
 		contentPane.setLayout(null);
 		
-		//summary label
+		// Summary label
 		JLabel lblSummary = new JLabel("Submission Summary");
 		lblSummary.setFont(new Font("Segoe UI Light", Font.PLAIN, 52));
 		lblSummary.setBounds(62, 45, 350, 70);
 		lblSummary.setSize(lblSummary.getPreferredSize());
 		contentPane.add(lblSummary);
 		
-		//setting the check mark label
+		// Setting the check mark label
 		ImageIcon checkMark = new ImageIcon("resources/check_mark.png");
 		Image img = checkMark.getImage() ;  
 	    Image newimg = img.getScaledInstance(30, 30, java.awt.Image.SCALE_SMOOTH ) ;  
 	    checkMark= new ImageIcon(newimg);
-	    
 		JLabel lblCheck;	
 		
-		//setting the x mark label
+		// Setting the x mark label
 		ImageIcon xMark = new ImageIcon("resources/cross_mark.png");
 		img = xMark.getImage() ;  
 	    newimg = img.getScaledInstance(30, 30, java.awt.Image.SCALE_SMOOTH ) ;  
@@ -74,7 +76,8 @@ public class StudentSubmissionSummaryGUI extends JFrame {
 		ArrayList<Boolean> summary = checkRightWrong(problems);
 		int ycoord = 50;
 		JPanel problemPanel = new JPanel();
-		//create a panel for each question
+		
+		// Create a panel for each question
 		for (int i = 0; i < problems.size(); i++) {
 			problemPanel = new JPanel();
 			problemPanel.setLayout(null);
@@ -83,12 +86,14 @@ public class StudentSubmissionSummaryGUI extends JFrame {
 			problemPanel.setBounds(62, ycoord + PANEL_GAP, 648, 85);
 			ycoord += PANEL_GAP;
 			addToProblemPanel(problemPanel, problems.get(i));
-			//if student got it right, check mark is shown
+			
+			//If student got it right, check mark is shown
 			if (summary.get(i)) {
 				lblCheck = new JLabel(checkMark);
 				lblCheck.setBounds(580, 20, 50, 50);
 				problemPanel.add(lblCheck);
-			} else { //if student got it wrong, x mark is shown
+			// If student got it wrong, x mark is shown
+			} else {
 				lblX = new JLabel(xMark);
 				lblX.setBounds(580, 20, 50, 50);
 				problemPanel.add(lblX);
@@ -96,9 +101,8 @@ public class StudentSubmissionSummaryGUI extends JFrame {
 			contentPane.add(problemPanel);
 		}
 		
-		//done button
+		// Done button
 		JButton btnDone = new JButton("Done");
-		
 		btnDone.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 		btnDone.setFocusPainted(false);
 		btnDone.setBackground(Color.LIGHT_GRAY);
