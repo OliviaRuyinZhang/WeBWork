@@ -34,9 +34,10 @@ public abstract class ListingGUI extends JFrame {
 	
 	public ListingGUI(String email) {
 		this.email = email;
+		ImageIcon icon = new ImageIcon("resources/webwork_icon.png");
+		setIconImage(icon.getImage());
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setTitle("WebWork");
 		this.contentPane = new JPanel();
 		JScrollPane scroll = new JScrollPane(contentPane, 
 				JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);

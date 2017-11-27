@@ -41,8 +41,6 @@ public class StudentListingGUI extends ListingGUI{
 	
 	public StudentListingGUI(String email) {
 		super(email);
-		ImageIcon icon = new ImageIcon("resources/webwork_icon.png");
-		setIconImage(icon.getImage());
 		setTitle("WeBWorK | Student Dashboard");
 		timer.start();
 	}

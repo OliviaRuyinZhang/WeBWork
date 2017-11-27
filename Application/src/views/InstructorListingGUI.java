@@ -41,8 +41,6 @@ public class InstructorListingGUI extends ListingGUI{
 	
 	public InstructorListingGUI(String email) {
 		super(email);
-		ImageIcon icon = new ImageIcon("resources/webwork_icon.png");
-		setIconImage(icon.getImage());
 		setTitle("WeBWorK | Instructor Dashboard");
 		timer.start();
 	}
