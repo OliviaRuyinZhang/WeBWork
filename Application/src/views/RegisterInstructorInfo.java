@@ -182,14 +182,15 @@ public class RegisterInstructorInfo extends RegisterGUI {
 		boolean validRegister = false;
 		boolean accessPermission = false;
 		
-		if (typeCheck) {
-			validRegister = Authenticator.register(true, email, password, firstNameField.getText(),
-					lastNameField.getText());
-		}
+	
 		
 		String inviteCodeLabel = new String(inviteCodeField.getPassword());
 		if (inviteCodeLabel.equals(inviteCode)) {
 			accessPermission = true;
+			if (typeCheck) {
+				validRegister = Authenticator.register(true, email, password, firstNameField.getText(),
+						lastNameField.getText());
+			}
 			registerValidation(validRegister, typeCheck, false);
 		} else {
 			if (!accessPermission) {
