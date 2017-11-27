@@ -43,7 +43,6 @@ public class FeedbackGUI extends JFrame{
 	public FeedbackGUI() {
 		ImageIcon icon = new ImageIcon("resources/webwork_icon.png");
 		setIconImage(icon.getImage());
-		setTitle("WeBWorK | Give Feedback");
 		setResizable(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(400,500);

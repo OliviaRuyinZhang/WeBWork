@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import models.Feedback;
+import models.Problem;
 
 public class ExtractData {
 
@@ -307,5 +308,36 @@ public class ExtractData {
 			return null;
 		}
 		return f;
+	}
+	
+	/**
+	 * Gathers the questions from the file given and puts them into an ArrayList of Problem objects
+	 * @param String fileName
+	 * @return ArrayList<Problem> containing all the questions and their info
+	 */
+	public static ArrayList<Problem> getProblems(String fileName) {
+		ArrayList<Problem> result = new <Problem>ArrayList();
+		try {
+			FileReader fr = new FileReader(fileName);
+			BufferedReader br = new BufferedReader(fr);
+			// Skip first cell
+			String line = br.readLine();
+			// Read all questions
+			while ((line = br.readLine()) != null) {
+				// Get line
+				String[] problemLine = line.split(",");
+				// Get question answers into an array list
+				ArrayList<String> options = new <Problem>ArrayList();
+				for (String s : problemLine[3].split("\\|")) {
+					options.add(s);
+				}
+				// Add new question to results
+				result.add(new Problem(Integer.parseInt(problemLine[0]), problemLine[1], options, problemLine[2]));
+			}
+			br.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return result;
 	}
 }

@@ -2,6 +2,7 @@ package views;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
@@ -31,7 +32,7 @@ public class StudentSubmissionSummaryGUI extends JFrame {
 	private JPanel contentPane;
 	private String email;
 	private File file;
-	
+
 	public StudentSubmissionSummaryGUI(File file, String email){
 		this.email = email;
 		this.file = file;	
@@ -75,7 +76,7 @@ public class StudentSubmissionSummaryGUI extends JFrame {
 	    xMark= new ImageIcon(newimg);
 		JLabel lblX;
 		
-		ArrayList<Problem> problems = getProblems(file.getName());
+		ArrayList<Problem> problems = ExtractData.getProblems(file.getName());
 		ArrayList<Boolean> summary = checkRightWrong(problems);
 		int ycoord = 50;
 		JPanel problemPanel = new JPanel();
@@ -123,7 +124,8 @@ public class StudentSubmissionSummaryGUI extends JFrame {
 		contentPane.add(btnDone);
 		
 		setLocationRelativeTo(null);
-		contentPane.setPreferredSize(new Dimension(600, ycoord));
+		contentPane.setPreferredSize(new Dimension(600, problemPanel.getHeight() + btnDone.getY() + PANEL_GAP));
+		
 	}
 	
 	/**
@@ -179,36 +181,5 @@ public class StudentSubmissionSummaryGUI extends JFrame {
 		lblProblem.setBounds(20, 5, 530, 70);
 		lblProblem.setBackground(Color.BLACK);
 		panel.add(lblProblem);
-	}
-	
-	/**
-	 * Gathers the questions from the file given and puts them into an ArrayList of Problem objects
-	 * @param String fileName
-	 * @return ArrayList<Problem> containing all the questions and their info
-	 */
-	private ArrayList<Problem> getProblems(String fileName) {
-		ArrayList<Problem> result = new <Problem>ArrayList();
-		try {
-			FileReader fr = new FileReader(fileName);
-			BufferedReader br = new BufferedReader(fr);
-			// Skip first cell
-			String line = br.readLine();
-			// Read all questions
-			while ((line = br.readLine()) != null) {
-				// Get line
-				String[] problemLine = line.split(",");
-				// Get question answers into an array list
-				ArrayList<String> options = new <Problem>ArrayList();
-				for (String s : problemLine[3].split("\\|")) {
-					options.add(s);
-				}
-				// Add new question to results
-				result.add(new Problem(Integer.parseInt(problemLine[0]), problemLine[1], options, problemLine[2]));
-			}
-			br.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return result;
 	}
 }

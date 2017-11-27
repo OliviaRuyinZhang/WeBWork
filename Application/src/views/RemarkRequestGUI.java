@@ -50,7 +50,6 @@ public class RemarkRequestGUI extends JFrame{
 	public RemarkRequestGUI(File file, String studentEmail) {
 		ImageIcon icon = new ImageIcon("resources/webwork_icon.png");
 		setIconImage(icon.getImage());
-		setTitle("WeBWorK | Request Remark");
 		this.file = file;
 		this.studentEmail = studentEmail;
 		this.instructorEmails = ExtractData.getInstructorEmails();

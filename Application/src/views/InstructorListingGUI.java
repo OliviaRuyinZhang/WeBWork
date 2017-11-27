@@ -390,6 +390,6 @@ public class InstructorListingGUI extends ListingGUI{
 			}
 			mean = sumOfFinalGrade/numberOfStudents;
 		}
-		return mean;
+		return Math.round(mean * 100.0) / 100.0;
 	}
 }

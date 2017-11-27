@@ -37,7 +37,6 @@ public abstract class RegisterGUI extends JFrame implements RegisterValidation {
 		
 		ImageIcon icon = new ImageIcon("resources/webwork_icon.png");
 		setIconImage(icon.getImage());
-		setTitle("WeBWorK | Register");
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setSize(300, 280);

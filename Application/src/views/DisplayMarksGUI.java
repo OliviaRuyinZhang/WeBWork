@@ -36,10 +36,9 @@ public class DisplayMarksGUI extends JFrame{
 	public DisplayMarksGUI() {
 		ImageIcon icon = new ImageIcon("resources/webwork_icon.png");
 		setIconImage(icon.getImage());
-		setTitle("WeBWorK | Display Marks");
 		model = new DefaultListModel<>();
 		setSize(350,400);
-		setResizable(true);
+		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
 		

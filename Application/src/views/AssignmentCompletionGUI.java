@@ -85,7 +85,7 @@ public class AssignmentCompletionGUI extends JFrame implements ActionListener {
 		contentPane.add(lblAssignment);
 
 		// Shuffle problems
-		ArrayList<Problem> problems = getAllProblems(fileName);
+		ArrayList<Problem> problems = ExtractData.getProblems(fileName);
 		int totalNoProblems = problems.size();
 		Collections.shuffle(problems);
 
@@ -168,7 +168,7 @@ public class AssignmentCompletionGUI extends JFrame implements ActionListener {
 	 * @return The student's grade for this submission
 	 */
 	private double gradeSubmission() {
-		ArrayList<Problem> problems = getAllProblems(fileName);
+		ArrayList<Problem> problems = ExtractData.getProblems(fileName);
 		double finalGrade = 0;
 		
 		for (int i = 0; i < problems.size(); i++) {
@@ -182,7 +182,7 @@ public class AssignmentCompletionGUI extends JFrame implements ActionListener {
 		}
 		
 		finalGrade = (finalGrade / problems.size()) * 100;
-		return finalGrade; 
+		return Math.round(finalGrade * 100.0) / 100.0; 
 	}
 
 	public void constructAssignmentAnswersTemplate(int totalNoProblems) {
@@ -219,9 +219,7 @@ public class AssignmentCompletionGUI extends JFrame implements ActionListener {
 	}
 
 	public String getAssignmentName(String fileName) {
-		int upTo = fileName.indexOf(".csv");
-
-		return fileName.substring(0, upTo-1) + " " + fileName.substring(upTo-1, upTo);
+		return fileName.substring(0, fileName.indexOf("."));
 	}
 
 	public boolean getPreviousSubmissionStatus(String fileName, String id) {
@@ -278,32 +276,6 @@ public class AssignmentCompletionGUI extends JFrame implements ActionListener {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-		}
-		return result;
-	}
-
-	public ArrayList<Problem> getAllProblems(String fileName) {
-		ArrayList<Problem> result = new <Problem>ArrayList();
-		try {
-			FileReader fr = new FileReader(fileName);
-			BufferedReader br = new BufferedReader(fr);
-			// Skip first cell
-			String line = br.readLine();
-			// Read all questions
-			while ((line = br.readLine()) != null) {
-				// Get line
-				String[] problemLine = line.split(",");
-				// Get question answers into an arraylist
-				ArrayList<String> options = new <Problem>ArrayList();
-				for (String s : problemLine[3].split("\\|")) {
-					options.add(s);
-				}
-				// Add new question to results
-				result.add(new Problem(Integer.parseInt(problemLine[0]), problemLine[1], options, problemLine[2]));
-			}
-			br.close();
-		} catch (IOException e) {
-			e.printStackTrace();
 		}
 		return result;
 	}
@@ -484,6 +456,7 @@ public class AssignmentCompletionGUI extends JFrame implements ActionListener {
 					JOptionPane.showMessageDialog(AssignmentCompletionGUI.this, "You need to answer questions to submit!");
 				} else {
 					averageGrade = (averageGrade + currentSubmissionGrade) / numOfTries;
+					averageGrade = Math.round(averageGrade * 100.0) / 100.0;
 					if(currentSubmissionGrade > Double.parseDouble(answersInfo.get("Final Mark"))) {
 						answersInfo.put("Final Mark", Double.toString(currentSubmissionGrade));
 					}	
