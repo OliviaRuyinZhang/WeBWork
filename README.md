@@ -89,7 +89,7 @@ We individually conducted code review and got together to discuss our findings. 
 - For first-time users, you must register your account by typing in your valid email address and password
 - You will have to check the "Instructor" checkbox before clicking "Register"
 - You will be presented with a screen to ask you input your first name, last name and passcode to finish your registration 
-- As an instructor, you will need to provide a valid passcode for the course in order to register as an instructor successfully. The passcode for now is `abc`.
+- As an instructor, you will need to provide a valid passcode for the course in order to register as an instructor successfully. If you are the first instructor, you are considered the admin and will be required to set the passcode for all other instructors.
 - You wll see a popup window notifying you of a successful registration after you have entered all the information properly and submit.
 
 ##### Login
