@@ -96,7 +96,7 @@ For this sprint, we refactored the code in:
 - StudentListingGUI.java
 - InsturctorListingGUI.java
 
-Newly created files: 
+Newly created files during refactorization: 
 - ListingGUI.java
 - ExportButton.java
 - StatusButton.java
@@ -160,14 +160,14 @@ Newly created files:
 
 ### User Instructions
 ##### Setup
-- Due to usage of an external library, JavaMail, if the program is being run through an IDE, the user must reconfigure their java build path to access the library. The API is found as 5 jar files in the "lib" folder in the project and you must add them to your build path.
+- Due to usage of an external library, JavaMail, if the program is being run through an IDE, the user must reconfigure their java build path to access the library. The API is found as 5 jar files in the **_lib_** folder in the project and you must add them to your build path.
 - Go to `ApplicationDriver.java` under the `controllers` package
 - Run `ApplicationDriver.java` and you will see a login/register interface
 
 #### **INSTRUCTOR'S MANUAL**
 ##### Register
 - For first-time users, you must register your account by typing in your valid email address and password
-- You will have to check the "Instructor" checkbox before clicking "Register"
+- You will have to check the **_Instructor_** checkbox before clicking **_Register_**
 - You will be presented with a screen to ask you input your first name, last name and passcode to finish your registration 
 - As an instructor, you will need to provide a valid passcode for the course in order to register as an instructor successfully. If you are the first instructor, you are considered the admin and will be required to set the passcode for all other instructors.
 - You wll see a popup window notifying you of a successful registration after you have entered all the information properly and submit.
@@ -176,15 +176,15 @@ Newly created files:
 - After you have registered successfully, you will be able to log in to the instructor dashboard using the same email address and password that you registered with (it is not necessary to check the instructor box)
 
 ##### Creating a Problem Set
-- Open the assignment creation panel by clicking the "+ Add Assignment" button at the top right corner
+- Open the assignment creation panel by clicking the **_+ Add Assignment_** button at the top right corner
 - Select a due date of the assignment by clicking the drop down box on the left top
 - Enter the assignment number you are going to create
 - Manually enter each problem corresponding multiple choice options
 - Preset the solution for each question by clicking the corresponding radio button for the correct multiple choice option
-- After you have entered all the required information for the question, you can click "Add this Problem" to add the problem into the problem set
-- If you have not entered all the required information before clicking "Add this Problem", you will get a popup notification to ask you fulfill all the required text
+- After you have entered all the required information for the question, you can click **_Add this Problem_** to add the problem into the problem set
+- If you have not entered all the required information before clicking **_Add this Problem_**, you will get a popup notification to ask you fulfill all the required text
 - Repeatly do the steps above until you have added all the problems to the problem set for the current assignment 
-- Click the "Create" button after you have entered all your problems to finish creating the assignment
+- Click the **_Create_** button after you have entered all your problems to finish creating the assignment
 - As an instructor, you can release and unrelease assignments by clicking the labeled buttons corresponding to the appropriate assignments
 
 ##### Assignment Editing
