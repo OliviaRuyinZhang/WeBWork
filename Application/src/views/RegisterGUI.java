@@ -21,6 +21,7 @@ import javax.swing.event.DocumentListener;
 
 import controllers.RegisterValidation;
 
+
 public abstract class RegisterGUI extends JFrame implements RegisterValidation {
 	public JPanel contentPane;
 	public JTextField firstNameField;
@@ -126,6 +127,12 @@ public abstract class RegisterGUI extends JFrame implements RegisterValidation {
 		contentPane.add(closeButton);
 	}
 	
+	/**
+	 * This method would pop up notification to the users based on the registration status
+	 * @param boolean validRegister
+	 * @param boolean typeCheck
+	 * @param boolean isStudent
+	 */
 	public void registerValidation(boolean validRegister, boolean typeCheck, boolean isStudent) {
 		
 		if (validRegister) {
@@ -163,7 +170,6 @@ public abstract class RegisterGUI extends JFrame implements RegisterValidation {
 		String text = name.getText();
 		boolean valid = isAlphabetical(text);
 		if (valid) {
-			// studentID.setForeground(getBackground());
 			label.setText(labelText);
 			label.setForeground(Color.BLACK);
 		} else {

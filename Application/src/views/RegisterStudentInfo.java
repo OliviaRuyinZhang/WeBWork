@@ -98,12 +98,20 @@ public class RegisterStudentInfo extends RegisterGUI {
 		}
 
 		if (checkIDInput(studentIDField.getText()) == false) {
-			int input = JOptionPane.showOptionDialog(null, "StudentID has to be integer numbers!", "Error",
-					JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, null, null);
-			if (input == JOptionPane.OK_OPTION) {
-				clearTextFields(studentIDField);
-				clearTextFields(firstNameField);
-				clearTextFields(lastNameField);
+			if (isAlphabetical(firstNameField.getText()) && isAlphabetical(lastNameField.getText())) {
+				int input = JOptionPane.showOptionDialog(null, "StudentID has to be integer numbers!", "Error",
+						JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, null, null);
+				if (input == JOptionPane.OK_OPTION) {
+					clearTextFields(studentIDField);
+				}
+			}else {
+				int input = JOptionPane.showOptionDialog(null, "StudentID has to be integer numbers!\nName has to be in letters", "Error",
+						JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, null, null);
+				if (input == JOptionPane.OK_OPTION) {
+					clearTextFields(firstNameField);
+					clearTextFields(lastNameField);
+					clearTextFields(studentIDField);
+				}
 			}
 			typeCheck = true;
 			isStudent = true;

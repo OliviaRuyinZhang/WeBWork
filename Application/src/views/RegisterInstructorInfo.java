@@ -195,6 +195,7 @@ public class RegisterInstructorInfo extends RegisterGUI {
 			registerValidation(validRegister, typeCheck, false);
 		} else {
 			if (!accessPermission) {
+				notifyWrongInviteCOde();
 				int input = JOptionPane.showOptionDialog(null, "Access Denied!", "Error", JOptionPane.DEFAULT_OPTION,
 						JOptionPane.INFORMATION_MESSAGE, null, null, null);
 				if (input == JOptionPane.OK_OPTION) {
@@ -203,6 +204,14 @@ public class RegisterInstructorInfo extends RegisterGUI {
 			}
 		}
 
+	}
+	
+	/**
+	 * This method would turn the Passcode Jlabel to be red
+	 */
+	public void notifyWrongInviteCOde() {
+		inviteCodeLabel.setForeground(Color.RED);
+		inviteCodeLabel.setText("Passcode" + "*");
 	}
 
 
