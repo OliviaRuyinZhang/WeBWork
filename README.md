@@ -78,6 +78,33 @@ For this sprint, we implemented:
 ### Code Review
 We individually conducted code review and got together to discuss our findings. [Here](https://drive.google.com/file/d/1z9PObnjwZjBa-xFHlrXZTirhLWe--yDO/view?usp=sharing) is a video of our debriefing.
 
+## Deliverable 6: Final Product
+### Sprint 6
+##### November 20, 2017
+For this sprint, we implmented:
+- A feedback user interface on student's dashboard
+- A user interface for instructors to view all the students' feedback.
+- An application logo to the user's login page
+- A submission summary window for students to view their answers correctness for each submission
+- A personal information interface for students to enter their first name, last name and student number when they register
+- A personal information interface for instructors to enter their first name, last name and invite code when they register
+- A personal information interface for the admin instructor to enter their first name, last name and allow admin instructor to set the invite code for all other instructors and TAs
+For this sprint, we refactored the code in:
+- RegisterStudentInfo
+- RegisterInstructorInfo
+- StudentListingGUI
+- InsturctorListingGUI
+
+### WeBWorK Welcome Page
+
+### Personal Information Interface
+
+### Submission Summary
+
+### Send Feedback
+
+### View Feedback
+
 ### User Instructions
 ##### Setup
 - Due to usage of an external library, JavaMail, if the program is being run through an IDE, the user must reconfigure their java build path to access the library. The API is found as 5 jar files in the "lib" folder in the project and you must add them to your build path.
@@ -125,6 +152,9 @@ We individually conducted code review and got together to discuss our findings. 
 - All the remark requests would be sent to your email directly through this application system once the student clicks the remark button on their student panel. Check your emails to view all the remark requests.
 - If you want to approve a remark request, you can go to your dashboard and click the "Remark" button. Enter the student number and the assignment number which you are handling, and the student's final mark to the text box. Click "Adjust Mark" to save the changes to the database and the application system will send an email to notify the student with the change of his/her mark automatically. Click "Cancel" if you would like to go back to the dashboard. 
 
+##### Feedback
+- You can view student feedback by clicking the "view feedback" button at the top corner of the dashboard. 
+
 #### **STUDENT'S MANUAL**
 ##### Register
 - Enter your valid student email address and password, click "Register"
@@ -141,12 +171,16 @@ We individually conducted code review and got together to discuss our findings. 
 - Click "Submit and Grade" to grade your assignment and get your mark
 - If you click "Save and Close", the application will auto-fill your previous saved answers for each question and set it as default option when you open the assignment again next time.
 
-##### Auto-marking & Student Feedback
+##### Auto-marking & Submission Summary
+- The application will auto grade your assignment after you click "Submit and Grade". There will be a submission summary to notify you which questions you have got right and which questions you have got wrong for the current submission. Your final mark of this assignment will get adjusted if your current try is better than the highest mark you have got in the history. 
 - You can view each assignment submission summary after the deadline of the assignment passed. Find your "Closed" assignments and click the "Result" button on the assignment result you want to reivew. You will be able to see your final mark, avergae mark, number of tries, and time spent as feedback. Click "Done" after reviewing it and the application would take you back to the dashboard.
 
 ##### Remarks
 - Click the "Remark" button beside the assignment you wish to get remarked
 - Explain why you want a remark in the message box and then click "Submit" to request a remark
 - The remark will be sent to instructors directly by email and you will be notified if your grade has been changed
+
+##### Feedback
+- You can communicate with your professors or TAs by sending them feedback messages. The "send feedback" button is at the right corner of the dashboard. Click "send feedback" button to write a feedback message.
 
 ###### Note: GitHub may have problems displaying some of our documents. For this reason, it is recommended you download the document instead of using GitHub's preview to view it.
