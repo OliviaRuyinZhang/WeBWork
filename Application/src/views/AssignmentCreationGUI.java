@@ -21,6 +21,7 @@ import javax.swing.JTextField;
 import javax.swing.JTextArea;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -48,6 +49,9 @@ public class AssignmentCreationGUI extends JFrame {
 	 * Create the frame.
 	 */
 	public AssignmentCreationGUI() {
+		ImageIcon icon = new ImageIcon("resources/webwork_icon.png");
+		setIconImage(icon.getImage());
+		setTitle("WeBWorK | Create Assignment");
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 900, 750);

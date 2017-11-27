@@ -49,6 +49,9 @@ public class AssignmentEditingGUI extends JFrame {
 	 * Create the frame.
 	 */
 	public AssignmentEditingGUI(File file) {
+		ImageIcon icon = new ImageIcon("resources/webwork_icon.png");
+		setIconImage(icon.getImage());
+		setTitle("WeBWorK | Edit Assignment");
 		this.file = file;
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

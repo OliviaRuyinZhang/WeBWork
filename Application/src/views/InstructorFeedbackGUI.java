@@ -4,6 +4,7 @@ import java.awt.EventQueue;
 import java.awt.Font;
 import java.util.ArrayList;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -31,10 +32,12 @@ public class InstructorFeedbackGUI extends JFrame {
 	 * Create the frame.
 	 */
 	public InstructorFeedbackGUI() {
+		ImageIcon icon = new ImageIcon("resources/webwork_icon.png");
+		setIconImage(icon.getImage());
+		setTitle("WeBWorK | Student Feedback");
 		// Create content pane and set up scroll
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setTitle("Student Feedback");
 		contentPane = new JPanel();
 		JScrollPane scroll = new JScrollPane(contentPane, 
 				JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);

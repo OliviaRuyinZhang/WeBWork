@@ -20,6 +20,7 @@ import java.util.Collections;
 import java.util.HashMap;
 
 import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -37,6 +38,7 @@ import models.Problem;
  * Class to display a list of assignments for an instructor.
  */
 public class AssignmentCompletionGUI extends JFrame implements ActionListener {
+	
 	private JPanel contentPane = new JPanel();
 	private JScrollPane scroll;
 	
@@ -51,6 +53,9 @@ public class AssignmentCompletionGUI extends JFrame implements ActionListener {
 	private ArrayList<String> previousSubmission = new <String>ArrayList();
 
 	public AssignmentCompletionGUI(String fileName, String studentNo) {
+		ImageIcon icon = new ImageIcon("resources/webwork_icon.png");
+		setIconImage(icon.getImage());
+		setTitle("WeBWorK | Complete Assignment");
 		start = Instant.now();
 		
 		this.fileName = fileName;
@@ -64,7 +69,6 @@ public class AssignmentCompletionGUI extends JFrame implements ActionListener {
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 900, 731);
-		setTitle("WebWork");
 
 		Container c = getContentPane();
 

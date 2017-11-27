@@ -8,6 +8,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -34,6 +35,9 @@ public abstract class RegisterGUI extends JFrame implements RegisterValidation {
 		this.email  = email;
 		this.password = password;
 		
+		ImageIcon icon = new ImageIcon("resources/webwork_icon.png");
+		setIconImage(icon.getImage());
+		setTitle("WeBWorK | Register");
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setSize(300, 280);

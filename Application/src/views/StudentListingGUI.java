@@ -41,6 +41,9 @@ public class StudentListingGUI extends ListingGUI{
 	
 	public StudentListingGUI(String email) {
 		super(email);
+		ImageIcon icon = new ImageIcon("resources/webwork_icon.png");
+		setIconImage(icon.getImage());
+		setTitle("WeBWorK | Student Dashboard");
 		timer.start();
 	}
 
@@ -174,7 +177,9 @@ public class StudentListingGUI extends ListingGUI{
 		String fileName = file.getName();
 		String[] info = ExtractData.getAssignmentInfo(fileName);
 
-		JLabel lblAssignment = new JLabel(fileName.replaceFirst("[.][^.]+$", "")); // Strips the .csv extension.
+		// Formats assignment name with space before number
+		int upTo = fileName.indexOf(".csv");		
+		JLabel lblAssignment = new JLabel(fileName.substring(0, upTo-1) + " " + fileName.substring(upTo-1, upTo));
 		lblAssignment.setFont(new Font("Segoe UI Semibold", Font.PLAIN, 16));
 		lblAssignment.setBounds(50, -3, 350, 70);
 		panel.add(lblAssignment);
@@ -196,7 +201,8 @@ public class StudentListingGUI extends ListingGUI{
 				  	String studentNumber = ExtractData.getStudentID(email);
 				  	// if the studentNumber is not empty or null, open the assignment
 				  	if(!studentNumber.isEmpty() && studentNumber != null) {
-				  		 new AssignmentCompletionGUI(fileName, studentNumber);
+				  		AssignmentCompletionGUI frame = new AssignmentCompletionGUI(fileName, studentNumber);
+				  		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 				  	}
 				  } 
 				} );
@@ -214,7 +220,9 @@ public class StudentListingGUI extends ListingGUI{
 		String fileName = file.getName(); 
 		String[] info = ExtractData.getAssignmentInfo(fileName);
 		
-		JLabel lblAssignment = new JLabel(fileName.replaceFirst("[.][^.]+$", "")); // Strips the .csv extension.
+		// Formats assignment name with space before number
+		int upTo = fileName.indexOf(".csv");		
+		JLabel lblAssignment = new JLabel(fileName.substring(0, upTo-1) + " " + fileName.substring(upTo-1, upTo));
 		lblAssignment.setFont(new Font("Segoe UI Semibold", Font.PLAIN, 16));
 		lblAssignment.setBounds(50, -3, 350, 70);
 		panel.add(lblAssignment);

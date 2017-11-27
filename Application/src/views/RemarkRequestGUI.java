@@ -22,6 +22,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -47,6 +48,9 @@ public class RemarkRequestGUI extends JFrame{
 	private JTextArea txtRemarkReason;
 	
 	public RemarkRequestGUI(File file, String studentEmail) {
+		ImageIcon icon = new ImageIcon("resources/webwork_icon.png");
+		setIconImage(icon.getImage());
+		setTitle("WeBWorK | Request Remark");
 		this.file = file;
 		this.studentEmail = studentEmail;
 		this.instructorEmails = ExtractData.getInstructorEmails();
