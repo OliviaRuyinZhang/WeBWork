@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.awt.Color;
 
 import javax.swing.JPasswordField;
+import javax.swing.JTextField;
 import javax.swing.JButton;
 
 public class RegisterInstructorInfo extends RegisterGUI {
@@ -197,19 +198,14 @@ public class RegisterInstructorInfo extends RegisterGUI {
 				int input = JOptionPane.showOptionDialog(null, "Access Denied!", "Error", JOptionPane.DEFAULT_OPTION,
 						JOptionPane.INFORMATION_MESSAGE, null, null, null);
 				if (input == JOptionPane.OK_OPTION) {
-					clearTextFields();
+					clearTextFields(inviteCodeField);
 				}
 			}
 		}
 
 	}
 
-	/**
-	 * Clears all text fields.
-	 */
-	public void clearTextFields() {
-		firstNameField.setText("");
-		lastNameField.setText("");
-		inviteCodeField.setText("");
-	}
+
+
+
 }

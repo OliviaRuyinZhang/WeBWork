@@ -139,7 +139,8 @@ public abstract class RegisterGUI extends JFrame implements RegisterValidation {
 				int input = JOptionPane.showOptionDialog(null, "Name has to be in letters!", "Error",
 						JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, null, null);
 				if (input == JOptionPane.OK_OPTION) {
-					clearTextFields();
+					clearTextFields(firstNameField);
+					clearTextFields(lastNameField);
 				}
 			} else {
 				if(!isStudent) {
@@ -187,5 +188,13 @@ public abstract class RegisterGUI extends JFrame implements RegisterValidation {
 			return false;
 		}
 	}
+	
+	/**
+	 * Clears all text fields.
+	 */
+	public void clearTextFields(JTextField textFiled) {
+		textFiled.setText("");
+	}
+	
 
 }

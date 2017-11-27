@@ -7,5 +7,5 @@ public interface RegisterValidation {
 	public void register();
 	public void validateNameInput(JLabel label, JTextField name, String labelText);
 	public boolean isAlphabetical(String name);
-	public void clearTextFields();
+	public void clearTextFields(JTextField textFiled);
 }

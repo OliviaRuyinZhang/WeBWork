@@ -10,7 +10,6 @@ import javax.swing.event.DocumentListener;
 
 import controllers.Authenticator;
 
-
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
@@ -27,7 +26,6 @@ public class RegisterStudentInfo extends RegisterGUI {
 	private JTextField studentIDField;
 	private String pattern = "\\d+";
 	private JLabel studentID;
-
 
 	/**
 	 * Class for student's to register an account into WebWork
@@ -98,12 +96,14 @@ public class RegisterStudentInfo extends RegisterGUI {
 			validRegister = Authenticator.register(false, email, password, firstNameField.getText(),
 					lastNameField.getText(), studentIDField.getText());
 		}
-		
+
 		if (checkIDInput(studentIDField.getText()) == false) {
 			int input = JOptionPane.showOptionDialog(null, "StudentID has to be integer numbers!", "Error",
 					JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, null, null);
 			if (input == JOptionPane.OK_OPTION) {
-				clearTextFields();
+				clearTextFields(studentIDField);
+				clearTextFields(firstNameField);
+				clearTextFields(lastNameField);
 			}
 			typeCheck = true;
 			isStudent = true;
@@ -129,12 +129,6 @@ public class RegisterStudentInfo extends RegisterGUI {
 			studentID.setForeground(Color.RED);
 			studentID.setText("StudentID*");
 		}
-	}
-
-	public void clearTextFields() {
-		firstNameField.setText("");
-		lastNameField.setText("");
-		studentIDField.setText("");
 	}
 
 	/**
