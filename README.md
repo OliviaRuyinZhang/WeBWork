@@ -82,28 +82,34 @@ We individually conducted code review and got together to discuss our findings. 
 ### Sprint 6
 ##### November 20, 2017
 For this sprint, we implmented:
-- A feedback user interface on student's dashboard
+- A feedback user interface on student's dashboard.
 - A user interface for instructors to view all the students' feedback.
-- An application logo to the user's login page
-- A submission summary window for students to view their answers correctness for each submission
-- A personal information interface for students to enter their first name, last name and student number when they register
-- A personal information interface for instructors to enter their first name, last name and invite code when they register
-- A personal information interface for the admin instructor to enter their first name, last name and allow admin instructor to set the invite code for all other instructors and TAs
+- An application logo to the user's login page.
+- A submission summary window for students to view their answers correctness for each submission.
+- A personal information interface for students to enter their first name, last name and student number when they register.
+- A personal information interface for instructors to enter their first name, last name and invite code when they register.
+- A personal information interface for the admin instructor to enter their first name, last name and allow admin instructor to set the invite code for all other instructors and TAs.
+
 For this sprint, we refactored the code in:
-- RegisterStudentInfo
-- RegisterInstructorInfo
-- StudentListingGUI
-- InsturctorListingGUI
+- RegisterStudentInfo.java
+- RegisterInstructorInfo.java
+- StudentListingGUI.java
+- InsturctorListingGUI.java
 
 ### WeBWorK Welcome Page
-
+![WeBWork_Login_Page]
+(https://github.com/CSCC01F17/L02_11/blob/master/Documents/Deliverable_6/Sprint_6/Application_Screenshots/WeBWorK_Login_Page.png)
 ### Personal Information Interface
 
 ### Submission Summary
+![Submission_Summary]
+(https://github.com/CSCC01F17/L02_11/blob/master/Documents/Deliverable_6/Sprint_6/Application_Screenshots/Submission_Summary.png)
 
 ### Send Feedback
 
 ### View Feedback
+![View Feedback]
+(https://github.com/CSCC01F17/L02_11/blob/master/Documents/Deliverable_6/Sprint_6/Application_Screenshots/View_Feedback.png)
 
 ### User Instructions
 ##### Setup
