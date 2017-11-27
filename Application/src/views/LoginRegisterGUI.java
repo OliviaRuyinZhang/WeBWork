@@ -182,9 +182,9 @@ public class LoginRegisterGUI extends JFrame {
 		btnRegister.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if (getIsInstructor()) {
-					new RegisterInstructorInfo(getIsInstructor(), getEmail(), getPassword());
+					new RegisterInstructorInfo(getEmail(), getPassword());
 				} else {
-					new RegisterStudentInfo(getIsInstructor(), getEmail(), getPassword());
+					new RegisterStudentInfo(getEmail(), getPassword());
 				}
 				clearTextFields();
 			}
