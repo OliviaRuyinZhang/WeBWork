@@ -101,8 +101,35 @@ For this sprint, we refactored the code in:
 
 ### Personal Information Interface
 
+### Instructor Dashboard
+
+### Assignment Creation
+
+### Assignment Editting
+
+### Student Dashboard
+
+### Assignment Completion
+
 ### Submission Summary
 ![submission_summary](https://user-images.githubusercontent.com/12486014/33279216-d09bd590-d36b-11e7-8ada-e9d9296bd0a5.png)
+
+### View Assignment Results
+
+### Export Assignment Marks
+
+### Remark Submission
+
+### Instructor receiving Remark Submission
+
+### Instructor Remarking an Assignment
+
+### Student Receiving Remark Completion
+
+### Student Submitting Course Feedback
+
+### Instructor Viewing Course Feedback
+
 
 ### Send Feedback
 
