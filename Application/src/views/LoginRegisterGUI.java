@@ -3,6 +3,7 @@ package views;
 import java.awt.EventQueue;
 
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
@@ -14,6 +15,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 import java.awt.Font;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -63,6 +65,9 @@ public class LoginRegisterGUI extends JFrame {
 	 * Create the frame.
 	 */
 	public LoginRegisterGUI() {
+		ImageIcon icon = new ImageIcon("resources/webwork_icon.png");
+		setIconImage(icon.getImage());
+		setTitle("WeBWorK");
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(900, 731);
@@ -76,23 +81,23 @@ public class LoginRegisterGUI extends JFrame {
 
 		JLabel lblWelcomeTo = new JLabel("Welcome to");
 		lblWelcomeTo.setFont(new Font("Segoe UI Light", Font.PLAIN, 34));
-		lblWelcomeTo.setBounds(365, 73, 171, 56);
+		lblWelcomeTo.setBounds(359, 75, 171, 56);
 		lblWelcomeTo.setSize(lblWelcomeTo.getPreferredSize());
 		contentPane.add(lblWelcomeTo);
 
 		JLabel lblWebwork = new JLabel("WeBWorK");
 		lblWebwork.setFont(new Font("Segoe UI Light", Font.PLAIN, 52));
-		lblWebwork.setBounds(337, 115, 227, 56);
+		lblWebwork.setBounds(331, 117, 227, 56);
 		lblWebwork.setSize(lblWebwork.getPreferredSize());
 		contentPane.add(lblWebwork);
 
 		JLabel lblEmailAddress = new JLabel("Email Address");
 		lblEmailAddress.setFont(new Font("Segoe UI", Font.PLAIN, 15));
-		lblEmailAddress.setBounds(306, 267, 138, 16);
+		lblEmailAddress.setBounds(306, 330, 138, 16);
 		contentPane.add(lblEmailAddress);
 
 		emailField = new JTextField();
-		emailField.setBounds(306, 294, 287, 35);
+		emailField.setBounds(306, 357, 287, 35);
 		contentPane.add(emailField);
 		emailField.setColumns(10);
 		emailField.setFont(new Font("Segoe UI", Font.PLAIN, 15));
@@ -101,12 +106,12 @@ public class LoginRegisterGUI extends JFrame {
 
 		JLabel lblPassword = new JLabel("Password");
 		lblPassword.setFont(new Font("Segoe UI", Font.PLAIN, 15));
-		lblPassword.setBounds(306, 350, 138, 16);
+		lblPassword.setBounds(306, 413, 138, 16);
 		contentPane.add(lblPassword);
 
 		passwordField = new JPasswordField();
 		passwordField.setColumns(10);
-		passwordField.setBounds(306, 377, 287, 35);
+		passwordField.setBounds(306, 440, 287, 35);
 		passwordField
 				.setBorder(BorderFactory.createCompoundBorder(border, BorderFactory.createEmptyBorder(5, 5, 5, 5)));
 		contentPane.add(passwordField);
@@ -167,7 +172,7 @@ public class LoginRegisterGUI extends JFrame {
 				clearTextFields();
 			}
 		});
-		btnLogin.setBounds(329, 465, 115, 32);
+		btnLogin.setBounds(329, 528, 115, 32);
 		contentPane.add(btnLogin);
 
 		JButton btnRegister = new JButton("Register");
@@ -184,14 +189,22 @@ public class LoginRegisterGUI extends JFrame {
 				clearTextFields();
 			}
 		});
-		btnRegister.setBounds(454, 465, 115, 32);
+		btnRegister.setBounds(454, 528, 115, 32);
 		contentPane.add(btnRegister);
 
 		chckbxInstructor = new JCheckBox("Instructor");
 		chckbxInstructor.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 		chckbxInstructor.setBackground(Color.WHITE);
-		chckbxInstructor.setBounds(395, 425, 130, 23);
+		chckbxInstructor.setBounds(395, 488, 130, 23);
 		contentPane.add(chckbxInstructor);
+		
+		JLabel lblLogo = new JLabel();
+		Image img = icon.getImage() ;  
+	    Image newimg = img.getScaledInstance(85, 85, java.awt.Image.SCALE_SMOOTH ) ;  
+	    icon = new ImageIcon( newimg );
+		lblLogo.setBounds(404, 209, 85, 85);
+		lblLogo.setIcon(icon);
+		contentPane.add(lblLogo);
 
 		setLocationRelativeTo(null);
 	}

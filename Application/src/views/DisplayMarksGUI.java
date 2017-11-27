@@ -12,6 +12,7 @@ import java.util.Set;
 
 import javax.swing.BoxLayout;
 import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JList;
@@ -33,6 +34,9 @@ public class DisplayMarksGUI extends JFrame{
 	private JTextField txtStudentId;
 	
 	public DisplayMarksGUI() {
+		ImageIcon icon = new ImageIcon("resources/webwork_icon.png");
+		setIconImage(icon.getImage());
+		setTitle("WeBWorK | Display Marks");
 		model = new DefaultListModel<>();
 		setSize(350,400);
 		setResizable(true);

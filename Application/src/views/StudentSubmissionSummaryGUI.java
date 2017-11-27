@@ -34,9 +34,12 @@ public class StudentSubmissionSummaryGUI extends JFrame {
 	
 	public StudentSubmissionSummaryGUI(File file, String email){
 		this.email = email;
-		this.file = file;		
+		this.file = file;	
 		
 		// Main content pane
+		ImageIcon icon = new ImageIcon("resources/webwork_icon.png");
+		setIconImage(icon.getImage());
+		setTitle("WeBWorK | Submission Summary");
 		setResizable(false);
 		setSize(800,600);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
