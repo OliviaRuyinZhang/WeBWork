@@ -28,29 +28,22 @@ public class RegisterStudentInfo extends JFrame {
 	private JTextField studentIDField;
 	private String pattern = "\\d+";
 	private JLabel studentID;
-	private boolean isInstructor;
 	private String email;
 	private String password;
 
 	/**
-	 * @param isInstructor
-	 *            true if it's a instructor, false otherwise
-	 * @param email
-	 *            user's email address
-	 * @param password
-	 *            user's input password
+         * Class for student's to register an account into WebWork
+	 * @param email user's email address
+	 * @param password user's input password
 	 */
-	public RegisterStudentInfo(boolean isInstructor, String email, String password) {
+	public RegisterStudentInfo(String email, String password) {
 
-		this.isInstructor = isInstructor;
 		this.email = email;
 		this.password = password;
 
-		// set up the frame
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(300, 280);
-		// set up the panel
 		contentPane = new JPanel();
 		
 		contentPane.setBackground(Color.WHITE);
@@ -61,27 +54,23 @@ public class RegisterStudentInfo extends JFrame {
 
 		Border border = BorderFactory.createLineBorder(Color.decode("#7A7A7A"), 2);
 
-		// set title
 		JLabel title = new JLabel("Personal Information");
 		title.setFont(new Font("Segoe UI", Font.BOLD, 15));
 		title.getPreferredSize();
 		title.setBounds((300/2) - 100, 30, 200, 25);
 		contentPane.add(title);
 
-		// set label as "first name"
 		JLabel firstName = new JLabel("First Name");
 		firstName.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		firstName.setBounds(10, 70, 90, 30);
 		contentPane.add(firstName);
 
-		// set the input text box for the label "first name"
 		firstNameField = new JTextField();
 		firstNameField.setBounds(100, 70, 170, 30);
 		contentPane.add(firstNameField);
 		firstNameField.setColumns(10);
 		firstNameField.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		firstNameField
-				.setBorder(BorderFactory.createCompoundBorder(border, BorderFactory.createEmptyBorder(5, 5, 5, 5)));
+		firstNameField.setBorder(BorderFactory.createCompoundBorder(border, BorderFactory.createEmptyBorder(5, 5, 5, 5)));
 
 		// the Jlabel "first name" will change color if the user input invalid content
 
@@ -102,20 +91,17 @@ public class RegisterStudentInfo extends JFrame {
 
 		});
 
-		// set the second label as "last name"
 		JLabel lastName = new JLabel("Last Name");
 		lastName.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		lastName.setBounds(10, 110, 90, 30);
 		contentPane.add(lastName);
 
-		// set up the text box for label "last name"
 		lastNameField = new JTextField();
 		lastNameField.setBounds(100, 110, 170, 30);
 		contentPane.add(lastNameField);
 		lastNameField.setColumns(10);
 		lastNameField.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		lastNameField
-				.setBorder(BorderFactory.createCompoundBorder(border, BorderFactory.createEmptyBorder(5, 5, 5, 5)));
+		lastNameField.setBorder(BorderFactory.createCompoundBorder(border, BorderFactory.createEmptyBorder(5, 5, 5, 5)));
 
 		// the Jlabel "last name" will change color if the user input an invalid content
 		// i.e. the input type is number
@@ -136,13 +122,11 @@ public class RegisterStudentInfo extends JFrame {
 
 		});
 
-		// set the third label as "Student ID"
 		studentID = new JLabel("StudentID");
 		studentID.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		studentID.setBounds(10, 150, 110, 30);
 		contentPane.add(studentID);
 
-		// set up the input text field for "student ID"
 		studentIDField = new JTextField();
 		studentIDField.setColumns(10);
 		studentIDField.setBounds(100, 150, 170, 30);
@@ -169,22 +153,17 @@ public class RegisterStudentInfo extends JFrame {
 
 		});
 
-		// set up the close button
 		JButton closeButton = new JButton("Close");
 		closeButton.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 		closeButton.setBackground(Color.LIGHT_GRAY);
-		// when the user click close, it will only close the "personal information"
-		// frame
 		closeButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dispose();
 			}
 		});
-		// add close button
 		closeButton.setBounds(10, 205, 100, 25);
 		contentPane.add(closeButton);
 
-		// set up the submit button
 		JButton registerButton = new JButton("Submit");
 		registerButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -196,7 +175,6 @@ public class RegisterStudentInfo extends JFrame {
 		registerButton.setBackground(Color.LIGHT_GRAY);
 		contentPane.add(registerButton);
 		setVisible(true);
-
 	}
 	
 	/**
@@ -212,7 +190,7 @@ public class RegisterStudentInfo extends JFrame {
 		// if the type of input information is valid, create an account for student 
 		if (typeCheck) {
 			// create an account
-			validRegister = Authenticator.register(isInstructor, email, password, firstNameField.getText(),
+			validRegister = Authenticator.register(false, email, password, firstNameField.getText(),
 					lastNameField.getText(), studentIDField.getText());
 			// if the account is successfully created, notify user
 			if (validRegister) {

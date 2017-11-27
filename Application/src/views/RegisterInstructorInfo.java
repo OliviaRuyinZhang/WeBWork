@@ -1,7 +1,5 @@
 package views;
 
-import java.awt.EventQueue;
-
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -11,7 +9,6 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import controllers.Authenticator;
-import models.Problem;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -26,15 +23,12 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.awt.Color;
 import javax.swing.JTextField;
-import javax.swing.SwingConstants;
 import javax.swing.JPasswordField;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 
 
 
@@ -42,64 +36,57 @@ public class RegisterInstructorInfo extends JFrame {
 	private JPanel contentPane;
 	private JTextField firstNameField;
 	private JTextField lastNameField;
-	private JLabel registrationCode;
-	private JPasswordField registrationCodeField;
-	private String accessCode;
-	private boolean isInstructor;
+	private JLabel inviteCodeLabel;
+	private JPasswordField inviteCodeField;
+	private String inviteCode;
 	private String email;
 	private String password;
-	private boolean isAdminInstructor;
+	private boolean firstTimeSetup;
 
 	/**
-	 * @param isInstructor
-	 *            true if it's a instructor, false otherwise
+         * Class for student's to register an account into WebWork
 	 * @param email
 	 *            user's email address
 	 * @param password
 	 *            user's input password
 	 */
-	public RegisterInstructorInfo(boolean isInstructor, String email, String password) {
-		// check if the register user is adminInstructor or not
-		isAdminProf();
-		
-		this.isInstructor = isInstructor;
+	public RegisterInstructorInfo(String email, String password) {
+            
+		this.firstTimeSetup = isFirstAdmin();
 		this.email = email;
 		this.password = password;
 		
-		// change label position if the user is an adminProf, else stay the same
+		// Change gui according to firstTimeSetup
 		int xPosition = 0;
-		if(isAdminInstructor) {
+		if(firstTimeSetup) {
 			xPosition = 20;
 		}
-		// set up the frame
+                
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(300 + xPosition, 280);
-		// set up the panel
+                
 		contentPane = new JPanel();
 		contentPane.setBackground(Color.WHITE);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		setLocationRelativeTo(null);
-		
+
 		Border border = BorderFactory.createLineBorder(Color.decode("#7A7A7A"), 2);
 		
-		// set title
 		JLabel title = new JLabel("Personal Information");
 		title.setFont(new Font("Segoe UI", Font.BOLD, 15));
 		title.getPreferredSize();
-		title.setBounds((300 + xPosition)/2 - 100, 30, 200, 25);
 		//title.setLocation(contentPane.getWidth()/2 - title.getWidth()/2, 30);
+		title.setBounds((300 + xPosition)/2 - 100, 30, 200, 25);
 		contentPane.add(title);
 		
-		// set label as "first name"
 		JLabel firstName = new JLabel("First Name");
 		firstName.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		firstName.setBounds(10, 70, 90, 30);
 		contentPane.add(firstName);
 		
-		// set the input text box for the label "first name"
 		firstNameField = new JTextField();
 		firstNameField.setBounds(100 + xPosition, 70, 170, 30);
 		contentPane.add(firstNameField);
@@ -121,19 +108,14 @@ public class RegisterInstructorInfo extends JFrame {
 			}
 
 			@Override
-			public void changedUpdate(DocumentEvent e) {
-				// TODO Auto-generated method stub
-
-			}
+			public void changedUpdate(DocumentEvent e) {}
 		});
 		
-		// set the second label as "last name"
 		JLabel lastName = new JLabel("Last Name");
 		lastName.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		lastName.setBounds(10, 110, 90, 30);
 		contentPane.add(lastName);
 		
-		// set up the text box for label "last name"
 		lastNameField = new JTextField();
 		lastNameField.setBounds(100 + xPosition, 110, 170, 30);
 		contentPane.add(lastNameField);
@@ -143,44 +125,39 @@ public class RegisterInstructorInfo extends JFrame {
 	            BorderFactory.createEmptyBorder(5, 5, 5, 5)));
 		
 		// the Jlabel "last name" will change color if the user input an invalid content
-	    // i.e. the input type is number
-		lastNameField.getDocument().addDocumentListener(new DocumentListener()
-	    {
-	      @Override
-	      public void removeUpdate(DocumentEvent e)
-	      {
-	    	  	validateNameInput(lastName, lastNameField, "Last Name");
-	      }
+                // i.e. the input type is number
+                lastNameField.getDocument().addDocumentListener(new DocumentListener() {
+                        @Override
+                        public void removeUpdate(DocumentEvent e){
+                                validateNameInput(lastName, lastNameField, "Last Name");
+                        }
 
-	      @Override
-	      public void insertUpdate(DocumentEvent e)
-	      {
-	    	  		validateNameInput(lastName, lastNameField, "Last Name");	  	
-	      }
+                        @Override
+                        public void insertUpdate(DocumentEvent e){
+                                validateNameInput(lastName, lastNameField, "Last Name");	  	
+                        }
 
-	      @Override
-	      public void changedUpdate(DocumentEvent e) {} // Not needed for plain-text fields
-
-	  });
+                        @Override
+                        public void changedUpdate(DocumentEvent e) {}
+                });
 		
-		// set label for passcode
-		if(isAdminInstructor) {
-			registrationCode = new JLabel("Set Passcode");
+		// Only on first time setup, allow instructor to set an invitecode
+		if(firstTimeSetup) {
+			inviteCodeLabel = new JLabel("Set Passcode");
 		}else {
-			registrationCode = new JLabel("Passcode");
+			inviteCodeLabel = new JLabel("Passcode");
 		}
 		
-		registrationCode.setFont(new Font("Segoe UI", Font.PLAIN, 15));
-		// set bound 
-		registrationCode.setBounds(10, 150, 100 + xPosition, 30);
-		contentPane.add(registrationCode);
+		inviteCodeLabel.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+		inviteCodeLabel.setBounds(10, 150, 100 + xPosition, 30);
+		contentPane.add(inviteCodeLabel);
 		
-		registrationCodeField = new JPasswordField();
-		registrationCodeField.setColumns(10);
-		registrationCodeField.setBounds(100 + xPosition, 150, 170, 30);
-		registrationCodeField.setBorder(BorderFactory.createCompoundBorder(border,
+		inviteCodeField = new JPasswordField();
+		inviteCodeField.setColumns(10);
+		inviteCodeField.setBounds(100 + xPosition, 150, 170, 30);
+		inviteCodeField.setBorder(BorderFactory.createCompoundBorder(border,
 	            BorderFactory.createEmptyBorder(5, 5, 5, 5)));
-		contentPane.add(registrationCodeField);
+		contentPane.add(inviteCodeField);
 		
 		JButton closeButton = new JButton("Close");
 		closeButton.setFont(new Font("Segoe UI", Font.PLAIN, 15));
@@ -197,15 +174,14 @@ public class RegisterInstructorInfo extends JFrame {
 		registerButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// if the instructor is admin Instructor and try to register for the first time, store the passcode he set
-				if(isAdminInstructor) {				
-					accessCode = new String(registrationCodeField.getPassword());
-					storeAccessCode(accessCode);
-					isAdminInstructor = false;
-				}
-				else {
+				if(firstTimeSetup) {				
+					inviteCode = new String(inviteCodeField.getPassword());
+					writeInviteCode(inviteCode);
+					firstTimeSetup = false;
+				} else {
 					// if the instructor is not admin then retrieve the access code
 					try {
-						retrieveAccessCode();
+						readInviteCode();
 					} catch (IOException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
@@ -223,39 +199,36 @@ public class RegisterInstructorInfo extends JFrame {
 	}
 
 	/**
-	 * This function stores the accessCode that the adminInstructor set to accessCode.csv file 
-	 * @param accessCode
+	 * Writes inviteCode string to inviteCode.csv
+	 * @param inviteCode to be written
 	 */
-	public void storeAccessCode(String accessCode) {
+	public void writeInviteCode(String inviteCode) {
 		try {
-			FileWriter fw = new FileWriter("accessCode.csv");
+			FileWriter fw = new FileWriter("inviteCode.csv");
 			BufferedWriter bf = new BufferedWriter(fw);
-			bf.write(accessCode);
+			bf.write(inviteCode);
 			bf.close();
 			fw.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
 	}
 
 	/**
-	 * This function retrieve the accessCode from accessCode.csv file
+	 * This function retrieve the inviteCode from inviteCode.csv file
 	 * @throws IOException
 	 */
-	public void retrieveAccessCode() throws IOException {
-		File filepath = new File("accessCode.csv");
+	public void readInviteCode() throws IOException {
+		File filepath = new File("inviteCode.csv");
 		if (filepath.exists()) {
 			try {
-				FileReader fr = new FileReader("accessCode.csv");
+				FileReader fr = new FileReader("inviteCode.csv");
 				BufferedReader reader = new BufferedReader(fr);
-				// set accessCode value
-				accessCode = reader.readLine();
+				inviteCode = reader.readLine();
 				reader.close();
 				fr.close();
 			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 
@@ -263,12 +236,14 @@ public class RegisterInstructorInfo extends JFrame {
 	}
 
 	/**
-	 * @return true when this is an adminProfessor, otherwise return false
+         * Returns true, if there is no existing admins in user.csv
+	 * @return true when there is no other admins in user.csv
 	 */
-	public void isAdminProf() {
-		isAdminInstructor = true;
-		File usersInfo = new File("users.csv");
-		if (usersInfo.exists() == true) {
+	public boolean isFirstAdmin() {
+		boolean r = true;
+                // If users.csv exists, check everyline for a pre-existing
+                // admin 
+		if (new File("users.csv").exists()) {
 			try {
 				FileReader fr = new FileReader("users.csv");
 				BufferedReader br = new BufferedReader(fr);
@@ -276,7 +251,7 @@ public class RegisterInstructorInfo extends JFrame {
 				while ((line = br.readLine()) != null) {
 					String[] user_info = line.split(",");
 					if (user_info[0].equalsIgnoreCase("true")) {
-						isAdminInstructor = false;
+						r = false;
 						break;
 					}
 				}
@@ -286,6 +261,7 @@ public class RegisterInstructorInfo extends JFrame {
 				e.printStackTrace();
 			}
 		}
+                return r;
 	}
 
 	/**
@@ -295,14 +271,14 @@ public class RegisterInstructorInfo extends JFrame {
 	 * registration failed
 	 */
 	public void registerValidation() {
-		boolean typeCheck = checkNameInput(firstNameField.getText()) && checkNameInput(lastNameField.getText());
+		boolean typeCheck = isAlphabetical(firstNameField.getText()) && isAlphabetical(lastNameField.getText());
 		boolean accessPermission = false;
 		boolean validRegister = false;
-		String registrationCode = new String(registrationCodeField.getPassword());
-		if (registrationCode.equals(accessCode)) {
+		String inviteCodeLabel = new String(inviteCodeField.getPassword());
+		if (inviteCodeLabel.equals(inviteCode)) {
 			accessPermission = true;
 			if (typeCheck) {
-				validRegister = Authenticator.register(isInstructor, email, password, firstNameField.getText(),
+				validRegister = Authenticator.register(true, email, password, firstNameField.getText(),
 						lastNameField.getText());
 			}
 			if (validRegister) {
@@ -335,47 +311,53 @@ public class RegisterInstructorInfo extends JFrame {
 	}
 
 	/**
-	 * change the name label to red with a star at the corner when the user input a
-	 * invalid name change it back to the original when the input is valid again
+         * Changes Jlabel label to a red foreground with an asterix symbol iff 
+         * JTextField name contains a non-alphabetical name. If JTextField name 
+         * is alphabetical, change Jlabel label to a black foreground with standard text.
 	 * 
 	 * @param label
 	 * @param name
 	 * @param labelText
 	 */
 	public void validateNameInput(JLabel label, JTextField name, String labelText) {
-		String text = name.getText();
-		boolean valid = checkNameInput(text);
-		if (valid) {
-			// studentID.setForeground(getBackground());
+                // Check if JTextField name is alphabetical
+		if (isAlphabetical(name.getText())) {
+			// If so, label behaves normally
 			label.setText(labelText);
 			label.setForeground(Color.BLACK);
 		} else {
-			label.setForeground(Color.RED);
+                        // If not, label turns red, add * symbol
 			label.setText(labelText + "*");
+			label.setForeground(Color.RED);
 		}
 	}
 
 	/**
-	 * @param name
-	 * @return true when the string is alphabetic string, false otherwise
+         * Returns true if s is an alphabetical string.
+         * 
+	 * @param s is a string that will be checked for non-alphabetical characters
+	 * @return true if s only contains characters from alphabet
 	 */
-	public boolean checkNameInput(String name) {
-		// set up regex pattern
+	public boolean isAlphabetical(String s) {
+		// Setup RegEx
 		String namePattern = "^[a-zA-Z]+$";
 		Pattern r = Pattern.compile(namePattern);
-		Matcher m = r.matcher(name);
-
-		if (m.matches()) {
+                
+                // Check if name matches RegEx
+		Matcher m = r.matcher(s);
+		if(m.matches()) {
 			return true;
 		} else {
 			return false;
 		}
 	}
 
+        /**
+	 * Clears all text fields.
+	 */
 	public void clearTextFields() {
 		firstNameField.setText("");
 		lastNameField.setText("");
-		registrationCodeField.setText("");
+		inviteCodeField.setText("");
 	}
-
 }
