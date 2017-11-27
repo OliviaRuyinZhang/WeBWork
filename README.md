@@ -97,19 +97,18 @@ For this sprint, we refactored the code in:
 - InsturctorListingGUI.java
 
 ### WeBWorK Welcome Page
-![WeBWork_Login_Page]
-(https://github.com/CSCC01F17/L02_11/blob/master/Documents/Deliverable_6/Sprint_6/Application_Screenshots/WeBWorK_Login_Page.png)
+![webwork_login_page](https://user-images.githubusercontent.com/12486014/33279148-910ea0ce-d36b-11e7-89aa-b4e7bc09fc7f.png)
+
 ### Personal Information Interface
 
 ### Submission Summary
-![Submission_Summary]
-(https://github.com/CSCC01F17/L02_11/blob/master/Documents/Deliverable_6/Sprint_6/Application_Screenshots/Submission_Summary.png)
+![submission_summary](https://user-images.githubusercontent.com/12486014/33279216-d09bd590-d36b-11e7-8ada-e9d9296bd0a5.png)
 
 ### Send Feedback
 
 ### View Feedback
-![View Feedback]
-(https://github.com/CSCC01F17/L02_11/blob/master/Documents/Deliverable_6/Sprint_6/Application_Screenshots/View_Feedback.png)
+![view_feedback](https://user-images.githubusercontent.com/12486014/33279435-8595dd74-d36c-11e7-8542-c43326646996.png)
+
 
 ### User Instructions
 ##### Setup
