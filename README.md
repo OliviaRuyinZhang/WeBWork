@@ -2,6 +2,9 @@
 ### Team L02_11
 #### Abhay Vaidya, Felix Chen, Julian Barker, Ruyin (Olivia) Zhang, Tito Ku
 
+#### A quick view of the final product can be found [here](#deliverable-6-final-product)
+
+
 ## Deliverable 1: Team Setup
 ##### September 25, 2017
 An introduction of our team and our team agreement can be found [here](https://github.com/CSCC01F17/L02_11/blob/master/Documents/Project_Deliverable_1.pdf).
