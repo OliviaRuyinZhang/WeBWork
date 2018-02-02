@@ -107,10 +107,10 @@ Newly created files during refactorization:
 ![webwork_login_page](https://user-images.githubusercontent.com/12486014/33279148-910ea0ce-d36b-11e7-89aa-b4e7bc09fc7f.png)
 
 ### Admin Instructor Registration Information
-![admin_prof_info](https://user-images.githubusercontent.com/12486014/33287182-e15222bc-d385-11e7-8497-944a01007753.png)
+![admin_prof_info](https://user-images.githubusercontent.com/12486014/33287204-f4332e80-d385-11e7-8a65-4a75dbf41351.png)
 
 ### Non-Admin Instructor Registration Information
-![general_prof_info](https://user-images.githubusercontent.com/12486014/33287204-f4332e80-d385-11e7-8a65-4a75dbf41351.png)
+![general_prof_info](https://user-images.githubusercontent.com/12486014/33287182-e15222bc-d385-11e7-8497-944a01007753.png)
 
 ### Student Registration Information
 ![student_info](https://user-images.githubusercontent.com/12486014/33287221-04cbbbc2-d386-11e7-81bb-43f3b6e3e16e.png)
